@@ -1,0 +1,6 @@
+metric,value
+mean_neural_entropy,0.260240
+std_neural_entropy,0.518495
+min_neural_entropy,0.000000
+max_neural_entropy,2.807355
+median_neural_entropy,0.000000
