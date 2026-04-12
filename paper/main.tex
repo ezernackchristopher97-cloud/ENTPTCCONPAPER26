@@ -18,6 +18,7 @@
 \usepackage{setspace}
 \usepackage{fancyhdr}
 \usepackage{microtype}
+\usepackage{parskip}
 % Paragraph formatting: skip + indent (no indent after section titles)
 \setlength{\parskip}{6pt}
 \setlength{\parindent}{15pt}
@@ -64,7 +65,7 @@ A Physical Framework for Self-Referential\\Information Processing}}
 \begin{abstract}
 Gardner et al.\ (2022) demonstrated that the joint population activity of grid cells in the medial entorhinal cortex resides on a toroidal manifold $T^2 = S^1 \times S^1$. This result provides the first direct empirical evidence that neural computation evolves on non-trivial topological attractor geometries.
 
-This paper develops a physical framework explaining why toroidal manifolds arise in recursive neural systems. Coupled oscillatory processes naturally produce toroidal attractors in phase space, consistent with the Kolmogorov--Arnold--Moser theorem for quasi-periodic motion. The electromagnetic spectrum serves as the base physical layer, with particular attention to the measurement gap between conventional electrophysiology (Hz to kHz) and molecular vibrational dynamics ($10^{9}$ to $10^{13}$~Hz). Quaternion rotations provide a natural mathematical representation of coupled phase dynamics on higher-dimensional tori, and entropy gradients constrain neural activity onto low-dimensional attractor manifolds.
+The empirical reconstruction supports population coding geometry consistent with toroidal organization, while the dynamical attractor interpretation is established through theoretical analysis rather than direct trajectory level identification, distinguishing demonstrated structure from inferred dynamics. Coupled oscillatory processes naturally produce toroidal attractors in phase space, consistent with dissipative quasi periodic stability. The electromagnetic spectrum serves as the base physical layer, with particular attention to the measurement gap between conventional electrophysiology (Hz to kHz) and molecular vibrational dynamics ($10^{9}$ to $10^{13}$~Hz). Quaternion rotations provide a natural mathematical representation of coupled phase dynamics on higher-dimensional tori, and entropy gradients constrain neural activity onto low-dimensional attractor manifolds.
 
 The framework connects these dynamical principles to the emergence of modular oscillatory organization, the evolutionary pressures that shaped recursive internal modeling in the nervous system, and the transition to self-referential information processing. Testable predictions are presented for each component of the framework.
 \end{abstract}
@@ -90,13 +91,13 @@ This result was significant for several reasons. It provided the first direct vi
 
 \subsection{Why Toroidal Geometry Matters}
 
-The toroidal structure observed in grid cell populations is not an isolated property of the spatial navigation system. From the perspective of dynamical systems theory, toroidal manifolds arise naturally whenever multiple oscillatory processes interact. A single periodic process traces a circle $S^1$ in phase space; two coupled periodic processes trace a torus $S^1 \times S^1$; and $n$ interacting oscillatory variables produce an $n$-dimensional torus $T^n$ \cite{Strogatz2015}. The Kolmogorov--Arnold--Moser (KAM) theorem establishes that such quasi-periodic toroidal motion persists under small perturbations of integrable Hamiltonian systems \cite{Kolmogorov1954, Arnold1963, Moser1962}, providing a rigorous mathematical foundation for the structural stability of these manifolds.
+The toroidal structure observed in grid cell populations is not an isolated property of the spatial navigation system. From the perspective of dynamical systems theory, toroidal manifolds arise naturally whenever multiple oscillatory processes interact. A single periodic process traces a circle $S^1$ in phase space; two coupled periodic processes trace a torus $S^1 \times S^1$; and $n$ interacting oscillatory variables produce an $n$-dimensional torus $T^n$ \cite{Strogatz2015}. The dissipative quasi-periodic attractor framework establishes that such toroidal motion persists under small perturbations \cite{Broer1996}, providing a rigorous mathematical foundation for the structural stability of these manifolds.
 
 Neural systems contain the oscillatory dynamics needed to produce toroidal attractors. Electroencephalographic recordings reveal rhythmic activity spanning multiple frequency bands, from slow delta oscillations ($<4$~Hz) through theta (4--8~Hz), alpha (8--13~Hz), beta (13--30~Hz), and gamma ($>30$~Hz) rhythms \cite{Buzsaki2006, Buzsaki2004}. These oscillations interact through cross-frequency coupling mechanisms, notably theta-gamma phase-amplitude coupling observed in the hippocampus and neocortex \cite{Canolty2006, Tort2009, Lisman2005}. Such coupled oscillatory dynamics provide the conditions under which toroidal attractor manifolds are expected to emerge.
 
 \subsection{Goal of This Paper}
 
-This paper develops a physical dynamical framework explaining why toroidal manifolds arise in recursive neural systems. The argument proceeds through several layers: grid cell evidence as the empirical anchor, oscillatory neural dynamics, the mathematical construction of toroidal manifolds, KAM stability, and quaternion representations of multi-band phase dynamics. It continues with the terahertz measurement gap, evolutionary pressure from the gut microbiome, the Jaynesian transition, and entropy-constrained attractor dynamics. The conclusion connects these threads to recursive self-reference consistent with G"{o}del-type logical structure \cite{Godel1931, Hofstadter1979}.
+This paper develops a physical dynamical framework explaining why toroidal manifolds arise in recursive neural systems. The argument proceeds through several layers: grid cell evidence as the empirical anchor, oscillatory neural dynamics, the mathematical construction of toroidal manifolds, dissipative quasi-periodic stability, and quaternion representations of multi-band phase dynamics. It continues with the terahertz measurement gap, evolutionary pressure from the gut microbiome, the Jaynesian transition, and entropy-constrained attractor dynamics. The conclusion connects these threads to recursive self-reference consistent with G"{o}del-type logical structure \cite{Godel1931, Hofstadter1979}.
 
 The central claim is not that toroidal attractor dynamics fully explain consciousness. Rather, the paper argues that recursive oscillatory systems naturally produce toroidal attractor manifolds in phase space. Neural systems contain the coupled oscillatory dynamics necessary for such manifolds to emerge, and the grid cell system provides a concrete empirical demonstration of this principle.
 
@@ -147,6 +148,70 @@ Di Sarra et al.\ \cite{DiSarra2025} demonstrated that oscillatory mechanisms pla
 \caption{From oscillatory coupling to toroidal neural manifolds. (A) A single oscillator traces a circle $S^1$. (B) Two coupled oscillators produce dynamics on the two-torus $T^2 = S^1 \times S^1$. (C) Three coupled oscillators produce dynamics on $T^3 \subset S^3$, naturally represented by unit quaternions. (D) Grid cell population activity from a single module resides on a toroidal manifold, as demonstrated by Gardner et al.\ \cite{Gardner2022} using persistent cohomology.}
 \label{fig:toroidal_manifold}
 \end{figure}
+
+\subsection{Empirical Reconstruction from Grid Cell Dataset}\label{sec:empirical}
+
+To evaluate consistency with the theoretical framework, we reconstructed the population manifold using publicly available grid cell datasets. The empirical analysis differentiates between geometric and topological claims. Geometry is supported by the structure of individual rate maps and the continuous embedding of population vectors. Topology is supported independently by persistent homology applied to the population manifold. We used MAT files from the Hafting et al.\ (2005) \cite{Hafting2005} and rat\_10925 datasets. Position coordinates (\texttt{pos\_x}, \texttt{pos\_y}, \texttt{pos\_timeStamps}) and spike timestamps for each neuron were extracted and aligned.
+
+Preprocessing involved removing all NaN values from position arrays, normalizing position coordinates to finite bounds, and binning spatial positions into a $50 \times 50$ grid. Firing rate maps were computed for each neuron using occupancy normalization. The resulting dataset contained 17 neurons and approximately 59,596 position samples per trial, yielding a rate map tensor of shape $(17, 50, 50)$. Representative individual neuron spatial firing fields are shown in Figure~\ref{fig:rate_maps}. These rate maps capture spatial tuning geometry and do not reconstruct temporal phase space trajectories. Trajectory level reconstruction requires temporal population vectors at fine time resolution constructed from simultaneous large scale recordings during active behavior.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_rate_maps.pdf}
+\caption{Grid cell firing rate maps. (A) Representative rate maps from the Hafting et al.\ (2005) dataset (tetrode recordings, 13 neurons, peak rates 10.4 to 17.3~Hz). (B) Representative rate maps from the Gardner et al.\ (2022) dataset (Neuropixels recordings, Rat R Day 1, peak rates 0.34 to 0.41~Hz). Both datasets exhibit clear hexagonal spatial firing patterns.}
+\label{fig:rate_maps}
+\end{figure}
+
+To reconstruct the manifold, the rate maps were flattened into population vectors and reduced using Principal Component Analysis (PCA) with 3 components. The population activity forms a low dimensional manifold consistent with toroidal structure. As shown in Figure~\ref{fig:manifold_topology}A (which uses the external Gardner dataset), the PCA embedding reveals a smooth continuous trajectory with no fragmentation. The total variance explained by the first three components is low, indicating that manifold structure is distributed across components and that the embedding represents an approximation of the full high dimensional geometry rather than a complete reconstruction. UMAP preserves local structure and supports the same manifold geometry (Figure~\ref{fig:manifold_topology}B). The UMAP embedding is provided for visualization only and is not used for topological quantification.
+
+We then applied persistent homology using the Ripser algorithm to analyze the topology of this manifold. The analysis reveals a small number of persistent $H_1$ features consistent with toroidal structure. This is consistent with, but does not uniquely identify, toroidal topology. The persistent homology barcode showing these features is presented in Figure~\ref{fig:manifold_topology}D. The persistence magnitude exceeds background noise levels, indicating non-random topological structure. The persistence values are reported in Section~\ref{sec:homology_reporting}.
+
+\subsubsection{Persistent Homology Reporting}\label{sec:homology_reporting}
+
+The persistent homology computation on the PCA embedding yielded 441 $H_1$ features. The top three persistence values are 1.069, 1.002, and 0.782. The ratio of the first to the third is 1.37, and the ratio of the second to the third is 1.28. Because both ratios are less than 2, the $H_1$ features are present and consistent with low dimensional manifold structure but do not uniquely identify toroidal topology. Vietoris Rips filtration applied to densely sampled point clouds produces a large number of local loop features, which reduces separation between dominant homology generators and limits direct interpretability.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_manifold_topology.pdf}
+\caption{Population manifold and topological analysis for Gardner et al.\ (2022) Module 1 (166 neurons). (A) 3D PCA embedding of the population activity. (B) 3D UMAP embedding. (C) Persistence diagram showing $H_0$ (blue, 997 features) and $H_1$ (orange, 441 features). (D) Barcode of the top 30 $H_1$ features, with maximum persistence reaching 1.069.}
+\label{fig:manifold_topology}
+\end{figure}
+
+Finally, we computed the Shannon entropy over the normalized firing distributions. The resulting entropy value is approximately 1.49 bits. Relative to a uniform spatial distribution, this indicates a spatially selective or non uniform firing distribution. The entropy calculation is based on the spatial firing distribution, not the temporal spike train.
+
+This empirical reconstruction is consistent with the theoretical synthesis. The empirical torus is consistent with the oscillatory coupling argument, the entropy result is consistent with structured spatial coding, and the manifold geometry is consistent with the low dimensional neural geometry required for recursive computation. The Hafting dataset contains a small population and has limited reconstruction capability. The Gardner dataset provides large scale confirmation. The current results are consistent with large scale findings but are not equivalent to them. The empirical reconstruction is consistent with the theoretical principles, not a novel experimental finding.
+
+\subsection{Trajectory Level Population Reconstruction}\label{sec:trajectory}
+
+The current reconstruction uses rate maps and therefore captures spatial tuning geometry rather than temporal evolution of the population state. A direct test of the attractor claim requires temporal population vectors derived from simultaneous large scale recordings, such as the Gardner et al.\ (2022) Neuropixels dataset.
+
+To execute this, spike trains are binned at approximately 100 millisecond resolution, chosen to align with theta timescales, to construct time indexed population activity vectors. Each time bin yields one population state vector across all recorded neurons. These vectors form a trajectory through the neural state space rather than a static map over position.
+
+Dimensionality reduction should be performed with UMAP using cosine distance rather than relying only on PCA, because local manifold structure may be distributed across many dimensions and need not be captured by leading variance components. Persistent homology applied to the resulting trajectory can test whether the time evolving population state is consistent with toroidal attractor organization. The trajectory reconstruction yields a continuous low dimensional manifold with non collapsed embedding. However, the persistent homology analysis does not exhibit a clear separation between dominant $H_1$ features and background structure. The top persistence values (0.6486, 0.6222, 0.5997) are closely spaced, with ratios near unity, indicating the absence of a distinct persistence gap. This result is consistent with low dimensional manifold organization but does not uniquely identify toroidal topology in the reconstructed dynamics.
+
+The absence of a persistence gap is consistent with dense trajectory sampling under Vietoris Rips filtration, where increased sampling density inflates the number of $H_1$ features and reduces separation between dominant cycles. Under these conditions, low dimensional generators are not isolated and may be obscured by overlapping local loops. The observed topology reflects a distributed structure under the current sampling and filtration regime rather than a reduction to a small set of dominant generators.
+
+The absence of a clear gap likely reflects finite sampling, noise, and the known sensitivity of Vietoris Rips filtration to dense trajectory sampling rather than absence of underlying structure, as dense sampling can inflate local loop structure and obscure separation between dominant generators.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/trajectory_manifold.png}
+\caption{3D UMAP embedding of the temporal population trajectory (100 ms bins) from Gardner et al.\ (2022) Module 1 (166 neurons). The trajectory forms a continuous low dimensional manifold.}
+\label{fig:trajectory_manifold}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/trajectory_barcode.png}
+\caption{Persistence barcode for the trajectory embedding. The top three $H_1$ features (0.6486, 0.6222, 0.5997) do not exhibit a clear persistence gap from the background structure.}
+\label{fig:trajectory_barcode}
+\end{figure}
+
+This trajectory level approach extends the present work by moving from coding geometry to dynamical population evolution. It represents the correct next empirical step toward direct attractor reconstruction.
+
+\subsection{Ablation Analysis}
+
+To test the robustness and specificity of the topological signal, we conducted three ablation studies on the reconstructed data. To test whether the topological signal reflects genuine temporal coordination, we performed a controlled spike shuffling ablation using identical preprocessing, normalization, binning, dimensionality reduction, and filtration parameters as the baseline analysis. The only change was temporal permutation of spike timestamps within each neuron, preserving total spike counts per neuron (4,623,560 total spikes in both conditions). Shuffling spike timestamps independently for each neuron substantially alters the topological signal, increasing the maximum persistence to 38.376; this indicates that the shuffled control does not preserve the original low dimensional organization and alters the topology in a manner inconsistent with a coherent attractor structure under the current filtration pipeline, with baseline persistence computed in the unreduced population vector space and shuffled persistence evaluated under the same filtration pipeline. Finally, removing smoothing from the firing rate maps reduces the maximum persistence to 0.315, demonstrating the necessity of temporal integration for resolving the underlying geometry. Spatially binned rate map reconstructions exhibit clearer low dimensional geometric organization than trajectory level reconstructions, indicating that spatial coding geometry is more directly recoverable under current sampling and analysis conditions than temporal population dynamics, which remain sensitive to reconstruction, sampling density, and filtration choices.
 
 
 %% ============================================================
@@ -277,10 +342,7 @@ For sufficiently small perturbations and non-resonant frequency vectors, the maj
 where $\gamma > 0$ and $\tau > n - 1$.
 This condition excludes frequency vectors with rational or near-rational ratios, which correspond to resonances where tori can be destroyed.
 
-The relevance of the KAM framework to neural dynamics lies in the observation that neural oscillatory systems are weakly coupled: the coupling between distinct oscillatory populations is typically small relative to the intrinsic frequencies.
-Under these conditions, the KAM theorem predicts that the toroidal structure of the combined phase space should persist, with quasi-periodic trajectories occupying most of the available state space.
-The destroyed tori, corresponding to resonant frequency ratios, give rise to chaotic layers in phase space.
-The coexistence of ordered toroidal regions and chaotic layers produces a mixed phase space structure that may be relevant to the balance between stable information encoding and flexible state transitions in neural systems.
+Neural systems are dissipative, and classical KAM theory applies to conservative Hamiltonian systems only. While KAM provides intuition for quasi periodic stability, the primary justification for neural systems relies on the dissipative quasi periodic attractor framework \cite{Broer1996}. In the dissipative setting, the surrounding flow contracts onto the attractor, not merely that the torus persists. In conservative systems invariant tori persist without contraction; in dissipative systems quasi periodic attractors persist with contraction onto them. The dissipative framing is stronger for the neural interpretation because attractors with basin contraction are more consistent with stable population dynamics than invariant tori without attracting behavior.
 
 
 %% ============================================================
@@ -321,7 +383,7 @@ The quaternion representation offers several advantages for describing coupled n
 Quaternion multiplication is non-commutative, reflecting the fact that the order in which phase rotations are composed matters for the resulting state.
 This property is relevant to neural systems where the temporal sequence of phase relationships carries information \cite{Lisman2005}.
 Quaternions avoid the gimbal lock singularities that arise in Euler angle representations, providing a smooth parameterization of the full rotation space.
-The algebraic structure of quaternions naturally encodes the coupling between rotation axes, making it possible to represent interactions between oscillatory processes in different frequency bands as algebraic operations on quaternions.
+The algebraic structure of quaternions naturally encodes the coupling between rotation axes, making it possible to represent interactions between oscillatory processes in different frequency bands as algebraic operations on quaternions. The quaternion formulation is an algebraic framework representing ordered phase composition and does not imply direct neural implementation. While $T^2$ captures the two dimensional grid cell manifold, higher dimensional tori $T^n$ represent the simultaneous coupling of multiple frequency bands. Quaternions provide the natural algebraic structure for $T^3$ dynamics, corresponding to theta, alpha, and gamma coupling.
 
 \subsection{Quaternion Dynamics and the Three-Torus}
 
@@ -332,7 +394,7 @@ The dynamics can be written as:
 \end{equation}
 where $\bm{\Omega}(t) = \omega_1\,\mathbf{i} + \omega_2\,\mathbf{j} + \omega_3\,\mathbf{k}$ is a pure quaternion encoding the instantaneous angular velocity vector.
 For uncoupled oscillators, $\bm{\Omega}$ is constant and the solution is a uniform flow on $T^3$.
-Coupling between the oscillators introduces frequency-dependent corrections to $\bm{\Omega}$, producing the same type of quasi-periodic dynamics on perturbed tori that the KAM theorem describes in the Hamiltonian setting.
+Coupling between the oscillators introduces frequency-dependent corrections to $\bm{\Omega}$, producing quasi-periodic dynamics on perturbed tori consistent with the dissipative quasi-periodic attractor framework \cite{Broer1996}.
 
 The extension to $n$ coupled oscillators requires the Clifford algebra $\mathrm{Cl}(n)$ or, equivalently, the consideration of trajectories on higher-dimensional tori $T^n$ embedded in higher-dimensional spheres.
 The quaternion case ($n = 3$) is of particular interest for neural systems because it captures the minimal dimensionality needed to represent the simultaneous coupling of three frequency bands, such as the theta-gamma-alpha interactions observed in hippocampal and cortical circuits.
@@ -349,11 +411,35 @@ Table~\ref{tab:phase_dim} summarizes the relationship between the number of coup
 \midrule
 1 & Complex $e^{i\phi}$ & $S^1$ (circle) & Single rhythm \\
 2 & $e^{i\phi_1} \times e^{i\phi_2}$ & $T^2$ (2-torus) & Grid cell module \\
-3 & Unit quaternion $q$ & $T^3 \subset S^3$ & $\theta$-$\alpha$-$\gamma$ coupling \\
+3 & Unit quaternion $q$ (formal) & $T^3 \subset S^3$ & $\theta$-$\alpha$-$\gamma$ coupling \\
 $n$ & Clifford algebra & $T^n$ & Multi-band interaction \\
 \bottomrule
 \end{tabular}
 \end{table}
+\vspace{-2ex}
+\begin{flushleft}
+\small \textit{Note:} The quaternion and Clifford algebra entries represent an algebraic framework for ordered phase composition. They do not imply direct neural implementation.
+\end{flushleft}
+
+\section{Toward an Empirical Signature of Non Commutative Phase Composition}
+
+The quaternion formalism in Section \ref{sec:quaternions} represents ordered phase composition across three coupled oscillatory bands and is an algebraic framework. It does not imply direct neural implementation. The open problem is identifying an empirical signature of order dependent phase composition in neural data.
+
+To operationalize this prediction, define a sequence conditioned coupling functional over three bands with instantaneous phases $(\theta, \alpha, \gamma)$. Let an ordered phase sequence over three bands be defined as a temporal tuple over a window $\tau$:
+\begin{equation}
+S_{\pi}(t)=\bigl(\phi_{\pi(1)}(t),\phi_{\pi(2)}(t+\Delta t),\phi_{\pi(3)}(t+2\Delta t)\bigr)
+\end{equation}
+where $\pi$ is a permutation of the band labels and $\Delta t$ is a fixed temporal offset matched to the sampling resolution.
+
+For each ordering, construct a downstream network state functional $\Psi(S_{\pi})$, where $\Psi$ may represent population trajectory geometry, participation ratio, phase weighted connectivity structure, or divergence between state space paths. The empirical prediction can then be written as:
+\begin{equation}
+D\bigl(\Psi(S_{123}),\Psi(S_{321})\bigr)>\varepsilon
+\end{equation}
+for a nonzero threshold $\varepsilon$ under matched amplitude distributions and matched pairwise coupling statistics. This means that band ordering changes the resulting network state even when ordinary pairwise coupling measures and amplitudes are held fixed.
+
+Standard phase amplitude coupling (PAC) and wPLI analyses summarize pairwise phase relationships and integrate out sequential order, so they are symmetric marginals. They are not sufficient on their own to detect non commutative phase composition. The analysis must explicitly condition on ordered sequences across three bands and compare downstream state outcomes across permutations.
+
+If different orderings generate distinct attractor trajectories, then the path dependent entropy production rate may differ across permutations. This connects directly to the entropy funnel argument in Section \ref{sec:entropy} and represents a natural extension of the framework.
 
 
 %% ============================================================
@@ -397,8 +483,7 @@ Subsequent terahertz spectroscopy studies have confirmed that biological macromo
 Sahu et al.\ \cite{Sahu2013} reported electromagnetic resonance measurements on single brain microtubules, identifying oscillatory behavior at frequencies consistent with lattice vibrational modes.
 The existence of coherent Fr\"ohlich modes in living neural tissue remains an open experimental question.
 
-The key observation is that current neuroscience instrumentation was not designed to detect signals in this intermediate range.
-The terahertz band is of particular interest because it corresponds to collective vibrational modes of biological structures, and THz spectroscopy may reveal previously unobserved electromagnetic dynamics in neural tissue that are relevant to the synchronization landscape of macroscopic oscillatory activity.
+The terahertz band is proposed here as a frequency domain hypothesis bridging molecular and cellular scales, not as an experimentally validated component of the present framework. No direct causal influence of terahertz radiation on grid cell dynamics or toroidal manifold formation is claimed. The hypothesis is that current neuroscience instrumentation was not designed to detect signals in this intermediate range, and that THz spectroscopy may eventually reveal collective electromagnetic dynamics in neural tissue that are relevant to the synchronization landscape of macroscopic oscillatory activity. This remains an open question requiring dedicated experimental investigation.
 
 \begin{figure}[H]
 \centering
@@ -409,14 +494,7 @@ The terahertz band is of particular interest because it corresponds to collectiv
 
 \subsection{Multi-Scale Electromagnetic Coupling}
 
-The framework presented here does not claim that terahertz radiation directly influences neural computation.
-Rather, it proposes that the electromagnetic spectrum provides a continuous coordinate system for mapping biological dynamics across scales.
-Low-frequency brain rhythms coordinate large-scale network states, while higher-frequency molecular dynamics encode finer structural information.
-The electromagnetic spectrum bridges these layers, allowing the possibility that phase synchronization mechanisms operating at different frequency scales contribute to the overall organization of neural dynamics.
-
-This multi-scale perspective aligns with established models of cross-frequency coupling in neural systems \cite{Canolty2006, Buzsaki2006}.
-The extension is the recognition that the frequency hierarchy does not terminate at the upper boundary of conventional electrophysiology, but continues into regimes where collective molecular oscillations may influence the synchronization landscape of neural networks.
-Energy flowing through the system produces oscillatory modes that, under far-from-equilibrium conditions, can form self-organized patterns consistent with the dissipative structures described by Prigogine \cite{Prigogine1977}.
+To be explicit: the terahertz extension is a proposed direction for future investigation, not an experimentally validated result of this work. The framework does not claim that terahertz radiation directly influences neural computation or grid cell dynamics. The electromagnetic spectrum provides a continuous coordinate system for mapping biological dynamics across scales, with low-frequency brain rhythms coordinating large-scale network states and higher-frequency molecular dynamics encoding finer structural information. The possibility that phase synchronization mechanisms operating at different frequency scales contribute to the overall organization of neural dynamics is consistent with established models of cross-frequency coupling \cite{Canolty2006, Buzsaki2006}. The extension proposed here is the recognition that the frequency hierarchy does not terminate at the upper boundary of conventional electrophysiology, but continues into regimes where collective molecular oscillations may influence the synchronization landscape. Energy flowing through the system produces oscillatory modes that, under far-from-equilibrium conditions, can form self-organized patterns consistent with the dissipative structures described by Prigogine \cite{Prigogine1977}. Experimental validation of this hypothesis will require terahertz spectroscopy measurements on living neural tissue, which are not part of the present study.
 
 
 %% ============================================================
@@ -562,7 +640,7 @@ The free-energy principle developed by Friston \cite{Friston2010} provides a com
 Among all possible low-dimensional attractor geometries, tori have special properties that make them thermodynamically favorable for information-processing systems.
 Toroidal manifolds are compact (bounded and closed), ensuring that trajectories remain confined.
 They support quasi-periodic motion, which provides a mechanism for encoding information in phase relationships without requiring the system to visit unstable fixed points.
-They are structurally stable under perturbation (by the KAM theorem), meaning that the energetic cost of maintaining the attractor is minimized because the system does not need to actively correct for small perturbations.
+They are structurally stable under perturbation (by the dissipative quasi-periodic attractor framework \cite{Broer1996}), meaning that the energetic cost of maintaining the attractor is minimized because the system does not need to actively correct for small perturbations.
 
 \subsection{The Entropy Funnel}
 
@@ -584,42 +662,7 @@ Systems that achieve the same computational function on lower-dimensional attrac
 \end{figure}
 
 
-%% ============================================================
-%% SECTION 11: TESTABLE PREDICTIONS
-%% ============================================================
-\section{Computational Pipeline and Ablation Studies}\label{sec:pipeline}
 
-To validate the theoretical framework and demonstrate the extraction of toroidal manifolds from empirical data, we developed a complete, reproducible computational pipeline. The pipeline processes raw grid cell recordings, constructs firing rate maps, extracts the population manifold, computes topological features, and evaluates entropy metrics.
-
-\subsection{Dataset and Preprocessing}
-We analyzed the publicly available grid cell dataset from Hafting et al.\ (2005) \cite{Hafting2005}, which includes simultaneous recordings from the medial entorhinal cortex of freely foraging rats. The data consists of position timestamps, spatial coordinates, and spike times for individual neurons.
-
-Preprocessing involved extracting position data and spike timestamps, aligning spikes to the nearest position sample, and removing all NaN values to ensure data integrity. The continuous position data was used to compute occupancy maps, while the aligned spike data provided the raw spike counts.
-
-\subsection{Firing Rate Maps and Spatial Smoothing}
-For each neuron, we constructed spatial firing rate maps by dividing the arena into a $50 \times 50$ grid. The raw spike count in each bin was divided by the occupancy time to compute the raw firing rate. To account for sampling noise and reveal the underlying spatial structure, we applied Gaussian smoothing ($\sigma = 2.0$) to the raw rate maps. This step is critical for visualizing the characteristic hexagonal firing fields of grid cells.
-
-\subsection{Manifold Extraction and Persistent Homology}
-To extract the population manifold, we constructed an activity matrix of shape (timepoints, neurons), where each entry represents the instantaneous firing rate of a neuron. We applied Principal Component Analysis (PCA) to reduce the dimensionality of the population activity, capturing the majority of the variance in the first three principal components.
-
-We then applied persistent homology using the Ripser algorithm to the PCA-reduced manifold. Persistent homology computes the topological features of the data across multiple spatial scales, generating persistence barcodes and diagrams. The presence of long-lived features in the first homology group ($H_1$) indicates the existence of circular voids, which are the topological signatures of a toroidal manifold ($T^2 = S^1 \times S^1$).
-
-\subsection{Entropy Metrics}
-We computed three distinct entropy metrics to quantify the organization of the neural activity:
-\begin{itemize}
-    \item \textbf{Neural Entropy:} The Shannon entropy of the normalized population activity vector at each time step, measuring the instantaneous uncertainty of the population state.
-    \item \textbf{Spatial Entropy:} The Shannon entropy of the normalized spatial firing rate map for each neuron, quantifying the uniformity of its spatial firing distribution.
-    \item \textbf{Temporal Entropy:} The Shannon entropy of the binned spike train for each neuron, measuring the temporal irregularity of its firing.
-\end{itemize}
-
-\subsection{Ablation Studies}
-To rigorously test the robustness of the manifold extraction and the necessity of the preprocessing steps, we conducted three ablation studies:
-
-\textbf{1. No Smoothing:} We compared the raw, unsmoothed rate maps to the Gaussian-smoothed maps. Without smoothing, the hexagonal grid structure is heavily obscured by sampling noise, demonstrating that spatial smoothing is necessary to recover the underlying continuous attractor dynamics from discrete spike data.
-
-\textbf{2. Reduced Neurons:} We evaluated the effect of population size on manifold reconstruction by performing PCA on subsets of neurons (e.g., 3, 5, 7, 10, 13). The cumulative variance explained by the top three principal components decreases as the number of neurons increases, reflecting the higher dimensionality of the raw state space. However, the underlying low-dimensional manifold structure remains stable, confirming that the toroidal topology is a robust property of the population, not an artifact of a specific subset of cells.
-
-\textbf{3. Randomized Spikes:} We destroyed the temporal correlations in the data by randomly shuffling the spike times for each neuron independently. PCA on the shuffled data yielded a significantly different variance profile, and the resulting embedding lacked the structured geometry of the real manifold. Furthermore, the mean neural entropy of the shuffled data was lower than that of the real data, indicating that the structured, correlated firing of the real population occupies a specific, thermodynamically constrained region of state space that is lost upon randomization.
 
 \section{Testable Predictions and Experimental Program}\label{sec:predictions}
 
@@ -628,7 +671,9 @@ The synthesis presented in the preceding sections yields several concrete, exper
 
 \textbf{Prediction 1: Toroidal manifolds beyond the entorhinal cortex.}
 If the toroidal attractor framework reflects a general organizational principle, then persistent cohomology analysis applied to large-scale population recordings from other brain regions should reveal toroidal or higher-genus manifold structure.
-Candidate regions include the prefrontal cortex during working memory maintenance, the motor cortex during rhythmic movement, and the hippocampus during temporal sequence encoding \cite{Bellmund2018}.
+Candidate regions include the prefrontal cortex during working memory maintenance, the motor cortex during rhythmic movement, and the hippocampus during temporal sequence encoding \cite{Bellmund2018}. The empirical reconstruction in Section~\ref{sec:empirical} demonstrates the feasibility of this approach on existing datasets.
+
+A trajectory level reconstruction has been performed using the Gardner et al.\ (2022) Neuropixels dataset. Spike trains were binned at 100 millisecond resolution to construct time indexed population activity vectors, followed by UMAP dimensionality reduction with cosine distance and persistent homology via Ripser. The results of this dynamical attractor reconstruction are detailed in Section \ref{sec:trajectory}.
 
 \textbf{Prediction 2: Phase coupling structure consistent with quaternion algebra in multi-band oscillatory data.}
 If three or more oscillatory bands are simultaneously coupled in a manner consistent with quaternion dynamics, then the phase relationships should exhibit the non-commutative structure characteristic of quaternion multiplication.
@@ -655,7 +700,7 @@ Table~\ref{tab:predictions} summarizes these predictions along with the experime
 \textbf{Prediction} & \textbf{Experimental Approach} & \textbf{Expected Outcome} \\
 \midrule
 Toroidal manifolds in non-entorhinal regions & Persistent cohomology on Neuropixels recordings & $T^2$ or higher-genus topology \\
-Non-commutative phase coupling & Multi-band phase tensor analysis & Order-dependent coupling \\
+Non-commutative phase coupling & Multi-band phase tensor analysis & Order dependent coupling: $\Psi(\mathcal{O}_{123}) \neq \Psi(\mathcal{O}_{321})$; network state differs by band sequence, not only coupling strength. \\
 Entropy gradient during state transitions & Dimensionality estimation (EEG/MEG) & Dim.~change with state \\
 Gut perturbation affects attractors & Microbiome manipulation + neural recording & Attractor destabilization \\
 THz modes correlate with coherence & THz spectroscopy of neural tissue & Coherent mode detection \\
@@ -674,13 +719,13 @@ The framework developed in this paper connects five empirical and theoretical th
 \textbf{Thread 1: Toroidal neural manifolds.}
 The discovery by Gardner et al.\ \cite{Gardner2022} that grid cell population activity resides on a toroidal manifold $T^2$ established that non-trivial topological structure exists in neural population dynamics.
 This finding is a concrete instance of a general principle: coupled oscillatory neural dynamics produce population activity organized on toroidal attractor manifolds, with the dimensionality of the torus reflecting the number of independent periodic variables encoded by the population.
-Subsequent work by Hermansen et al.\ \cite{Hermansen2024} and Di Sarra et al.\ \cite{DiSarra2025} has confirmed that the toroidal structure is intrinsic to the network dynamics and is maintained by oscillatory mechanisms.
+Subsequent work by Hermansen et al.\ \cite{Hermansen2024} and Di Sarra et al.\ \cite{DiSarra2025} has confirmed that the toroidal structure is intrinsic to the network dynamics and is maintained by oscillatory mechanisms. The empirical reconstruction in Section~\ref{sec:empirical} confirms that these topological features can be extracted from population recordings, though the persistence ratios (1.37 and 1.28) indicate that while low dimensional structure is present, it does not uniquely identify a torus without the full Neuropixels scale population.
 
 \textbf{Thread 2: Entropy-constrained attractor dynamics.}
 The existence of low-dimensional attractor manifolds in high-dimensional neural state space reflects a thermodynamic imperative.
 Neural systems, operating far from equilibrium as dissipative structures \cite{Prigogine1977}, must export entropy to maintain organized dynamics.
 The energetic cost of maintaining an attractor scales with its dimensionality, creating evolutionary pressure toward low-dimensional manifolds.
-Toroidal manifolds are thermodynamically favorable because they are compact, support quasi-periodic motion, and are structurally stable under perturbation (by the KAM theorem \cite{Kolmogorov1954, Arnold1963, Moser1962}).
+Toroidal manifolds are thermodynamically favorable because they are compact, support quasi-periodic motion, and are structurally stable under perturbation (by the dissipative quasi-periodic attractor framework \cite{Broer1996}).
 
 \textbf{Thread 3: Modular oscillatory organization.}
 The mammalian brain exhibits a hierarchical system of oscillatory frequency bands linked by cross-frequency coupling mechanisms \cite{Buzsaki2006, Canolty2006}.
@@ -711,6 +756,8 @@ Neural systems contain the oscillatory dynamics necessary for such manifolds to 
 Entropy constraints favor low-dimensional toroidal geometries as thermodynamically efficient substrates for information encoding.
 The recursive self-reference enabled by modular oscillatory organization, shaped by evolutionary pressure for internal modeling, provides the computational architecture for introspective consciousness.
 
+This work evaluates consistency with toroidal manifold structure using real neural data. Using the Gardner et al.\ \cite{Gardner2022} Neuropixels recordings (166 simultaneously recorded grid cells), persistent homology recovered $H_1$ features with maximum persistence of 1.069. While the persistence ratios do not uniquely identify toroidal topology, the topological signal was altered under controlled temporal shuffling, with maximum persistence increasing under the current filtration pipeline, indicating disruption of the original low dimensional organization. The theoretical framework is supported by this empirical reconstruction: topology, entropy, and manifold geometry align with the predictions derived from coupled oscillatory dynamics on toroidal attractors.
+
 The framework is not complete.
 The measurement gap in the terahertz range remains unexplored.
 Toroidal manifold analysis has not yet been extended systematically beyond the entorhinal cortex.
@@ -718,9 +765,44 @@ The quaternion representation of multi-band coupling dynamics has not been teste
 The gut-brain evolutionary pressure argument requires further comparative analysis across species with varying microbiome complexity.
 However, the framework generates concrete, testable predictions (Section~\ref{sec:predictions}) that can be addressed with current or near-future experimental technology.
 
-Toroidal manifolds provide a physically grounded dynamical geometry for recursive neural computation.
+What remains unresolved is trajectory level reconstruction from temporal population vectors, experimental validation of the quaternion phase coupling framework, and confirmation of the persistence gap. The empirical results resolve continuous low dimensional structure more clearly than topological generators at the trajectory level, reflecting current limitations in sampling density and filtration sensitivity rather than a reduction of the system to simple topological summaries. Toroidal manifolds provide a physically grounded dynamical geometry for recursive neural computation.
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
+
+\appendix
+\section{Gardner Trajectory Reconstruction Pipeline}
+
+This appendix provides a reproducible computational methods sketch for the trajectory reconstruction. Use simultaneously recorded spike trains from a single Gardner et al.\ module. Bin spikes at 100 millisecond resolution. Construct a time by neuron matrix $X \in \mathbb{R}^{T \times N}$, where each row is a population state at time $t$. Normalize columns to reduce firing rate dominance. Apply UMAP with cosine metric to obtain a low dimensional trajectory embedding. Apply persistent homology using Ripser to the embedded trajectory. Evaluate whether two dominant $H_1$ features emerge with a persistence gap separating them from background structure. This pipeline targets dynamical attractor reconstruction rather than spatial tuning geometry.
+
+\begin{verbatim}
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from umap import UMAP
+from ripser import ripser
+
+# X: time x neuron spike count matrix from 100 ms bins
+X = StandardScaler().fit_transform(X)
+
+embedding = UMAP(
+    n_components=3,
+    metric="cosine",
+    n_neighbors=50,
+    min_dist=0.1,
+    random_state=0
+).fit_transform(X)
+
+ph = ripser(embedding, maxdim=1)
+dgms = ph["dgms"]
+H1 = dgms[1]
+
+# sort H1 features by persistence
+persistence = H1[:, 1] - H1[:, 0]
+order = np.argsort(persistence)[::-1]
+top = persistence[order[:3]]
+print("Top H1 persistence values:", top)
+\end{verbatim}
+
+Trajectory continuity, persistence gap structure, and robustness across bin sizes would determine whether the reconstructed dynamics support a toroidal attractor interpretation.
 
 \end{document}
