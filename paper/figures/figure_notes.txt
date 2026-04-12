@@ -1,5 +1,0 @@
-Figure 1 (fig_em_spectrum.pdf): EM spectrum hierarchy showing measurement gap. Good quality.
-Figure 2 (fig_toroidal_manifold.pdf): Four-panel figure showing S1, T2, T3/S3, and grid cell torus. Good quality.
-Figure 3 (fig_entropy_funnel.pdf): Entropy funnel from high-dim to toroidal attractor. Clean layout, good quality.
-Figure 4 (fig_recursive_loop.pdf): Recursive self-reference diagram. Text labels on circles overlap slightly - acceptable for now, the key concepts are readable.
-All figures compiled successfully with pdflatex.

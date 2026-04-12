@@ -1,3 +1,0 @@
-Figure 4 observation: The two concentric circles (outer blue, inner red) are very large (4.2 and 2.4 radius) which makes the figure spread out too much. The "Oscillatory dynamics" and "Self-model" labels are sitting right on the circle edges and the bidirectional arrows are hard to see. The "(theta, alpha, gamma bands)" and "(internal representation)" labels are at the bottom overlapping with arrow markers.
-
-Fix approach: Make the circles smaller, place labels in the gap between inner and outer circles cleanly, and ensure the four corner boxes don't overlap with the input/output arrows.

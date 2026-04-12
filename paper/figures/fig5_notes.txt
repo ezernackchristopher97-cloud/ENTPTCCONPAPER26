@@ -1,5 +1,0 @@
-Figure 5 (grid cell hex) looks clean. Three panels:
-- (A) Spatial firing fields with red Gaussian blobs in hexagonal pattern, gray trajectory
-- (B) Hexagonal lattice with e1, e2 vectors and 60 degree angle
-- (C) Phase wrapping diagram: spatial position -> mod lambda -> S1 x S1 = T2
-All labels are clear, no truncation or overlap. Ready to include.

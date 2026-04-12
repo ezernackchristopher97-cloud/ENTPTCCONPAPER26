@@ -1,1 +1,0 @@
-Issues: "Feedback loop" text on left is partially hidden behind Godel box. "Recursive coupling" on right is truncated by Cross-frequency box arrow. Fix: remove those two small labels, widen the dashed curves to go wider around the boxes, and make sure no arrows cross over box text.
