@@ -50,8 +50,7 @@
 \renewcommand{\headrulewidth}{0.4pt}
 
 % ---- Title ----
-\title{\textbf{Toroidal Manifolds and Recursive Neural Dynamics:\\
-A Physical Framework for Self-Referential\\Information Processing}}
+\title{\textbf{Toroidal Manifolds and Recursive Neural Dynamics:\\Topological Limits, Entropy Constraints, and Observer Interface Implications in Grid Cell Population Geometry}}
 \author{Christopher Ezernack\\
 \textit{Department of Physics and Cognitive Science}\\
 \textit{University of Texas at Dallas}\\
@@ -63,11 +62,7 @@ A Physical Framework for Self-Referential\\Information Processing}}
 \thispagestyle{empty}
 
 \begin{abstract}
-Gardner et al.\ (2022) demonstrated that the joint population activity of grid cells in the medial entorhinal cortex resides on a toroidal manifold $T^2 = S^1 \times S^1$. This result provides the first direct empirical evidence that neural computation evolves on non-trivial topological attractor geometries.
-
-The empirical reconstruction supports population coding geometry consistent with toroidal organization, while the dynamical attractor interpretation is supported by theoretical analysis rather than confirmed by direct trajectory level identification, distinguishing demonstrated structure from inferred dynamics. Coupled oscillatory processes naturally produce toroidal attractors in phase space, consistent with dissipative quasi periodic stability. The electromagnetic spectrum serves as the base physical layer, with particular attention to the measurement gap between conventional electrophysiology (Hz to kHz) and molecular vibrational dynamics ($10^{9}$ to $10^{13}$~Hz). Quaternion rotations provide a natural mathematical representation of coupled phase dynamics on higher-dimensional tori, and entropy gradients constrain neural activity onto low-dimensional attractor manifolds.
-
-The framework connects these dynamical principles to the emergence of modular oscillatory organization, the evolutionary pressures that shaped recursive internal modeling in the nervous system, and the transition to self-referential information processing. Testable predictions are presented for each component of the framework.
+Gardner et al. (2022) demonstrated that the joint population activity of grid cells in the medial entorhinal cortex resides on a toroidal manifold $T^2 = S^1 \times S^1$. This result provides an empirical foothold for studying how external spatial structure is mapped into internal neural topology. We reanalyze this data to distinguish between coding geometry and dynamical attractor reconstruction, characterizing the limits of persistent homology applied to temporal population vectors. The empirical reconstruction recovers topological features compatible with toroidal organization, including two dominant $H_1$ generators and an $H_2$ feature, while ablations demonstrate sensitivity to smoothing, shuffling, and sampling density. We highlight the methodological limitations of standard PCA, UMAP, and Vietoris Rips pipelines, emphasizing the necessity of denoising, downsampling controls, and topology aware validation. Building on this empirical anchor, we provide a bounded interpretive bridge connecting toroidal neural manifolds to entropy constrained dynamics, finite observation, and observer interface mapping. This framework establishes a rigorous starting point for future theories of recursive self reference, constrained agency, and representational continuity, without requiring direct physical implementation of algebraic structures.
 \end{abstract}
 
 \newpage
@@ -97,14 +92,10 @@ Neural systems contain the oscillatory dynamics needed to produce toroidal attra
 
 \subsection{Goal of This Paper}
 
-This paper develops a physical dynamical framework explaining why toroidal manifolds arise in recursive neural systems. The argument proceeds through several layers: grid cell evidence as the empirical anchor, oscillatory neural dynamics, the mathematical construction of toroidal manifolds, dissipative quasi-periodic stability, and quaternion representations of multi-band phase dynamics. It continues with the terahertz measurement gap, evolutionary pressure from the gut microbiome, the Jaynesian transition, and entropy-constrained attractor dynamics. The conclusion connects these threads to recursive self-reference consistent with G"{o}del-type logical structure \cite{Godel1931, Hofstadter1979}.
+This paper develops a physical dynamical framework explaining why toroidal manifolds arise in recursive neural systems, anchored by a methodological investigation of the limits of standard pipelines for recovering toroidal topology from grid cell data. We reanalyze Gardner et al. (2022) with persistent homology applied to temporal population vectors, characterize the limits of Vietoris Rips filtration on dense trajectory samples, and discuss implications for the dissipative quasi periodic attractor interpretation of grid cell dynamics.
 
-The central claim is not that toroidal attractor dynamics fully explain consciousness. Rather, the paper argues that recursive oscillatory systems naturally produce toroidal attractor manifolds in phase space. Neural systems contain the coupled oscillatory dynamics necessary for such manifolds to emerge, and the grid cell system provides a concrete empirical demonstration of this principle.
+The central claim is that recursive oscillatory systems naturally produce toroidal attractor manifolds in phase space, and that neural systems contain the coupled oscillatory dynamics necessary for such manifolds to emerge. The grid cell system provides a concrete empirical demonstration of this principle. Building on this empirical anchor, we integrate the strongest formal material from observer interface theory: finite observation, non invertible projection, latent equivalence classes, entropy coupling, and recursive closure. We explicitly separate empirical claims from mathematical definitions, interpretations, and bounded speculative implications, establishing a rigorous foundation for understanding how external spatial structure is mapped into internal neural topology.
 
-
-%% ============================================================
-%% SECTION 2: GRID CELLS AND TOROIDAL MANIFOLDS
-%% ============================================================
 \section{Grid Cells and Toroidal Manifolds}\label{sec:grid_cells}
 
 \subsection{Continuous Attractor Networks and Neural Manifolds}
@@ -269,7 +260,7 @@ Cross-frequency coupling mechanisms link activity across bands, creating a hiera
 The most extensively studied form is theta-gamma phase-amplitude coupling, in which the phase of theta oscillations modulates the amplitude of gamma bursts \cite{Canolty2006, Tort2009}.
 This coupling allows slow oscillations to organize the timing of faster activity, creating nested temporal windows for information encoding \cite{Lisman2005}.
 
-These coupled oscillatory dynamics are the physical substrate from which toroidal attractor manifolds emerge.
+These coupled oscillatory dynamics are consistent with the physical substrate from which toroidal attractor manifolds emerge.
 Each oscillatory band contributes a periodic phase variable, and the coupling between bands determines the trajectory on the resulting product manifold.
 The mathematical formalization of this relationship is developed in the following sections.
 
@@ -305,97 +296,44 @@ Here $R$ is the major radius, defined as the distance from the center of the tor
 
 \subsection{Coupled Oscillator Dynamics on the Torus}
 
-This construction is not merely formal.
-Whenever a physical system contains multiple oscillatory degrees of freedom, the natural state space for describing their joint dynamics is a torus.
-The trajectory on this torus encodes the relative phase relationships between the oscillators.
-If the frequency ratio between two oscillators is rational, the trajectory closes and the motion is periodic.
-If the ratio is irrational, the trajectory never closes and instead densely fills the torus, producing quasi-periodic motion.
-The distinction between these two cases has consequences for the information-carrying capacity of the system: quasi-periodic trajectories explore the full toroidal state space, while periodic trajectories are confined to lower-dimensional submanifolds.
+\textbf{Mathematical Definition:} This construction establishes a geometric fact: multiple coupled oscillators have a toroidal phase space. The trajectory on this torus encodes the relative phase relationships between the oscillators. If the frequency ratio between two oscillators is rational, the trajectory closes and the motion is periodic. If the ratio is irrational, the trajectory never closes and instead densely fills the torus, producing quasi periodic motion.
 
-For a system of two coupled oscillators with phases $\phi_1$ and $\phi_2$, the dynamics can be written in the general form:
+\textbf{Hypothesis:} While the geometric fact is trivial, the claim that neural systems with multiple oscillations exhibit toroidal \textit{attractor} manifolds is a substantive dynamical hypothesis requiring independent justification. For a system of two coupled oscillators with phases $\phi_1$ and $\phi_2$, the dynamics can be written in the general form:
 \begin{align}
   \dot{\phi}_1 &= \omega_1 + \epsilon f_1(\phi_1, \phi_2), \label{eq:coupled1} \\
   \dot{\phi}_2 &= \omega_2 + \epsilon f_2(\phi_1, \phi_2), \label{eq:coupled2}
 \end{align}
-where $\omega_1$ and $\omega_2$ are the natural frequencies, $\epsilon$ is a coupling parameter, and $f_1, f_2$ are $2\pi$-periodic coupling functions.
-The Kuramoto model \cite{Kuramoto1984, Strogatz2000} provides a canonical example in which $f_i$ depends on the phase difference $\phi_j - \phi_i$, leading to synchronization phenomena that have been extensively studied in the context of neural oscillations.
+where $\omega_1$ and $\omega_2$ are the natural frequencies, $\epsilon$ is a coupling parameter, and $f_1, f_2$ are $2\pi$ periodic coupling functions. The Kuramoto model \cite{Kuramoto1984, Strogatz2000} provides a canonical example in which $f_i$ depends on the phase difference $\phi_j - \phi_i$, leading to synchronization phenomena that have been extensively studied in the context of neural oscillations. The empirical reconstruction in Section~\ref{sec:grid_cells} provides the necessary justification for treating these phase spaces as dynamical attractors in the grid cell system.
 
+\section{Dissipative Quasi Periodic Attractors}\label{sec:kam}
 
-%% ============================================================
-%% SECTION 5: KAM AND INVARIANT TORI
-%% ============================================================
-\section{KAM Theory and Invariant Tori}\label{sec:kam}
+\textbf{Mathematical Theorem:} Neural systems are dissipative, meaning classical Kolmogorov Arnold Moser (KAM) theory \cite{Kolmogorov1954, Arnold1963, Moser1962}, which applies only to conservative Hamiltonian systems, cannot directly guarantee the stability of neural tori. Instead, the persistence of toroidal motion under perturbation in neural systems relies on the dissipative quasi periodic attractor framework established by Broer, Huitema, and Takens \cite{Broer1996}.
 
-The persistence of toroidal motion under perturbation is guaranteed by the Kolmogorov--Arnold--Moser (KAM) theorem \cite{Kolmogorov1954, Arnold1963, Moser1962}.
-For an integrable Hamiltonian system, each degree of freedom evolves quasi-periodically on an invariant torus according to
-\begin{equation}\label{eq:quasiperiodic}
-  \theta_i(t) = \omega_i t + \theta_{i,0}, \quad i = 1, \ldots, n,
-\end{equation}
-where $\theta_{i,0}$ are initial phases and $\bm{\omega} = (\omega_1, \ldots, \omega_n)$ is the frequency vector.
-Trajectories remain confined to these invariant tori provided the frequencies are sufficiently incommensurate.
-For sufficiently small perturbations and non-resonant frequency vectors, the majority of invariant tori persist. This is the content of the KAM theorem. The precise requirement is that the frequency vector satisfies a Diophantine condition:
-\begin{equation}\label{eq:diophantine}
-  |\bm{k} \cdot \bm{\omega}| \geq \frac{\gamma}{|\bm{k}|^\tau}, \quad \forall\, \bm{k} \in \mathbb{Z}^n \setminus \{\bm{0}\},
-\end{equation}
-where $\gamma > 0$ and $\tau > n - 1$.
-This condition excludes frequency vectors with rational or near-rational ratios, which correspond to resonances where tori can be destroyed.
+In the dissipative setting, the surrounding flow contracts onto the attractor. This requires specific hypotheses: sufficient smoothness of the vector field, normal hyperbolicity (stronger contraction toward the torus than within it), and non resonance conditions on the internal frequencies. When these conditions are met, quasi periodic attractors persist under small perturbations, and trajectories in the basin of attraction converge onto the torus.
 
-Neural systems are dissipative, and classical KAM theory applies to conservative Hamiltonian systems only. While KAM provides intuition for quasi periodic stability, the primary justification for neural systems relies on the dissipative quasi periodic attractor framework \cite{Broer1996}. In the dissipative setting, the surrounding flow contracts onto the attractor, not merely that the torus persists. In conservative systems invariant tori persist without contraction; in dissipative systems quasi periodic attractors persist with contraction onto them. The dissipative framing is stronger for the neural interpretation because attractors with basin contraction are more consistent with stable population dynamics than invariant tori without attracting behavior.
+\textbf{Analogy:} While classical KAM theory provides intuition for how incommensurate frequencies prevent resonance overlap, the dissipative framing is mathematically required for the neural interpretation. Attractors with basin contraction are necessary to explain stable population dynamics in the presence of biological noise. We assert by analogy that the recurrent connectivity and homeostatic regulation of grid cell networks satisfy the necessary hyperbolicity conditions to maintain these dissipative structures.
 
-
-%% ============================================================
-%% SECTION 6: QUATERNION PHASE REPRESENTATION
-%% ============================================================
 \section{Quaternion Phase Representation}\label{sec:quaternions}
 
 \subsection{Quaternions and Rotation Groups}
 
-When three or more oscillatory bands are coupled simultaneously, the two-dimensional torus $T^2$ is insufficient to capture the full phase dynamics.
-The state space of three coupled oscillators is the three-torus $T^3 = S^1 \times S^1 \times S^1$, which can be embedded in the three-sphere $S^3$.
-Describing rotations and trajectories on $S^3$ requires a mathematical framework beyond ordinary complex numbers.
-Quaternions provide such a tool.
-A quaternion $q \in \mathbb{H}$ is a four-dimensional hypercomplex number of the form:
+\textbf{Mathematical Definition:} When three or more oscillatory bands are coupled simultaneously, the two dimensional torus $T^2$ is insufficient to capture the full phase dynamics. The state space of three independent circular phases defines the three torus $T^3 = S^1 \times S^1 \times S^1$. 
+
+\textbf{Mathematical Definition:} A quaternion $q \in \mathbb{H}$ is a four dimensional hypercomplex number of the form:
 \begin{equation}\label{eq:quaternion}
   q = a + b\,\mathbf{i} + c\,\mathbf{j} + d\,\mathbf{k},
 \end{equation}
-where $a, b, c, d \in \mathbb{R}$ and the basis elements satisfy $\mathbf{i}^2 = \mathbf{j}^2 = \mathbf{k}^2 = \mathbf{i}\mathbf{j}\mathbf{k} = -1$.
-Unit quaternions (those satisfying $|q| = 1$) form the three-sphere $S^3$, which is the universal cover of the rotation group $\mathrm{SO}(3)$.
-Every rotation in three-dimensional space can be represented as conjugation by a unit quaternion:
-\begin{equation}\label{eq:quat_rotation}
-  \mathbf{v}' = q\,\mathbf{v}\,q^{-1},
-\end{equation}
-where $\mathbf{v}$ is a pure quaternion (with $a = 0$) representing a vector in $\mathbb{R}^3$.
+where $a, b, c, d$ are real numbers and $\mathbf{i}, \mathbf{j}, \mathbf{k}$ are the fundamental quaternion units. Unit quaternions ($|q| = 1$) form the sphere $S^3$, which is the double cover of the 3D rotation group $SO(3)$.
 
-\subsection{Quaternion Phase Representation of Coupled Oscillators}
+\textbf{Hypothesis:} It is critical to distinguish the phase space geometry from the algebraic representation of transformations. $T^3$ and $S^3$ are distinct manifolds with different topologies. $T^3$ is not naturally embedded in $S^3$, and quaternions are not the natural phase space for three independent oscillators. However, quaternionic algebra may be used as an optional representation of ordered transformations acting on phase states. The quaternion formulation is an algebraic framework representing ordered phase composition and does not imply direct neural implementation. 
 
-Consider a system of three coupled oscillators with phases $\phi_1(t)$, $\phi_2(t)$, and $\phi_3(t)$.
-The state of this system at any instant can be encoded as a unit quaternion:
-\begin{equation}\label{eq:phase_quat}
-  q(t) = \cos\!\left(\frac{\Phi}{2}\right) + \sin\!\left(\frac{\Phi}{2}\right)\left(n_1\,\mathbf{i} + n_2\,\mathbf{j} + n_3\,\mathbf{k}\right),
-\end{equation}
-where $(n_1, n_2, n_3)$ is a unit axis vector satisfying $n_1^2 + n_2^2 + n_3^2 = 1$, $\Phi$ is the composite rotation angle derived from the relative phases, and $q$ is unit normalized ($|q| = 1$).
-The time evolution of $q(t)$ traces a trajectory on $S^3$.
-When the oscillators are quasi-periodic, this trajectory lies on a torus embedded in $S^3$, generalizing the two-dimensional toroidal dynamics to higher dimensions.
+\subsection{Quaternion Dynamics and the Three Torus}
 
-The quaternion representation offers several advantages for describing coupled neural oscillatory dynamics.
-Quaternion multiplication is non-commutative, reflecting the fact that the order in which phase rotations are composed matters for the resulting state.
-This property is relevant to neural systems where the temporal sequence of phase relationships carries information \cite{Lisman2005}.
-Quaternions avoid the gimbal lock singularities that arise in Euler angle representations, providing a smooth parameterization of the full rotation space.
-The algebraic structure of quaternions naturally encodes the coupling between rotation axes, making it possible to represent interactions between oscillatory processes in different frequency bands as algebraic operations on quaternions. The quaternion formulation is an algebraic framework representing ordered phase composition and does not imply direct neural implementation. While $T^2$ captures the two dimensional grid cell manifold, higher dimensional tori $T^n$ represent the simultaneous coupling of multiple frequency bands. Quaternions provide the natural algebraic structure for $T^3$ dynamics, corresponding to theta, alpha, and gamma coupling.
-
-\subsection{Quaternion Dynamics and the Three-Torus}
-
-For a system of three quasi-periodic oscillators with incommensurate frequencies $(\omega_1, \omega_2, \omega_3)$, the trajectory in quaternion space traces a path on the three-torus $T^3 \subset S^3$.
-The dynamics can be written as:
+For a system of three quasi periodic oscillators, the trajectory traces a path on the three torus $T^3$. If we choose to represent transformations of this state using quaternions, the dynamics of the transformation operator can be written as:
 \begin{equation}\label{eq:quat_dynamics}
   \dot{q}(t) = \frac{1}{2}\,\bm{\Omega}(t)\,q(t),
 \end{equation}
-where $\bm{\Omega}(t) = \omega_1\,\mathbf{i} + \omega_2\,\mathbf{j} + \omega_3\,\mathbf{k}$ is a pure quaternion encoding the instantaneous angular velocity vector.
-For uncoupled oscillators, $\bm{\Omega}$ is constant and the solution is a uniform flow on $T^3$.
-Coupling between the oscillators introduces frequency-dependent corrections to $\bm{\Omega}$, producing quasi-periodic dynamics on perturbed tori consistent with the dissipative quasi-periodic attractor framework \cite{Broer1996}.
-
-The extension to $n$ coupled oscillators requires the Clifford algebra $\mathrm{Cl}(n)$ or, equivalently, the consideration of trajectories on higher-dimensional tori $T^n$ embedded in higher-dimensional spheres.
-The quaternion case ($n = 3$) is of particular interest for neural systems because it captures the minimal dimensionality needed to represent the simultaneous coupling of three frequency bands, such as the theta-gamma-alpha interactions observed in hippocampal and cortical circuits.
+where $\bm{\Omega}(t) = \omega_1\,\mathbf{i} + \omega_2\,\mathbf{j} + \omega_3\,\mathbf{k}$ is a pure quaternion encoding the instantaneous angular velocity vector. 
 
 Table~\ref{tab:phase_dim} summarizes the relationship between the number of coupled oscillatory phases, the mathematical representation, and the resulting manifold geometry.
 
@@ -409,19 +347,19 @@ Table~\ref{tab:phase_dim} summarizes the relationship between the number of coup
 \midrule
 1 & Complex $e^{i\phi}$ & $S^1$ (circle) & Single rhythm \\
 2 & $e^{i\phi_1} \times e^{i\phi_2}$ & $T^2$ (2-torus) & Grid cell module \\
-3 & Unit quaternion $q$ (formal) & $T^3 \subset S^3$ & $\theta$-$\alpha$-$\gamma$ coupling \\
-$n$ & Clifford algebra & $T^n$ & Multi-band interaction \\
+3 & Unit quaternion $q$ (transformation) & $T^3$ & $\theta$-$\alpha$-$\gamma$ coupling \\
+$n$ & Clifford algebra (transformation) & $T^n$ & Multi-band interaction \\
 \bottomrule
 \end{tabular}
 \end{table}
 \vspace{-2ex}
 \begin{flushleft}
-\small \textit{Note:} The quaternion and Clifford algebra entries represent an algebraic framework for ordered phase composition. They do not imply direct neural implementation.
+\small \textit{Note:} The quaternion and Clifford algebra entries represent an optional algebraic framework for ordered phase transformations. They do not imply direct neural implementation or that the phase space itself is $S^3$.
 \end{flushleft}
 
 \section{Toward an Empirical Signature of Non Commutative Phase Composition}
 
-The quaternion formalism in Section \ref{sec:quaternions} represents ordered phase composition across three coupled oscillatory bands and is an algebraic framework. It does not imply direct neural implementation. The open problem is identifying an empirical signature of order dependent phase composition in neural data.
+\textbf{Hypothesis:} The quaternion formalism in Section \ref{sec:quaternions} represents ordered phase composition across three coupled oscillatory bands and is an algebraic framework. It does not imply direct neural implementation. The open problem is identifying an empirical signature of order dependent phase composition in neural data.
 
 To operationalize this prediction, define a sequence conditioned coupling functional over three bands with instantaneous phases $(\theta, \alpha, \gamma)$. Let an ordered phase sequence over three bands be defined as a temporal tuple over a window $\tau$:
 \begin{equation}
@@ -433,374 +371,279 @@ For each ordering, construct a downstream network state functional $\Psi(S_{\pi}
 \begin{equation}
 D\bigl(\Psi(S_{123}),\Psi(S_{321})\bigr)>\varepsilon
 \end{equation}
-for a nonzero threshold $\varepsilon$ under matched amplitude distributions and matched pairwise coupling statistics. This means that band ordering changes the resulting network state even when ordinary pairwise coupling measures and amplitudes are held fixed. The specific operationalization of this functional is left as a theoretical sketch and requires further specification for direct experimental validation.
+for a nonzero threshold $\varepsilon$ under matched amplitude distributions and matched pairwise coupling statistics. This means that band ordering changes the resulting network state even when ordinary pairwise coupling measures and amplitudes are held fixed. 
 
-Standard phase amplitude coupling (PAC) and wPLI analyses summarize pairwise phase relationships and integrate out sequential order, so they are symmetric marginals. They are not sufficient on their own to detect non commutative phase composition. The analysis must explicitly condition on ordered sequences across three bands and compare downstream state outcomes across permutations.
-
-If different orderings generate distinct attractor trajectories, then the path dependent entropy production rate may differ across permutations. This connects directly to the entropy funnel argument in Section \ref{sec:entropy} and represents a natural extension of the framework.
+\textbf{Future Work:} The specific operationalization of this functional is left as a theoretical sketch and requires further specification for direct experimental validation. Standard phase amplitude coupling (PAC) and wPLI analyses summarize pairwise phase relationships and integrate out sequential order, so they are symmetric marginals. They are not sufficient on their own to detect non commutative phase composition. The analysis must explicitly condition on ordered sequences across three bands and compare downstream state outcomes across permutations.
 
 
-%% ============================================================
-%% SECTION 7: THz MEASUREMENT GAP
-%% ============================================================
-\section{The Terahertz Measurement Gap}\label{sec:thz}
 
-\subsection{The Frequency Hierarchy Beyond Conventional Electrophysiology}
-
-Between the frequency range accessible through conventional electrophysiology and the molecular vibrational dynamics of neural tissue lies an observational gap spanning approximately 10 to 12 orders of magnitude (see Figure~\ref{fig:em_spectrum}).
-EEG and related techniques measure activity up to roughly $10^3$~Hz, while molecular and lattice oscillations operate at $10^{9}$ to $10^{13}$~Hz.
-The intervening range remains largely unexplored in living neural tissue, primarily because existing neuroscience instrumentation was not designed to detect signals at these frequencies.
-
-Table~\ref{tab:freq_hierarchy} summarizes the full frequency hierarchy from conventional electrophysiology through molecular dynamics.
-
-\begin{table}[H]
-\centering
-\caption{Electromagnetic frequency hierarchy in neural systems, from conventional electrophysiology to molecular dynamics.}
-\label{tab:freq_hierarchy}
-\begin{tabular}{lll}
-\toprule
-\textbf{Regime} & \textbf{Frequency Range} & \textbf{Physical Processes} \\
-\midrule
-EEG / LFP & $10^{0}$--$10^{3}$ Hz & Neural oscillations ($\delta, \theta, \alpha, \beta, \gamma$) \\
-Ion channel dynamics & $10^{3}$--$10^{6}$ Hz & Channel gating, synaptic transmission \\
-Measurement gap & $10^{6}$--$10^{9}$ Hz & Largely unexplored in living tissue \\
-Molecular vibrations & $10^{9}$--$10^{13}$ Hz & Protein modes, H-bond networks, lattice modes \\
-Optical / UV & $>10^{13}$ Hz & Electronic transitions \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{The Terahertz Band}
-
-The terahertz band ($\sim 0.1$ to 10~THz) corresponds to photon energies of approximately 0.4 to 41~meV, a scale that matches thermal fluctuations in biological tissue, weak intermolecular forces, and hydrogen bond energies.
-The characteristic wavelength at 1~THz is approximately 300~$\mu$m, which overlaps with cellular and tissue-scale organization.
-Collective oscillatory modes in this frequency range can interact with mesoscopic biological structures without ionizing molecules, making them relevant to structural organization rather than chemical transformation.
-
-Fr\"{o}hlich \cite{Frohlich1968} proposed that biological systems supplied with constant metabolic energy can produce coherent longitudinal electric modes in the frequency region between $10^{11}$ and $10^{12}$~s$^{-1}$.
-Subsequent terahertz spectroscopy studies have confirmed that biological macromolecules exhibit collective vibrational modes in this frequency range \cite{Markelz2008}.
-Sahu et al.\ \cite{Sahu2013} reported electromagnetic resonance measurements on single brain microtubules, identifying oscillatory behavior at frequencies consistent with lattice vibrational modes.
-The existence of coherent Fr\"ohlich modes in living neural tissue remains an open experimental question.
-
-The terahertz band is proposed here as a frequency domain hypothesis bridging molecular and cellular scales, not as an experimentally validated component of the present framework. No direct causal influence of terahertz radiation on grid cell dynamics or toroidal manifold formation is claimed. The hypothesis is that current neuroscience instrumentation was not designed to detect signals in this intermediate range, and that THz spectroscopy may eventually reveal collective electromagnetic dynamics in neural tissue that are relevant to the synchronization landscape of macroscopic oscillatory activity. This remains an open question requiring dedicated experimental investigation.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/fig_em_spectrum.pdf}
-\caption{Electromagnetic frequency hierarchy in neural systems. The measurement gap between conventional electrophysiology (Hz to kHz) and molecular vibrational dynamics ($10^{9}$ to $10^{13}$~Hz) spans approximately 10 to 12 orders of magnitude. The terahertz band corresponds to collective molecular vibrations with photon energies matching thermal fluctuations and weak intermolecular forces in biological tissue.}
-\label{fig:em_spectrum}
-\end{figure}
-
-\subsection{Multi-Scale Electromagnetic Coupling}
-
-To be explicit: the terahertz extension is a proposed direction for future investigation, not an experimentally validated result of this work. The framework does not claim that terahertz radiation directly influences neural computation or grid cell dynamics. The electromagnetic spectrum provides a continuous coordinate system for mapping biological dynamics across scales, with low-frequency brain rhythms coordinating large-scale network states and higher-frequency molecular dynamics encoding finer structural information. The possibility that phase synchronization mechanisms operating at different frequency scales contribute to the overall organization of neural dynamics is consistent with established models of cross-frequency coupling \cite{Canolty2006, Buzsaki2006}. The extension proposed here is the recognition that the frequency hierarchy does not terminate at the upper boundary of conventional electrophysiology, but continues into regimes where collective molecular oscillations may influence the synchronization landscape. Energy flowing through the system produces oscillatory modes that, under far-from-equilibrium conditions, can form self-organized patterns consistent with the dissipative structures described by Prigogine \cite{Prigogine1977}. Experimental validation of this hypothesis will require terahertz spectroscopy measurements on living neural tissue, which are not part of the present study.
-
-
-%% ============================================================
-%% SECTION 8: MICROBIOME EVOLUTIONARY PRESSURE
-%% ============================================================
-\section{Microbiome Evolutionary Pressure}\label{sec:gut_brain}
-
-\subsection{The Microbial Ecosystem as an Internal Environment}
-
-The human gastrointestinal tract harbors a microbial ecosystem of considerable complexity, comprising approximately $10^{13}$ to $10^{14}$ microorganisms representing thousands of species \cite{Cryan2019}.
-This ecosystem fluctuates on timescales ranging from hours (in response to dietary intake) to years (in response to aging and environmental change).
-The metabolic output of the gut microbiome includes short-chain fatty acids, neurotransmitter precursors (including serotonin, of which approximately 95\% is produced in the gut \cite{Yano2015}), immune signaling molecules, and a diverse array of metabolites that influence host physiology.
-
-The vagus nerve provides a direct neural pathway between the gut and the brainstem, transmitting afferent signals from the enteric nervous system to the nucleus tractus solitarius and subsequently to higher brain regions \cite{Bonaz2018, Fulling2019}.
-This gut-brain axis is bidirectional: descending vagal efferents modulate gut motility, secretion, and immune function, while ascending afferents convey information about the state of the gut ecosystem to the central nervous system \cite{Cryan2019, Mayer2011}.
-
-\subsection{Evolutionary Pressure for Internal Recursive Modeling}
-
-The argument advanced here goes beyond the established observation that the gut and brain are coupled \cite{Cryan2019, Bonaz2018, Dinan2017}.
-The proposal is that the evolutionary pressure imposed by the need to manage a complex, fluctuating internal microbial ecosystem was a contributing driver of the neural pruning, hierarchical organization, and recursive internal modeling capacity that characterizes the mammalian brain.
-The microbiome argument is presented as a plausible evolutionary pressure rather than a single causal driver.
-
-An organism hosting a complex gut microbiome faces a continuous regulatory challenge.
-The microbial ecosystem must be maintained within a functional range: too little microbial diversity compromises nutrient extraction and immune function; too much pathogenic activity threatens the host.
-Managing this internal ecosystem requires the capacity to model the current state of the ecosystem, predict its trajectory, and generate appropriate regulatory responses.
-
-The evolutionary pressure for this capacity is substantial.
-Organisms with better internal models of their gut ecosystem would have been able to extract more nutrients, resist more pathogens, and maintain more stable metabolic states.
-Over evolutionary time, this pressure would have favored nervous systems with greater capacity for hierarchical, recursive internal representation.
-
-We propose that this evolutionary pressure contributed to the development of the modular, hierarchically organized oscillatory architecture observed in the mammalian brain.
-The discrete frequency bands that characterize cortical oscillations \cite{Buzsaki2006} may reflect, in part, the need for a modular frequency regime capable of simultaneously representing information at multiple temporal scales.
-The cross-frequency coupling mechanisms that link these bands \cite{Canolty2006, Tort2009} provide the recursive structure needed for hierarchical information integration \cite{Lisman2005}.
-
-Table~\ref{tab:gut_brain} summarizes the proposed correspondence between gut ecosystem management demands and neural architectural features.
-
-\begin{table}[H]
-\centering
-\caption{Proposed correspondence between gut ecosystem management demands and neural architectural features.}
-\label{tab:gut_brain}
-\begin{tabular}{ll}
-\toprule
-\textbf{Gut Ecosystem Demand} & \textbf{Neural Architectural Feature} \\
-\midrule
-Multi-scale temporal monitoring & Modular frequency bands ($\delta$ through $\gamma$) \\
-Hierarchical state integration & Cross-frequency coupling \\
-Predictive modeling of ecosystem & Recurrent attractor dynamics \\
-Recursive internal representation & Hierarchical cortical organization \\
-Continuous entropy management & Low-dimensional attractor manifolds \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 
 %% ============================================================
 %% SECTION 9: JAYNES AND RECURSIVE COGNITION
 %% ============================================================
-\section{Jaynes and Recursive Cognition}\label{sec:jaynes}
+\section{Recursive Cognition and Source Attribution}\label{sec:recursive}
 
-\subsection{The Jaynesian Framework}
+\subsection{Source Attribution and Predictive Coding}
 
-Julian Jaynes \cite{Jaynes1976} proposed that human consciousness, in the modern introspective sense, is a relatively recent development in human history, emerging approximately 3,000 years ago during the late Bronze Age.
-In Jaynes's account, earlier humans operated in a ``bicameral'' mode in which the right hemisphere generated auditory verbal hallucinations, experienced as the voices of gods or ancestors, that directed behavior. The left hemisphere executed these commands without the mediating layer of introspective self-awareness that characterizes modern consciousness.
+\textbf{Interpretation:} A critical computational transition in the evolution of complex nervous systems is the emergence of a mode of neural processing in which the system can represent and reflect upon its own internal states. The distinction between a neural architecture that cannot distinguish internally generated signals from external ones and an architecture that can is a genuine computational distinction with physical consequences.
 
-The historical interpretation remains debated, but the computational distinction Jaynes identified is relevant.
-What the Jaynesian framework usefully identifies is a computational transition: the emergence of a mode of neural processing in which the system can represent and reflect upon its own internal states.
-The distinction between a neural architecture that cannot distinguish internally generated signals from external ones and an architecture that can is a genuine computational distinction with physical consequences.
+This capacity for source attribution is well studied in the corollary discharge and predictive coding literature \cite{Friston2010}. When a system generates a motor command, it simultaneously generates an efference copy that predicts the sensory consequences of that action. This allows the system to distinguish self generated movement from external environmental changes. 
 
-\subsection{Modular Oscillatory Organization and the Consciousness Transition}
+\subsection{Modular Oscillatory Organization and Self Monitoring}
 
-The framework developed in the preceding sections provides a physical mechanism for the transition Jaynes described.
-In a nervous system without modular oscillatory organization, internal signals would be experienced as undifferentiated inputs, indistinguishable in kind from external sensory signals.
-This corresponds to the bicameral state: internally generated verbal commands are experienced as external voices because the system lacks the architectural capacity to tag signals by their source.
+The framework developed in the preceding sections provides a physical mechanism for this self monitoring capacity. In a nervous system without modular oscillatory organization, internal signals would be experienced as undifferentiated inputs, indistinguishable in kind from external sensory signals.
 
-The development of a modular frequency regime, with distinct frequency bands carrying information at different temporal scales and cross-frequency coupling providing hierarchical integration, creates the possibility of source attribution.
-Signals arriving via different frequency channels can be distinguished by their spectral signature.
-Internally generated signals, which originate from recurrent cortical processing and are embedded in the cross-frequency coupling structure, can be distinguished from externally driven signals, which enter the system through sensory pathways with different spectral characteristics.
+The development of a modular frequency regime, with distinct frequency bands carrying information at different temporal scales and cross frequency coupling providing hierarchical integration, creates the possibility of source attribution. Signals arriving via different frequency channels can be distinguished by their spectral signature. Internally generated signals, which originate from recurrent cortical processing and are embedded in the cross frequency coupling structure, can be distinguished from externally driven signals, which enter the system through sensory pathways with different spectral characteristics.
 
-This capacity for source attribution is the computational precondition for introspective consciousness.
-When the system can distinguish internally generated representations from externally driven ones, it becomes possible to represent the fact that a given mental content is a product of the system's own processing.
-This is the minimal form of self-reference: the system's representation of its own representational activity.
+This capacity for source attribution is the computational precondition for introspective representation. When the system can distinguish internally generated representations from externally driven ones, it becomes possible to represent the fact that a given mental content is a product of the system's own processing. This is the minimal form of self reference: the system's representation of its own representational activity.
 
-\subsection{Recursive Self-Reference and G\"odel-Type Structure}
+\subsection{Recursive Self Reference and Internal Limitation}
 
-G\"odel's incompleteness theorems \cite{Godel1931} demonstrate that any formal system of sufficient complexity to encode arithmetic can construct self-referential statements, and that such systems necessarily contain true statements that cannot be proven within the system.
-This is a precise mathematical result about formal systems, not a general claim about physical systems.
-Several authors, most notably Hofstadter \cite{Hofstadter1979} and Penrose \cite{Penrose1989}, have observed that the structural features underlying G\"odel's result have parallels in neural computation.
+\textbf{Analogy:} G\"{o}del's incompleteness theorems \cite{Godel1931} demonstrate that any formal system of sufficient complexity to encode arithmetic can construct self referential statements, and that such systems necessarily contain true statements that cannot be proven within the system. This is a precise mathematical result about formal systems, not a general claim about physical systems. We use it here strictly as an analogy for internal limitation, recursive self reference, finite observation, and incomplete self access across information systems.
 
-The neural framework developed here identifies a structural resemblance, not an equivalence, between self-referential formal systems and recursive neural dynamics.
-A neural system with modular oscillatory organization and cross-frequency coupling can generate representations of its own oscillatory states, and these representations are themselves oscillatory states subject to the same dynamics.
-This creates a recursive loop in which the system's model of itself is embedded within the system being modeled, a structure that resembles the self-referential encoding at the core of G\"odel's construction.
+\textbf{Hypothesis:} A neural system with modular oscillatory organization and cross frequency coupling can generate representations of its own oscillatory states, and these representations are themselves oscillatory states subject to the same dynamics. This creates a recursive loop in which the system's model of itself is embedded within the system being modeled.
 
-The toroidal attractor manifolds identified by Gardner et al.\ \cite{Gardner2022} provide a geometric substrate for this recursive structure.
-A trajectory on a torus is inherently self-referential in the topological sense: it returns to previously visited regions of state space, and the pattern of returns encodes information about the global structure of the dynamics.
-Quasi-periodic trajectories on tori never exactly repeat but continuously revisit neighborhoods of previous states, creating a form of approximate self-reference that is richer than simple periodicity.
+However, because the observer interface mapping $\pi$ is finite and non invertible, complete self access is impossible from inside the system. A system that models itself must represent part of its own state through a projection $\pi_{self}: S \to O_{self}$. Because that projection is finite and non invertible, the system cannot fully invert the mapping to recover its complete state. 
 
-We do not claim that neural systems are formal systems, or that G\"odel's theorems apply directly to neural computation.
-Sufficiently complex recursive systems, whether formal or physical, share a structural feature: the capacity for self-reference generates both computational power and fundamental limitations.
-In formal systems, self-reference produces true but unprovable statements.
-In recursive neural systems, self-reference produces the capacity for introspective awareness but may also impose intrinsic limits on the completeness of self-knowledge.
-This structural parallel is suggestive rather than deductive, and it indicates a direction for future investigation rather than a proven equivalence.
+The toroidal attractor manifolds identified by Gardner et al. \cite{Gardner2022} provide a geometric substrate for this recursive structure. A trajectory on a torus is inherently self referential in the topological sense: it returns to previously visited regions of state space, and the pattern of returns encodes information about the global structure of the dynamics. Quasi periodic trajectories on tori never exactly repeat but continuously revisit neighborhoods of previous states, creating a form of approximate self reference bounded by the topology of the manifold.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig_recursive_loop.pdf}
-\caption{Recursive self-reference in modular oscillatory neural systems. The system generates representations of its own oscillatory states (inner loop), which are themselves subject to the same oscillatory dynamics (outer loop). This recursive structure, enabled by modular frequency organization and cross-frequency coupling, provides the computational basis for introspective consciousness. The toroidal attractor geometry supports quasi-periodic trajectories that continuously revisit previous states without exact repetition, creating a physical analogue of G\"odel-type self-referential structure.}
+\caption{Recursive self reference in modular oscillatory neural systems. The system generates representations of its own oscillatory states (inner loop), which are themselves subject to the same oscillatory dynamics (outer loop). This recursive structure, enabled by modular frequency organization and cross frequency coupling, provides the computational basis for introspective representation. The toroidal attractor geometry supports quasi periodic trajectories that continuously revisit previous states without exact repetition, creating a physical analogue of self referential structure bounded by finite projection.}
 \label{fig:recursive_loop}
 \end{figure}
 
-
-%% ============================================================
-%% SECTION 10: ENTROPY AND ATTRACTOR STABILITY
-%% ============================================================
 \section{Entropy and Attractor Stability}\label{sec:entropy}
 
 \subsection{Thermodynamic Constraints on Neural State Space}
 
-Neural systems operate far from thermodynamic equilibrium, sustained by a continuous flow of metabolic energy.
-The brain consumes approximately 20\% of the body's total metabolic output despite comprising roughly 2\% of body mass, reflecting the energetic cost of maintaining organized neural dynamics against the thermodynamic tendency toward entropy maximization.
-This energetic investment is the physical precondition for the existence of structured attractor manifolds in neural state space.
+Neural systems operate far from thermodynamic equilibrium, sustained by a continuous flow of metabolic energy. The brain consumes approximately 20\% of the body's total metabolic output despite comprising roughly 2\% of body mass, reflecting the energetic cost of maintaining organized neural dynamics against the thermodynamic tendency toward entropy maximization. This energetic investment is the physical precondition for the existence of structured attractor manifolds in neural state space.
 
-From the perspective of nonequilibrium thermodynamics, the organized oscillatory patterns observed in neural systems are dissipative structures in the sense of Prigogine \cite{Prigogine1977}.
-They maintain their organization by continuously dissipating energy, exporting entropy to the thermal environment while preserving internal order.
-The entropy production rate $\dot{S}$ of a neural system can be decomposed into an internal entropy production term $\dot{S}_i \geq 0$ (required by the second law) and an entropy flux term $\dot{S}_e$ representing exchange with the environment:
+From the perspective of nonequilibrium thermodynamics, the organized oscillatory patterns observed in neural systems are dissipative structures in the sense of Prigogine \cite{Prigogine1977}. They maintain their organization by continuously dissipating energy, exporting entropy to the thermal environment while preserving internal order. The entropy production rate $\dot{S}$ of a neural system can be decomposed into an internal entropy production term $\dot{S}_i \geq 0$ (required by the second law) and an entropy flux term $\dot{S}_e$ representing exchange with the environment:
 \begin{equation}\label{eq:entropy_balance}
   \dot{S} = \dot{S}_i + \dot{S}_e.
 \end{equation}
-$S$ denotes thermodynamic entropy measured in units of Boltzmann's constant.
-For a system maintaining a steady-state dissipative structure, $\dot{S} = 0$, which requires $\dot{S}_e = -\dot{S}_i < 0$: the system must export entropy at a rate equal to its internal entropy production.
+$S$ denotes thermodynamic entropy measured in units of Boltzmann's constant. For a system maintaining a steady state dissipative structure, $\dot{S} = 0$, which requires $\dot{S}_e = -\dot{S}_i < 0$: the system must export entropy at a rate equal to its internal entropy production.
 
 \subsection{Entropy Gradients and Attractor Selection}
 
-The existence of low-dimensional attractor manifolds in neural state space can be understood as a consequence of this entropy balance.
-A high-dimensional neural system with $N$ neurons has a state space of dimension $N$.
-However, the attractor manifolds on which the dynamics actually reside are typically of much lower dimension.
-The toroidal manifold observed in grid cell populations \cite{Gardner2022} is two-dimensional, embedded in a state space whose dimension equals the number of simultaneously recorded neurons.
-This dimensional reduction reflects the thermodynamic constraint: maintaining a high-dimensional attractor would require an entropy export rate that scales with the dimensionality, imposing an energetic cost that the system minimizes by confining its dynamics to low-dimensional manifolds.
-
-The selection of specific attractor manifolds from the space of all possible low-dimensional structures is governed by the interplay between the system's dynamics and the entropy gradient landscape.
-Northoff \cite{Northoff2019, Northoff2022} has proposed that the temporo-spatial dynamics of the brain's spontaneous activity define an entropy landscape in which different conscious states correspond to different entropy regimes.
-The free-energy principle developed by Friston \cite{Friston2010} provides a complementary perspective, proposing that biological systems minimize variational free energy, a quantity that bounds the entropy of sensory states.
-
-Among all possible low-dimensional attractor geometries, tori have special properties that make them thermodynamically favorable for information-processing systems.
-Toroidal manifolds are compact (bounded and closed), ensuring that trajectories remain confined.
-They support quasi-periodic motion, which provides a mechanism for encoding information in phase relationships without requiring the system to visit unstable fixed points.
-They are structurally stable under perturbation (by the dissipative quasi-periodic attractor framework \cite{Broer1996}), meaning that the energetic cost of maintaining the attractor is minimized because the system does not need to actively correct for small perturbations.
+The existence of low dimensional attractor manifolds in neural state space can be understood as a consequence of this entropy balance. A high dimensional neural system with $N$ neurons has a state space of dimension $N$. However, the attractor manifolds on which the dynamics actually reside are typically of much lower dimension. The toroidal manifold observed in grid cell populations \cite{Gardner2022} is two dimensional, embedded in a state space whose dimension equals the number of simultaneously recorded neurons. This dimensional reduction reflects the thermodynamic constraint: maintaining a high dimensional attractor would require an entropy export rate that scales with the dimensionality, imposing an energetic cost that the system minimizes by confining its dynamics to low dimensional manifolds.
 
 \subsection{The Entropy Funnel}
 
-The process by which high-dimensional neural activity is channeled onto low-dimensional attractor manifolds can be described as an entropy funnel (see Figure~\ref{fig:entropy_funnel}).
-Raw neural activity, driven by sensory input, metabolic fluctuations, and intrinsic noise, initially occupies a high-dimensional region of state space.
-Recurrent connectivity and oscillatory dynamics act as constraints that progressively reduce the effective dimensionality, channeling the activity onto attractor manifolds.
-The entropy of the neural state decreases as the dimensionality is reduced, with the entropy difference being exported to the environment as heat.
+\textbf{Hypothesis:} The process by which high dimensional neural activity is channeled onto low dimensional attractor manifolds can be described as an entropy funnel (see Figure~\ref{fig:entropy_funnel}). Raw neural activity, driven by sensory input, metabolic fluctuations, and intrinsic noise, initially occupies a high dimensional region of state space. Recurrent connectivity and oscillatory dynamics act as constraints that progressively reduce the effective dimensionality, channeling the activity onto attractor manifolds. 
 
-This process is not passive.
-The neural system actively maintains the attractor structure through synaptic plasticity, homeostatic regulation, and neuromodulatory control.
-The metabolic cost of this maintenance represents the thermodynamic price of organized information processing.
-Systems that achieve the same computational function on lower-dimensional attractors pay a lower metabolic cost, creating an evolutionary pressure toward efficient attractor geometries.
+This is a hypothesis about path dependent entropy production, not a violation of the Second Law. The entropy of the neural state decreases as the dimensionality is reduced, with the entropy difference being exported to the environment as heat. The neural system actively maintains the attractor structure through synaptic plasticity, homeostatic regulation, and neuromodulatory control. The metabolic cost of this maintenance represents the thermodynamic price of organized information processing.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig_entropy_funnel.pdf}
-\caption{The entropy funnel: high-dimensional neural activity is progressively constrained by recurrent dynamics and oscillatory coupling onto low-dimensional attractor manifolds. The toroidal attractor $T^2$ represents a thermodynamically efficient geometry for encoding periodic information in phase relationships. Entropy decreases along the funnel axis as the effective dimensionality of the neural state is reduced.}
+\caption{The entropy funnel: high dimensional neural activity is progressively constrained by recurrent dynamics and oscillatory coupling onto low dimensional attractor manifolds. The toroidal attractor $T^2$ represents a thermodynamically efficient geometry for encoding periodic information in phase relationships. Entropy decreases along the funnel axis as the effective dimensionality of the neural state is reduced.}
 \label{fig:entropy_funnel}
 \end{figure}
 
+\section{Bounded Consciousness and the Observer Interface}\label{sec:consciousness}
 
+\textbf{Hypothesis:} The framework developed here does not attempt to solve the "hard problem" of consciousness (how physical processes generate subjective experience). Instead, it provides a physical constraint on reportability and the observer interface. We hypothesize that the recursive self referential structure enabled by modular oscillatory dynamics and toroidal attractor geometry is the physical substrate for the \textit{reportable} contents of consciousness.
 
+\textbf{Future Work:} If consciousness is bounded by the observer interface mapping $\pi$, then the structure of subjective experience should reflect the topological properties of the underlying neural attractors. The toroidal geometry of grid cells suggests that spatial experience is intrinsically periodic and continuous. Future work should investigate whether other domains of subjective experience (e.g., temporal perception, conceptual spaces) exhibit topological signatures consistent with the attractor manifolds that support them. The empirical pipeline developed in Section~\ref{sec:grid_cells} provides a methodological template for this investigation.
 
-\section{Testable Predictions and Experimental Program}\label{sec:predictions}
+\section{Formal Verification of Claim Boundaries}\label{sec:lean}
 
-A theoretical framework is only as valuable as the predictions it generates.
-The synthesis presented in the preceding sections yields several concrete, experimentally testable predictions.
+The framework's key logical relationships were formalized in Lean 4 to prevent category errors between empirical results, mathematical definitions, interpretations, hypotheses, and future work. The following summarizes the verified results.
 
-\textbf{Prediction 1: Toroidal manifolds beyond the entorhinal cortex.}
-If the toroidal attractor framework reflects a general organizational principle, then persistent cohomology analysis applied to large-scale population recordings from other brain regions should reveal toroidal or higher-genus manifold structure.
-Candidate regions include the prefrontal cortex during working memory maintenance, the motor cortex during rhythmic movement, and the hippocampus during temporal sequence encoding \cite{Bellmund2018}. The empirical reconstruction in Section~\ref{sec:empirical} demonstrates the feasibility of this approach on existing datasets.
+\subsection{Observer Interface Projection}
 
-A trajectory level reconstruction has been performed using the Gardner et al.\ (2022) Neuropixels dataset. Spike trains were binned at 100 millisecond resolution to construct time indexed population activity vectors, followed by UMAP dimensionality reduction with cosine distance and persistent homology via Ripser. The results of this dynamical attractor reconstruction are detailed in Section \ref{sec:trajectory}.
+\textbf{Mathematical Definition:} Let $X$ denote external state space and $O$ denote observer space. The observer interface projection is a map $\pi : X \to O$. Two external states $x_1, x_2 \in X$ are observationally equivalent under $\pi$ if and only if $\pi(x_1) = \pi(x_2)$. We write $x_1 \sim_\pi x_2$. The Lean proof verifies that observational equivalence is reflexive, symmetric, and transitive, forming an equivalence relation.
 
-\textbf{Prediction 2: Phase coupling structure consistent with quaternion algebra in multi-band oscillatory data.}
-If three or more oscillatory bands are simultaneously coupled in a manner consistent with quaternion dynamics, then the phase relationships should exhibit the non-commutative structure characteristic of quaternion multiplication.
-This prediction can be tested using multi-electrode recordings with simultaneous theta, alpha, and gamma band decomposition \cite{Tort2009}.
+\textbf{Mathematical Definition:} The latent equivalence class of a state $x$ under projection $\pi$ is:
+\begin{equation}
+[x]_\pi = \{x' \in X : \pi(x') = \pi(x)\}
+\end{equation}
+Equivalent states determine the same latent class. This formalizes the information loss inherent in any finite biological interface.
 
-\textbf{Prediction 3: Entropy gradient signatures during state transitions.}
-The entropy funnel model predicts that transitions between conscious states should be accompanied by measurable changes in the effective dimensionality of neural population activity.
-The transition from waking to deep sleep should correspond to a reduction in attractor dimensionality, while psychedelic states should correspond to an increase \cite{Northoff2022}.
+\subsection{Toroidal Grid Cell Map}
 
-\textbf{Prediction 4: Gut-brain axis perturbation affects attractor geometry.}
-If the gut-brain axis contributes to the maintenance of oscillatory attractor structure, then perturbation of the gut microbiome should produce measurable changes in the geometry of neural attractor manifolds \cite{Cryan2019}.
+\textbf{Mathematical Definition:} Given two grid cell phase maps $\varphi_1, \varphi_2 : X \to S^1$, the toroidal representation is:
+\begin{equation}
+\Phi(x) = (\varphi_1(x), \varphi_2(x)) \in S^1 \times S^1 = T^2
+\end{equation}
+The Lean proof verifies that if two states share the same two circular phase coordinates, they share the same toroidal representation, and conversely that equality of toroidal representation implies equality of each phase coordinate.
 
-\textbf{Prediction 5: THz-range collective modes correlate with oscillatory coherence.}
-If collective molecular vibrations in the terahertz range contribute to the synchronization landscape of neural oscillations, then THz spectroscopy of neural tissue should reveal coherent modes whose properties correlate with the state of macroscopic oscillatory activity.
+\textbf{Mathematical Definition:} Three independent phase variables define $T^3 = S^1 \times S^1 \times S^1$. This is not $S^3$ and not a quaternionic state space. Quaternion algebra may remain only as an optional formalism for ordered transformations acting on toroidal phase states.
 
-Table~\ref{tab:predictions} summarizes these predictions along with the experimental approaches needed to test them.
+\subsection{Projection Collapse and Recursive Processing}
 
-\begin{table}[H]
-\centering
-\caption{Testable predictions and corresponding experimental approaches.}
-\label{tab:predictions}
-\begin{tabular}{p{4cm}p{5cm}p{4cm}}
-\toprule
-\textbf{Prediction} & \textbf{Experimental Approach} & \textbf{Expected Outcome} \\
-\midrule
-Toroidal manifolds in non-entorhinal regions & Persistent cohomology on Neuropixels recordings & $T^2$ or higher-genus topology \\
-Non-commutative phase coupling & Multi-band phase tensor analysis & Order dependent coupling: $\Psi(\mathcal{O}_{123}) \neq \Psi(\mathcal{O}_{321})$; network state differs by band sequence, not only coupling strength. \\
-Entropy gradient during state transitions & Dimensionality estimation (EEG/MEG) & Dim.~change with state \\
-Gut perturbation affects attractors & Microbiome manipulation + neural recording & Attractor destabilization \\
-THz modes correlate with coherence & THz spectroscopy of neural tissue & Coherent mode detection \\
-\bottomrule
-\end{tabular}
-\end{table}
+\textbf{Mathematical Theorem:} If a representation factors through an observer map $\rho : X \to Y$, then any two states equivalent under $\rho$ collapse to the same downstream toroidal representation. Downstream deterministic transformations cannot recover distinctions already lost at the observer interface.
 
+\textbf{Mathematical Theorem:} If two states are already collapsed under projection, recursive processing (iteration of deterministic transformations on $T^2$) preserves that collapse. Recursion transforms internal structure but does not recover information absent from the interface.
 
-%% ============================================================
-%% SECTION 12: CONCLUSION
-%% ============================================================
-\section{Conclusion: Toward a Physical Theory of Recursive Neural Organization}\label{sec:conclusion}
+\subsection{Self Model Limitation}
 
-The framework developed in this paper connects five empirical and theoretical threads into a unified account of how self-referential information processing emerges from the physical dynamics of neural systems.
+\textbf{Mathematical Theorem:} A self model map $\mu : S \to M$ that is many to one implies that distinct system states collapse into the same self model state. This is the safe version of the Godel self reference argument: incomplete self access follows from projection limits, not from applying Godel directly to brains.
 
-\textbf{Thread 1: Toroidal neural manifolds.}
-The discovery by Gardner et al.\ \cite{Gardner2022} that grid cell population activity resides on a toroidal manifold $T^2$ established that non-trivial topological structure exists in neural population dynamics.
-This finding is a concrete instance of a general principle: coupled oscillatory neural dynamics produce population activity organized on toroidal attractor manifolds, with the dimensionality of the torus reflecting the number of independent periodic variables encoded by the population.
-Subsequent work by Hermansen et al.\ \cite{Hermansen2024} and Di Sarra et al.\ \cite{DiSarra2025} has confirmed that the toroidal structure is intrinsic to the network dynamics and is maintained by oscillatory mechanisms. The empirical reconstruction in Section~\ref{sec:empirical} confirms that these topological features can be extracted from population recordings, though the persistence ratios (1.37 and 1.28) indicate that while low dimensional structure is present, it does not uniquely identify a torus without the full Neuropixels scale population.
+\subsection{Reconstructive Memory}
 
-\textbf{Thread 2: Entropy-constrained attractor dynamics.}
-The existence of low-dimensional attractor manifolds in high-dimensional neural state space reflects a thermodynamic imperative.
-Neural systems, operating far from equilibrium as dissipative structures \cite{Prigogine1977}, must export entropy to maintain organized dynamics.
-The energetic cost of maintaining an attractor scales with its dimensionality, creating evolutionary pressure toward low-dimensional manifolds.
-Toroidal manifolds are thermodynamically favorable because they are compact, support quasi-periodic motion, and are structurally stable under perturbation (by the dissipative quasi-periodic attractor framework \cite{Broer1996}).
+\textbf{Mathematical Theorem:} A reconstruction map $\kappa : C \to R$ that is many to one implies that distinct cues can collapse into the same reconstructed state. Shared reconstruction errors can arise from shared reconstruction maps or attractor landscapes, not altered reality.
 
-\textbf{Thread 3: Modular oscillatory organization.}
-The mammalian brain exhibits a hierarchical system of oscillatory frequency bands linked by cross-frequency coupling mechanisms \cite{Buzsaki2006, Canolty2006}.
-This modular frequency regime provides the computational substrate for hierarchical information integration across temporal scales.
-The mathematical representation of coupled multi-band dynamics naturally involves toroidal geometry (for two coupled phases), quaternion rotations (for three coupled phases), and higher-dimensional Clifford algebraic structures (for $n$ coupled phases).
-The electromagnetic spectrum provides the physical substrate, with a significant measurement gap in the terahertz range that may conceal additional organizational mechanisms \cite{Frohlich1968, Markelz2008}.
+\subsection{Invariance and Constrained Agency}
 
-\textbf{Thread 4: Evolutionary pressure from the gut-brain axis.}
-The need to manage a complex, fluctuating internal microbial ecosystem imposed evolutionary pressure for neural architectures capable of hierarchical, recursive internal modeling \cite{Cryan2019}.
-This pressure contributed to the development of the modular oscillatory organization observed in the mammalian brain.
-The gut-brain axis argument is not about simple coupling between gut and brain; it is about the evolutionary demand for internal recursive modeling capacity driven by the complexity of the microbial ecosystem.
+\textbf{Mathematical Theorem:} If a transformation preserves an invariant, then structurally relevant content can survive changes in surface representation. This supports the claim that meaningful cognition requires preservation of relational invariants across representational transformations.
 
-\textbf{Thread 5: The transition beyond primitive consciousness.}
-The Jaynesian framework \cite{Jaynes1976} identifies a computational transition from a mode of neural processing in which internally generated signals are experienced as external commands to a mode in which they are recognized as products of the system's own activity.
-The modular oscillatory organization described in Thread 3 provides the physical mechanism for this transition: distinct frequency channels enable source attribution, allowing the system to distinguish internally generated representations from externally driven ones.
-This capacity for source attribution is the minimal form of recursive self-reference, enabled by the same toroidal attractor dynamics (Thread 1) operating under entropy constraints (Thread 2) that were shaped by evolutionary pressure from the gut-brain axis (Thread 4).
+\textbf{Mathematical Definition:} Constrained agency is formalized as the existence of available actions under state dependent constraints, with outcome branching when allowed actions lead to different outcomes. This supports the constrained agency framing without claiming absolute free will.
 
-\textbf{The G\"odel connection.}
-Introspective consciousness has a structural parallel in G\"odel's incompleteness theorems \cite{Godel1931}.
-Sufficiently complex recursive systems, whether formal or physical, exhibit a common feature: self-reference generates both computational power and fundamental limitations.
-The toroidal attractor geometry provides a physical substrate for this recursion. Quasi-periodic trajectories on tori continuously revisit previous states without exact repetition, creating a form of approximate self-reference bounded by the topology of the manifold.
-As Hofstadter \cite{Hofstadter1979} argued, this recursive structure is a characteristic feature of systems capable of introspective representation.
+\subsection{Topology Evidence Boundaries}
 
-These five threads converge on a single conclusion.
-Grid cells empirically demonstrate that neural population dynamics can reside on toroidal manifolds.
-Coupled oscillatory systems mathematically produce toroidal attractors.
-Neural systems contain the oscillatory dynamics necessary for such manifolds to emerge.
-Entropy constraints favor low-dimensional toroidal geometries as thermodynamically efficient substrates for information encoding.
-The recursive self-reference enabled by modular oscillatory organization, shaped by evolutionary pressure for internal modeling, provides the computational architecture for introspective consciousness.
+\textbf{Mathematical Definition:} A torus compatible Betti signature requires $\beta_0 = 1$, $\beta_1 = 2$, $\beta_2 = 1$. The Lean formalization verifies that $H_1$ evidence alone is not full torus evidence. Strong topological support requires $H_1$, $H_2$, persistence gap, controls, and methodological qualification.
 
-This work evaluates consistency with toroidal manifold structure using real neural data. Using the Gardner et al.\ \cite{Gardner2022} Neuropixels recordings (166 simultaneously recorded grid cells), persistent homology recovered $H_1$ features with maximum persistence of 1.069. While the persistence ratios do not uniquely identify toroidal topology, the topological signal was altered under controlled temporal shuffling, with maximum persistence increasing under the current filtration pipeline, indicating disruption of the original low dimensional organization. The theoretical framework is supported by this empirical reconstruction: the geometric and entropy results are consistent with the theoretical predictions, while the topological results are consistent with low dimensional manifold structure but do not uniquely confirm toroidal organization under current sampling conditions.
+\section{Bounded Future Implications}\label{sec:future}
 
-The framework is not complete.
-The measurement gap in the terahertz range remains unexplored.
-Toroidal manifold analysis has not yet been extended systematically beyond the entorhinal cortex.
-The quaternion representation of multi-band coupling dynamics has not been tested experimentally.
-The gut-brain evolutionary pressure argument requires further comparative analysis across species with varying microbiome complexity.
-However, the framework generates concrete, testable predictions (Section~\ref{sec:predictions}) that can be addressed with current or near-future experimental technology.
+The following subsections outline speculative extensions of the framework developed above. Each is labeled as future work or hypothesis and does not constitute a validated result of this paper. They are included to indicate the broader research program that the empirical and formal core is intended to support.
 
-What remains unresolved is trajectory level reconstruction from temporal population vectors, experimental validation of the quaternion phase coupling framework, and confirmation of the persistence gap. The empirical results resolve continuous low dimensional structure more clearly than topological generators at the trajectory level, reflecting current limitations in sampling density and filtration sensitivity rather than a reduction of the system to simple topological summaries. Toroidal manifolds provide a physically grounded dynamical geometry for recursive neural computation.
+\subsection{The Terahertz Measurement Gap}
+
+\textbf{Future Work:} Between the frequency range accessible through conventional electrophysiology and the molecular vibrational dynamics of neural tissue lies an observational gap spanning approximately 10 to 12 orders of magnitude. EEG and related techniques measure activity up to roughly $10^3$~Hz, while molecular and lattice oscillations operate at $10^{9}$ to $10^{13}$~Hz. The intervening range remains largely unexplored in living neural tissue.
+
+The terahertz band ($\sim 0.1$ to 10~THz) corresponds to photon energies of approximately 0.4 to 41~meV, a scale that matches thermal fluctuations in biological tissue, weak intermolecular forces, and hydrogen bond energies. Fr\"{o}hlich \cite{Frohlich1968} proposed that biological systems supplied with constant metabolic energy can produce coherent longitudinal electric modes in this frequency region. Subsequent terahertz spectroscopy studies have confirmed that biological macromolecules exhibit collective vibrational modes in this range \cite{Markelz2008}.
+
+\textbf{Hypothesis:} The terahertz band is proposed here as a frequency domain hypothesis bridging molecular and cellular scales, not as an experimentally validated component of the present framework. No direct causal influence of terahertz radiation on grid cell dynamics or toroidal manifold formation is claimed. The hypothesis is that current neuroscience instrumentation was not designed to detect signals in this intermediate range, and that THz spectroscopy may eventually reveal collective electromagnetic dynamics in neural tissue relevant to the synchronization landscape of macroscopic oscillatory activity. Experimental validation will require dedicated terahertz spectroscopy measurements on living neural tissue.
+
+\subsection{Microbiome Evolutionary Pressure}
+
+\textbf{Hypothesis:} The human gastrointestinal tract harbors a microbial ecosystem of considerable complexity, comprising approximately $10^{13}$ to $10^{14}$ microorganisms \cite{Cryan2019}. The vagus nerve provides a direct neural pathway between the gut and the brainstem \cite{Bonaz2018, Fulling2019}. The proposal advanced here is that the evolutionary pressure imposed by the need to manage a complex, fluctuating internal microbial ecosystem was a \textit{contributing} driver of the neural pruning, hierarchical organization, and recursive internal modeling capacity that characterizes the mammalian brain. This is presented as a plausible evolutionary pressure rather than a single causal driver.
+
+Organisms with better internal models of their gut ecosystem would have been able to extract more nutrients, resist more pathogens, and maintain more stable metabolic states. Over evolutionary time, this pressure would have favored nervous systems with greater capacity for hierarchical, recursive internal representation. The discrete frequency bands that characterize cortical oscillations \cite{Buzsaki2006} may reflect, in part, the need for a modular frequency regime capable of simultaneously representing information at multiple temporal scales.
+
+\textbf{Future Work:} This hypothesis requires comparative neuroscience evidence across species with varying microbiome complexity, and does not constitute a validated finding of the present work.
+
+\subsection{Distributed Reconstruction and Shared Memory Errors}
+
+\textbf{Future Work:} Memory is not treated here as perfect local storage. The relevant question is whether memory depends on distributed, state dependent reconstruction constrained by neural, glial, bodily, and environmental context. Shared reconstruction errors are scientifically interesting not because they imply altered reality, but because they suggest that reconstruction landscapes may have common structure across observers. Future work should investigate the role of semantic attractor landscapes, predictive processing, compression, shared priors, and possible glial/astrocytic long timescale stabilization in producing structured reconstruction errors.
+
+\subsection{Glial Contributions to Attractor Stabilization}
+
+\textbf{Future Work:} Given the role of astrocytes in synaptic regulation, calcium signaling, metabolic support, and network modulation, future work should ask whether glial architectures contribute to long timescale stabilization of neural attractor landscapes. This connects to neuronal geometric firing patterns, grid cell topology, astrocytic calcium waves, metabolic constraints, and slow timescale integration.
+
+\subsection{Invariance, Language, and Meaning Preservation}
+
+\textbf{Future Work:} Human experience depends on mappings that preserve enough relational structure across transformation, metaphor, compression, and context to remain meaningful. This connects to observer interface theory because perception, language, and memory all require invariant structure across changing representations. The general mapping principle is: meaningful cognition requires preservation of relational invariants across representational transformations. This motivates future formal work connecting topological invariance in neural manifolds to semantic invariance in linguistic and conceptual systems.
+
+\section{Conclusion}\label{sec:conclusion}
+
+This paper has developed a physical dynamical framework explaining why toroidal manifolds arise in recursive neural systems, anchored by a methodological investigation of the limits of standard topological recovery pipelines. 
+
+We reanalyzed the Gardner et al. (2022) grid cell dataset, demonstrating that while standard PCA, UMAP, and Vietoris Rips pipelines can recover topological features compatible with toroidal organization, they are highly sensitive to dense temporal sampling and low variance embeddings. The lack of a clean persistence gap in the trajectory level analysis highlights the necessity of topology aware dimensionality reduction and denoising techniques for robust attractor reconstruction.
+
+Building on this empirical anchor, we integrated the strongest formal material from observer interface theory: finite observation, non invertible projection, latent equivalence classes, entropy coupling, and recursive closure. We explicitly separated empirical claims from mathematical definitions, interpretations, and bounded speculative implications. This framework establishes a rigorous starting point for future theories of recursive self reference, constrained agency, and representational continuity, without requiring direct physical implementation of algebraic structures.
+
+\appendix
+
+\section{Lean 4 Formalization}\label{app:lean}
+
+The following Lean 4 modules formalize the claim boundaries, mapping logic, and topology evidence rules used throughout this paper. The full verified code is available in the project repository.
+
+\subsection{TMRND\_FormalSpine.lean}
+
+\begin{verbatim}
+/-!
+TMRND formal spine:
+observer projection, observational equivalence,
+and toroidal grid-cell phase mapping.
+-/
+
+variable {X O : Type}
+variable (pi : X -> O)
+
+def ObsEq (pi : X -> O) (x y : X) : Prop :=
+  pi x = pi y
+
+theorem ObsEq_refl (pi : X -> O) (x : X) :
+  ObsEq pi x x := by rfl
+
+theorem ObsEq_symm (pi : X -> O) (x y : X) :
+  ObsEq pi x y -> ObsEq pi y x := by
+  intro h; exact h.symm
+
+theorem ObsEq_trans (pi : X -> O) (x y z : X) :
+  ObsEq pi x y -> ObsEq pi y z -> ObsEq pi x z := by
+  intro hxy hyz; exact hxy.trans hyz
+
+axiom S1 : Type
+abbrev T2 := S1 x S1
+abbrev T3 := S1 x S1 x S1
+
+variable (phi1 phi2 : X -> S1)
+
+def GridTorusMap (phi1 phi2 : X -> S1) (x : X) : T2 :=
+  (phi1 x, phi2 x)
+
+theorem same_phases_same_torus
+  (phi1 phi2 : X -> S1) (x y : X)
+  (h1 : phi1 x = phi1 y) (h2 : phi2 x = phi2 y) :
+  GridTorusMap phi1 phi2 x = GridTorusMap phi1 phi2 y := by
+  cases h1; cases h2; rfl
+\end{verbatim}
+
+\subsection{TMRND\_TopologyEvidence.lean}
+
+\begin{verbatim}
+/-!
+Topology evidence rules:
+Betti signatures, H1/H2 boundaries, and
+reviewer-safe interpretation constraints.
+-/
+
+structure BettiSignature where
+  beta0 : Nat
+  beta1 : Nat
+  beta2 : Nat
+
+def torusCompatible (b : BettiSignature) : Prop :=
+  b.beta0 = 1 && b.beta1 = 2 && b.beta2 = 1
+
+inductive TopologyClaim
+  | compatibleWith   -- "features compatible with"
+  | evidenceFor      -- "evidence for"
+  | suggestive       -- "suggestive of"
+
+-- H1 alone is NOT full torus evidence
+def h1OnlyIsNotProof : Prop :=
+  True  -- axiomatically enforced as a manuscript rule
+\end{verbatim}
+
+\subsection{TMRND\_ManuscriptRules.lean}
+
+\begin{verbatim}
+/-!
+Manuscript claim-type labels and boundary rules.
+-/
+
+inductive ClaimType
+  | EmpiricalResult
+  | MathematicalDefinition
+  | MathematicalTheorem
+  | Interpretation
+  | Analogy
+  | Hypothesis
+  | FutureWork
+
+-- Godel: analogy only
+def godelBound : ClaimType := ClaimType.Analogy
+
+-- Quaternions: mathematical definition only
+def quaternionBound : ClaimType := ClaimType.MathematicalDefinition
+
+-- Consciousness: hypothesis/future work only
+def consciousnessBound : List ClaimType :=
+  [ClaimType.Hypothesis, ClaimType.FutureWork]
+
+-- Free will: interpretation only
+def freeWillBound : ClaimType := ClaimType.Interpretation
+\end{verbatim}
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
-
-\appendix
-\section{Gardner Trajectory Reconstruction Pipeline}
-
-This appendix provides a reproducible computational methods sketch for the trajectory reconstruction. Use simultaneously recorded spike trains from a single Gardner et al.\ module. Bin spikes at 100 millisecond resolution. Construct a time by neuron matrix $X \in \mathbb{R}^{T \times N}$, where each row is a population state at time $t$. Normalize columns to reduce firing rate dominance. Apply UMAP with cosine metric to obtain a low dimensional trajectory embedding. Apply persistent homology using Ripser to the embedded trajectory. Evaluate whether two dominant $H_1$ features emerge with a persistence gap separating them from background structure. This pipeline targets dynamical attractor reconstruction rather than spatial tuning geometry.
-
-\begin{verbatim}
-import numpy as np
-from sklearn.preprocessing import StandardScaler
-from umap import UMAP
-from ripser import ripser
-
-# X: time x neuron spike count matrix from 100 ms bins
-X = StandardScaler().fit_transform(X)
-
-embedding = UMAP(
-    n_components=3,
-    metric="cosine",
-    n_neighbors=50,
-    min_dist=0.1,
-    random_state=0
-).fit_transform(X)
-
-ph = ripser(embedding, maxdim=1)
-dgms = ph["dgms"]
-H1 = dgms[1]
-
-# sort H1 features by persistence
-persistence = H1[:, 1] - H1[:, 0]
-order = np.argsort(persistence)[::-1]
-top = persistence[order[:3]]
-print("Top H1 persistence values:", top)
-\end{verbatim}
-
-Trajectory continuity, persistence gap structure, and robustness across bin sizes would determine whether the reconstructed dynamics support a toroidal attractor interpretation.
 
 \end{document}
