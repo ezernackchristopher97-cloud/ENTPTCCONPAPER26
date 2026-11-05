@@ -1,6 +1,7 @@
 """
-Entropy metrics for grid cell population activity.
-Computes neural entropy, spatial entropy, and temporal entropy.
+Descriptive Shannon entropies of explicitly normalized nonnegative weights.
+These are activity-share, spatial-rate, and time-window allocation statistics,
+not joint population entropy, entropy rates, or thermodynamic entropy.
 Exports results to CSV.
 
 Author: Christopher Ezernack
@@ -14,24 +15,38 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(__file__))
-from preprocessing import load_all_data, build_activity_matrix
+from preprocessing import analysis_context, build_activity_matrix
+
+
+def weight_entropy(weights, axis=-1):
+    """Shannon entropy in bits; zero total mass is undefined (NaN).
+
+    Zero probabilities contribute exactly zero. Scaling by the largest weight
+    before summing avoids overflow for otherwise finite input weights.
+    """
+    values = np.asarray(weights, dtype=float)
+    if values.ndim == 0 or not np.all(np.isfinite(values)) or np.any(values < 0):
+        raise ValueError("weights must be an array of finite nonnegative values")
+    largest = np.max(values, axis=axis, keepdims=True, initial=0)
+    scaled = np.divide(values, largest, out=np.zeros_like(values), where=largest > 0)
+    total = scaled.sum(axis=axis, keepdims=True)
+    probabilities = np.divide(scaled, total, out=np.zeros_like(scaled), where=total > 0)
+    logs = np.zeros_like(probabilities)
+    np.log2(probabilities, out=logs, where=probabilities > 0)
+    result = -np.sum(probabilities * logs, axis=axis)
+    return np.where(np.squeeze(total, axis=axis) > 0, result, np.nan)
 
 
 def neural_entropy(activity):
+    """Entropy of neuron activity shares per time bin; silent bins are NaN.
+
+    The neuron label is the categorical variable, conditional on positive total
+    activity. This is not the entropy of the joint population random process.
     """
-    Compute neural entropy for each time bin.
-    For each time bin, normalize the population vector to a probability
-    distribution and compute Shannon entropy.
-    activity: (timepoints, neurons)
-    Returns: (timepoints,) array of entropy values.
-    """
-    eps = 1e-12
-    row_sums = activity.sum(axis=1, keepdims=True)
-    row_sums = np.where(row_sums == 0, 1.0, row_sums)
-    p = activity / row_sums
-    p = np.clip(p, eps, 1.0)
-    H = -np.sum(p * np.log2(p), axis=1)
-    return H
+    activity = np.asarray(activity, dtype=float)
+    if activity.ndim != 2:
+        raise ValueError("activity must have shape (timepoints, neurons)")
+    return weight_entropy(activity, axis=1)
 
 
 def spatial_entropy(rate_map):
@@ -41,44 +56,44 @@ def spatial_entropy(rate_map):
     rate_map: 2D array (nx, ny) of firing rates.
     Returns: scalar entropy value.
     """
-    eps = 1e-12
-    flat = rate_map.flatten()
-    flat = flat[flat > 0]
-    if len(flat) == 0:
-        return 0.0
-    total = flat.sum()
-    p = flat / total
-    p = np.clip(p, eps, 1.0)
-    H = -np.sum(p * np.log2(p))
-    return H
+    # NaN marks unobserved spatial bins; it is not a zero-rate measurement.
+    flat = np.asarray(rate_map, dtype=float).ravel()
+    return float(weight_entropy(flat[~np.isnan(flat)]))
 
 
 def temporal_entropy(spike_train, n_bins=100):
     """
-    Compute temporal entropy of a single neuron's spike train.
-    Divides the recording into n_bins time windows and computes
-    Shannon entropy of the spike count distribution.
-    spike_train: 1D array of spike counts per time bin.
-    Returns: scalar entropy value.
+    Entropy of activity mass allocated to contiguous time windows, in bits.
+
+    Input samples must be equally spaced counts or rates with a common bin
+    width. Split into min(n_bins, sample_count) nonempty windows whose sample
+    counts differ by at most one. Every sample is used exactly once. This is
+    not an entropy rate, count-histogram entropy, or information-persistence
+    measure: permuting complete windows leaves it unchanged. No activity gives
+    NaN because the normalized allocation distribution is undefined.
     """
-    eps = 1e-12
-    n = len(spike_train)
-    if n == 0:
-        return 0.0
+    values = np.asarray(spike_train, dtype=float)
+    if values.ndim != 1 or not np.all(np.isfinite(values)) or np.any(values < 0):
+        raise ValueError("spike_train must be a finite nonnegative 1D array")
+    if isinstance(n_bins, (bool, np.bool_)) or not isinstance(n_bins, (int, np.integer)) or n_bins < 1:
+        raise ValueError("n_bins must be a positive integer")
+    if values.size == 0 or values.max() == 0:
+        return float("nan")
+    scaled = values / values.max()
+    windows = np.array_split(scaled, min(n_bins, len(scaled)))
+    return float(weight_entropy([window.sum() for window in windows]))
 
-    bin_size = max(1, n // n_bins)
-    binned = []
-    for i in range(0, n, bin_size):
-        binned.append(spike_train[i:i+bin_size].sum())
-    binned = np.array(binned)
 
-    total = binned.sum()
-    if total == 0:
-        return 0.0
-    p = binned / total
-    p = np.clip(p, eps, 1.0)
-    H = -np.sum(p * np.log2(p))
-    return H
+def activity_entropy_summary(neural_H):
+    """Summaries conditional on defined bins, with the denominator reported."""
+    values = np.asarray(neural_H, dtype=float)
+    valid = values[np.isfinite(values)]
+    stats = {"total_time_bins": values.size, "defined_time_bins": valid.size,
+             "undefined_time_bins": values.size - valid.size}
+    for name, function in (("mean", np.mean), ("std", np.std), ("min", np.min),
+                           ("max", np.max), ("median", np.median)):
+        stats[f"{name}_neural_entropy"] = float(function(valid)) if valid.size else float("nan")
+    return stats
 
 
 def save_entropy_results(neural_H, spatial_H_dict, temporal_H_dict,
@@ -89,29 +104,27 @@ def save_entropy_results(neural_H, spatial_H_dict, temporal_H_dict,
     with open(os.path.join(out_dir, "entropy_metrics.csv"), "w") as f:
         f.write("neuron_id,spatial_entropy,temporal_entropy,"
                 "mean_neural_entropy\n")
-        mean_neural = float(np.mean(neural_H))
+        summary = activity_entropy_summary(neural_H)
+        mean_neural = summary["mean_neural_entropy"]
         for nid in neuron_ids:
-            sp = spatial_H_dict.get(nid, 0.0)
-            tp = temporal_H_dict.get(nid, 0.0)
+            sp = spatial_H_dict.get(nid, np.nan)
+            tp = temporal_H_dict.get(nid, np.nan)
             f.write(f"{nid},{sp:.6f},{tp:.6f},{mean_neural:.6f}\n")
 
     np.save(os.path.join(out_dir, "neural_entropy_timeseries.npy"), neural_H)
 
     with open(os.path.join(out_dir, "neural_entropy_summary.csv"), "w") as f:
         f.write("metric,value\n")
-        f.write(f"mean_neural_entropy,{np.mean(neural_H):.6f}\n")
-        f.write(f"std_neural_entropy,{np.std(neural_H):.6f}\n")
-        f.write(f"min_neural_entropy,{np.min(neural_H):.6f}\n")
-        f.write(f"max_neural_entropy,{np.max(neural_H):.6f}\n")
-        f.write(f"median_neural_entropy,{np.median(neural_H):.6f}\n")
+        for metric, value in summary.items():
+            f.write(f"{metric},{value}\n")
 
     fig, ax = plt.subplots(figsize=(10, 3))
     step = max(1, len(neural_H) // 5000)
     ax.plot(np.arange(0, len(neural_H), step) * 0.02,
             neural_H[::step], linewidth=0.5, color="steelblue")
     ax.set_xlabel("Time (s)")
-    ax.set_ylabel("Neural Entropy (bits)")
-    ax.set_title("Population Neural Entropy Over Time")
+    ax.set_ylabel("Activity-share entropy (bits)")
+    ax.set_title("Neuron Activity Shares; Silent Bins Undefined")
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, "neural_entropy_timeseries.png"),
                 dpi=150, bbox_inches="tight")
@@ -131,8 +144,8 @@ def save_entropy_results(neural_H, spatial_H_dict, temporal_H_dict,
     axes[1].barh(range(len(nids)), tp_vals, color="mediumpurple")
     axes[1].set_yticks(range(len(nids)))
     axes[1].set_yticklabels(nids, fontsize=7)
-    axes[1].set_xlabel("Temporal Entropy (bits)")
-    axes[1].set_title("Temporal Entropy per Neuron")
+    axes[1].set_xlabel("Time-window allocation entropy (bits)")
+    axes[1].set_title("Activity Allocation per Neuron")
 
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, "entropy_per_neuron.png"),
@@ -141,17 +154,14 @@ def save_entropy_results(neural_H, spatial_H_dict, temporal_H_dict,
 
 
 if __name__ == "__main__":
-    data_dir = os.path.join(os.path.dirname(__file__), "..", "data")
-    out_dir = os.path.join(os.path.dirname(__file__), "..", "outputs", "entropy")
-    rate_map_dir = os.path.join(os.path.dirname(__file__), "..", "outputs", "rate_maps")
-
-    sessions = load_all_data(data_dir)
+    sessions, out_root = analysis_context()
+    out_dir = os.path.join(out_root, "entropy")
+    rate_map_dir = os.path.join(out_root, "rate_maps")
     activity, neuron_ids, time_bins = build_activity_matrix(sessions)
 
     print("Computing neural entropy...")
     neural_H = neural_entropy(activity)
-    print(f"  Mean neural entropy: {np.mean(neural_H):.4f} bits")
-    print(f"  Std neural entropy: {np.std(neural_H):.4f} bits")
+    print(f"  Activity-share summary: {activity_entropy_summary(neural_H)}")
 
     print("\nComputing spatial entropy from rate maps...")
     spatial_H_dict = {}
@@ -162,8 +172,8 @@ if __name__ == "__main__":
             spatial_H_dict[nid] = spatial_entropy(rm)
             print(f"  {nid}: spatial_H = {spatial_H_dict[nid]:.4f} bits")
         else:
-            spatial_H_dict[nid] = 0.0
-            print(f"  {nid}: rate map not found, spatial_H = 0.0")
+            spatial_H_dict[nid] = np.nan
+            print(f"  {nid}: rate map not found, spatial_H = undefined")
 
     print("\nComputing temporal entropy...")
     temporal_H_dict = {}

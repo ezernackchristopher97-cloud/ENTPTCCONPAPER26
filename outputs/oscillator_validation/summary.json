@@ -1,0 +1,203 @@
+{
+  "kind": "synthetic mathematical validation, not biological evidence",
+  "phase_cases": {
+    "independent_irrational": {
+      "omega1": 1.0,
+      "omega2": 1.4142135623730951,
+      "epsilon": 0.0,
+      "radial_rate": 2.0,
+      "radial_forcing": 0.0
+    },
+    "independent_rational": {
+      "omega1": 1.0,
+      "omega2": 1.5,
+      "epsilon": 0.0,
+      "radial_rate": 2.0,
+      "radial_forcing": 0.0
+    },
+    "coupled_drifting": {
+      "omega1": 1.0,
+      "omega2": 1.4142135623730951,
+      "epsilon": 0.1,
+      "radial_rate": 2.0,
+      "radial_forcing": 0.0
+    },
+    "synchronized": {
+      "omega1": 1.0,
+      "omega2": 1.4142135623730951,
+      "epsilon": 0.6,
+      "radial_rate": 2.0,
+      "radial_forcing": 0.0
+    }
+  },
+  "phase_initial": [
+    0.2,
+    0.9
+  ],
+  "duration": 200.0,
+  "rk4_step": 0.02,
+  "independent_max_unwrapped_error": 3.1036506698001176e-11,
+  "rational_exact_return_distance_at_4pi": 8.831053657317262e-16,
+  "independent_kick_distance_range": [
+    0.1999999999999318,
+    0.20000000000001705
+  ],
+  "locked_phase_difference": 0.35242840190761004,
+  "locked_exponent_exact": -1.1262447002078144,
+  "locked_exponent_finite_fit": -1.1262427746173094,
+  "locked_final_phase_difference_error": 1.6431300764452317e-13,
+  "locked_common_phase_offset_after_kick": 0.09999999999999432,
+  "drift_mean_slip_exact": 0.362729755126058,
+  "drift_mean_slip_quadrature": 0.36272975512605804,
+  "drift_mean_slip_measured_full_cycles": 0.3627297551260575,
+  "drift_full_cycle_crossings": 11,
+  "radial": {
+    "attracting_torus": {
+      "parameters": {
+        "omega1": 1.0,
+        "omega2": 1.4142135623730951,
+        "epsilon": 0.0,
+        "radial_rate": 2.0,
+        "radial_forcing": 0.0
+      },
+      "max_graph_residual_error": 2.4342705073898685e-09,
+      "minimum_radius": 0.7
+    },
+    "attracting_torus_with_locking": {
+      "parameters": {
+        "omega1": 1.0,
+        "omega2": 1.4142135623730951,
+        "epsilon": 0.6,
+        "radial_rate": 2.0,
+        "radial_forcing": 0.0
+      },
+      "max_graph_residual_error": 2.4342705073898685e-09,
+      "minimum_radius": 0.7
+    },
+    "deformed_attracting_torus": {
+      "parameters": {
+        "omega1": 1.0,
+        "omega2": 1.4142135623730951,
+        "epsilon": 0.0,
+        "radial_rate": 2.0,
+        "radial_forcing": 0.1
+      },
+      "max_graph_residual_error": 2.3757903561127947e-09,
+      "minimum_radius": 0.7
+    }
+  },
+  "adaptive_tolerance_difference": 2.842170943040401e-14,
+  "adaptive_method_difference": 1.283417816466681e-12,
+  "convergence": [
+    {
+      "case": "drifting",
+      "step": 0.08,
+      "max_abs_error": 1.5531291808201786e-09,
+      "observed_order": null
+    },
+    {
+      "case": "drifting",
+      "step": 0.04,
+      "max_abs_error": 9.702638692488108e-11,
+      "observed_order": 4.000656869518087
+    },
+    {
+      "case": "drifting",
+      "step": 0.02,
+      "max_abs_error": 6.078693104427657e-12,
+      "observed_order": 3.996544062232338
+    },
+    {
+      "case": "drifting",
+      "step": 0.01,
+      "max_abs_error": 3.872457909892546e-13,
+      "observed_order": 3.972439719712487
+    },
+    {
+      "case": "locked",
+      "step": 0.08,
+      "max_abs_error": 3.0761084790498217e-08,
+      "observed_order": null
+    },
+    {
+      "case": "locked",
+      "step": 0.04,
+      "max_abs_error": 1.8584414007705163e-09,
+      "observed_order": 4.04894127701888
+    },
+    {
+      "case": "locked",
+      "step": 0.02,
+      "max_abs_error": 1.1420153711583225e-10,
+      "observed_order": 4.024439224591772
+    },
+    {
+      "case": "locked",
+      "step": 0.01,
+      "max_abs_error": 7.077449737380448e-12,
+      "observed_order": 4.0122086603773885
+    },
+    {
+      "case": "radial",
+      "step": 0.08,
+      "max_abs_error": 6.883110788002966e-07,
+      "observed_order": null
+    },
+    {
+      "case": "radial",
+      "step": 0.04,
+      "max_abs_error": 4.023900967986549e-08,
+      "observed_order": 4.0963940266229555
+    },
+    {
+      "case": "radial",
+      "step": 0.02,
+      "max_abs_error": 2.4346447080603184e-09,
+      "observed_order": 4.0468116417068245
+    },
+    {
+      "case": "radial",
+      "step": 0.01,
+      "max_abs_error": 1.4999979036645072e-10,
+      "observed_order": 4.020678863085864
+    },
+    {
+      "case": "forced_radial",
+      "step": 0.08,
+      "max_abs_error": 6.690906688699982e-07,
+      "observed_order": null
+    },
+    {
+      "case": "forced_radial",
+      "step": 0.04,
+      "max_abs_error": 3.927309055740125e-08,
+      "observed_order": 4.090588685509777
+    },
+    {
+      "case": "forced_radial",
+      "step": 0.02,
+      "max_abs_error": 2.3757683598191193e-09,
+      "observed_order": 4.047075050282763
+    },
+    {
+      "case": "forced_radial",
+      "step": 0.01,
+      "max_abs_error": 1.4636147849245162e-10,
+      "observed_order": 4.020786378973212
+    }
+  ],
+  "limitations": [
+    "Finite trajectories cannot prove density, irrationality, or general persistence.",
+    "sqrt(2) is an exact model assumption, represented approximately in floating point.",
+    "Critical locking has zero linear exponent; finite slow drift can look locked.",
+    "Return to a manifold or orbit does not imply return to the same timed phase.",
+    "The forced radial example has an exact graph and does not validate generic perturbations.",
+    "No PH recovery, neural fit, stochastic noise test, or thermodynamic measurement is made."
+  ],
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8"
+  }
+}

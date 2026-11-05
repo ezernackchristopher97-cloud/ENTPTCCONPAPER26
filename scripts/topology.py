@@ -7,6 +7,7 @@ Author: Christopher Ezernack
 """
 
 import os
+from preprocessing import analysis_context
 import numpy as np
 from ripser import ripser
 from persim import plot_diagrams
@@ -116,8 +117,9 @@ def save_persistence_results(result, summaries, out_dir, prefix="pca"):
 
 
 if __name__ == "__main__":
-    out_dir = os.path.join(os.path.dirname(__file__), "..", "outputs", "topology")
-    manifold_dir = os.path.join(os.path.dirname(__file__), "..", "outputs", "manifold")
+    _, out_root = analysis_context()
+    out_dir = os.path.join(out_root, "topology")
+    manifold_dir = os.path.join(out_root, "manifold")
 
     pca_path = os.path.join(manifold_dir, "pca_embedding.npy")
     if os.path.exists(pca_path):

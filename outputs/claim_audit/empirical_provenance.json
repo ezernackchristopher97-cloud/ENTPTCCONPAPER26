@@ -1,0 +1,162 @@
+{
+  "kind": "repository provenance audit; no new attractor evidence",
+  "sessions": [
+    {
+      "file": "Hafting_Fig2c_Trial1.mat",
+      "sha256": "f0baf496fc3e184de88561dd85a7de9077e708a277b70d9339912a2af1382223",
+      "raw_position_samples": 59596,
+      "finite_position_samples": 59587,
+      "neuron_labels": [
+        "rat11015_t5c1",
+        "rat11015_t5c2",
+        "rat11015_t5c3",
+        "rat11015_t6c1",
+        "rat11015_t7c1",
+        "rat11015_t7c2",
+        "rat11015_t7c3"
+      ],
+      "neuron_count": 7,
+      "session_activity_shape_20ms": [
+        59992,
+        7
+      ]
+    },
+    {
+      "file": "Hafting_Fig2c_Trial2.mat",
+      "sha256": "24b7e01efbfb84f6307ccdba2b6bf9835b3583b6af6e7f6998e37bcfc59ccbe6",
+      "raw_position_samples": 59723,
+      "finite_position_samples": 59723,
+      "neuron_labels": [
+        "rat11015_t5c1",
+        "rat11015_t5c2",
+        "rat11015_t5c3",
+        "rat11015_t6c1",
+        "rat11015_t7c1",
+        "rat11015_t7c2",
+        "rat11015_t7c3"
+      ],
+      "neuron_count": 7,
+      "session_activity_shape_20ms": [
+        59999,
+        7
+      ]
+    },
+    {
+      "file": "Hafting_Fig2d_Trial1.mat",
+      "sha256": "6193158002126e668943ba9bd29cadd4abdda13527a27e0c9e614b7ddcbb9b8c",
+      "raw_position_samples": 59596,
+      "finite_position_samples": 59587,
+      "neuron_labels": [
+        "rat11015_t1c1",
+        "rat11015_t2c1",
+        "rat11015_t2c2"
+      ],
+      "neuron_count": 3,
+      "session_activity_shape_20ms": [
+        59992,
+        3
+      ]
+    },
+    {
+      "file": "Hafting_Fig2d_Trial2.mat",
+      "sha256": "ed45226238a987ed377b7b8a0f186efc67a39a5a77421447e7b6c8978c14d863",
+      "raw_position_samples": 59723,
+      "finite_position_samples": 59723,
+      "neuron_labels": [
+        "rat11015_t1c1",
+        "rat11015_t2c1",
+        "rat11015_t2c2"
+      ],
+      "neuron_count": 3,
+      "session_activity_shape_20ms": [
+        59999,
+        3
+      ]
+    },
+    {
+      "file": "rat_10925.mat",
+      "sha256": "ba170c43588d63d535aa36bdcff34daf233a74af6763a9802111c0b5a5a68efb",
+      "raw_position_samples": 89652,
+      "finite_position_samples": 89648,
+      "neuron_labels": [
+        "cell1",
+        "cell2",
+        "cell3"
+      ],
+      "neuron_count": 3,
+      "session_activity_shape_20ms": [
+        89998,
+        3
+      ]
+    }
+  ],
+  "total_cell_recordings_across_files": 23,
+  "distinct_neuron_labels_across_files": 13,
+  "legacy_activity": {
+    "shape": [
+      59992,
+      13
+    ],
+    "sha256": "64ce7521d11d660c12cf3828e7e21d7b0fc2d20079639c73136d60ec446c333a",
+    "matches_old_cross_session_pooling_exactly": true,
+    "valid_simultaneous_population_evidence": false
+  },
+  "legacy_topology": {
+    "pca": {
+      "file": "outputs/topology/diagram_H1_pca.csv",
+      "sha256": "3cc8f85ef415327aee67571d0a978f71344e949b37cdd06b919369ee363c934b",
+      "n_finite_H1": 32,
+      "top_five": [
+        0.6689469218254089,
+        0.4895988702774048,
+        0.324975848197937,
+        0.3176349401473999,
+        0.31087982654571533
+      ],
+      "top_to_third_ratio": 2.0584511911727215,
+      "valid_simultaneous_population_evidence": false
+    },
+    "umap": {
+      "file": "outputs/topology/diagram_H1_umap.csv",
+      "sha256": "76e37d3d5c1f613fe6dff1ba38d4218701ddb6397e9b8ee8bc12f29d042c7732",
+      "n_finite_H1": 84,
+      "top_five": [
+        4.001927375793457,
+        3.7168030738830566,
+        3.370814323425293,
+        3.305783271789551,
+        3.264878749847412
+      ],
+      "top_to_third_ratio": 1.1872286610337086,
+      "valid_simultaneous_population_evidence": false
+    }
+  },
+  "retained_rate_map_count": 13,
+  "retained_spatial_entropy_bits": {
+    "rate_map_cell1": 10.850963357966794,
+    "rate_map_cell2": 10.971593946222818,
+    "rate_map_cell3": 10.99211047818363,
+    "rate_map_rat11015_t1c1": 10.649772745466482,
+    "rate_map_rat11015_t2c1": 10.920557647482898,
+    "rate_map_rat11015_t2c2": 10.647931431293742,
+    "rate_map_rat11015_t5c1": 10.900907236566248,
+    "rate_map_rat11015_t5c2": 10.79735206436199,
+    "rate_map_rat11015_t5c3": 10.823988747594376,
+    "rate_map_rat11015_t6c1": 10.728237510636543,
+    "rate_map_rat11015_t7c1": 10.935022149195465,
+    "rate_map_rat11015_t7c2": 10.95544553185686,
+    "rate_map_rat11015_t7c3": 11.00538473066713
+  },
+  "retained_mean_spatial_entropy_bits": 10.859943659807303,
+  "retained_population_entropy_summary": "metric,value\nmean_neural_entropy,0.260240\nstd_neural_entropy,0.518495\nmin_neural_entropy,0.000000\nmax_neural_entropy,2.807355\nmedian_neural_entropy,0.000000\n",
+  "H2_output_files": [],
+  "missing_reported_figure": true,
+  "limits": [
+    "Separate files are treated as separate recordings without evidence of shared acquisition.",
+    "Distinct labels are not a verified count of distinct biological neurons.",
+    "Legacy rate maps can overwrite repeated labels across trials.",
+    "No Gardner Rat R Day 1 Module 2 raw recording or matching analysis is retained here.",
+    "Legacy H1 diagnostics have no calibrated noise floor and do not establish T2.",
+    "Unresolved or unavailable H2 is not evidence that the biological torus is absent."
+  ]
+}

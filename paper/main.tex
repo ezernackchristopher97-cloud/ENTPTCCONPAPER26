@@ -1,9 +1,13 @@
 \documentclass[12pt,a4paper]{article}
 
 % ---- Packages ----
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
+% Build with XeLaTeX for consistent Unicode font handling.
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\setsansfont{Latin Modern Sans}
+\setmonofont{DejaVu Sans Mono}[Scale=MatchLowercase]
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{verbatim}{Verbatim}{fontsize=\footnotesize,breaklines=true,breakanywhere=true}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,mathtools,bm}
 \usepackage{graphicx}
@@ -19,18 +23,14 @@
 \usepackage{fancyhdr}
 \usepackage{microtype}
 \usepackage{parskip}
-% Paragraph formatting: skip + indent (no indent after section titles)
+% Standard section commands keep headings with their following text.
+% Paragraph formatting: skip + indent (no indent after section titles).
 \setlength{\parskip}{6pt}
 \setlength{\parindent}{15pt}
-\makeatletter
-\let\orig@section\section
-\renewcommand{\section}{\@ifstar{\orig@section*}{\@dblarg{\my@section}}}
-\def\my@section[#1]#2{\orig@section[#1]{#2}\noindent\@afterindentfalse\@afterheading}
-\let\orig@subsection\subsection
-\renewcommand{\subsection}{\@ifstar{\orig@subsection*}{\@dblarg{\my@subsection}}}
-\def\my@subsection[#1]#2{\orig@subsection[#1]{#2}\noindent\@afterindentfalse\@afterheading}
-\makeatother
+\clubpenalty=10000
+\widowpenalty=10000
 \usepackage[numbers,sort&compress]{natbib}
+\usepackage{xurl}
 \usepackage{hyperref}
 \usepackage{cleveref}
 
@@ -41,6 +41,8 @@
   urlcolor=NavyBlue
 }
 
+\setlength{\headheight}{15pt}
+\setlength{\emergencystretch}{2em}
 \doublespacing
 
 \pagestyle{fancy}
@@ -50,243 +52,170 @@
 \renewcommand{\headrulewidth}{0.4pt}
 
 % ---- Title ----
-\title{\textbf{Toroidal Manifolds and Recursive Neural Dynamics:\\Topological Limits, Entropy Constraints, and Observer Interface Implications in Grid Cell Population Geometry}}
+\title{\Large\textbf{Toroidal Manifolds and Recursive Neural Dynamics:\\Topological Limits, Entropy Constraints, and Observer Interface Implications in Grid Cell Population Geometry}}
 \author{Christopher Ezernack\\
 \textit{Department of Physics and Cognitive Science}\\
 \textit{University of Texas at Dallas}\\
 \texttt{christopher.ezernack@utdallas.edu}}
-\date{\today}
+\date{November 4, 2026}
 
 \begin{document}
 \maketitle
-\thispagestyle{empty}
+\thispagestyle{fancy}
 
 \begin{abstract}
-Gardner et al. (2022) demonstrated that the joint population activity of grid cells in the medial entorhinal cortex resides on a toroidal manifold $T^2 = S^1 \times S^1$. This result provides an empirical foothold for studying how external spatial structure is mapped into internal neural topology. We reanalyze this data to distinguish between coding geometry and dynamical attractor reconstruction, characterizing the limits of persistent homology applied to temporal population vectors. The empirical reconstruction recovers topological features compatible with toroidal organization, including two dominant $H_1$ generators, while ablations demonstrate sensitivity to smoothing, shuffling, and sampling density. $H_2$ computation (required for full torus evidence per the formal framework) was performed but did not resolve a clear feature above the noise floor. We highlight the methodological limitations of standard PCA, UMAP, and Vietoris-Rips pipelines, emphasizing the necessity of denoising, downsampling controls, and topology aware validation. Building on this empirical anchor, we provide a bounded interpretive bridge connecting toroidal neural manifolds to entropy constrained dynamics, finite observation, and observer interface mapping. This framework establishes a rigorous starting point for future theories of recursive self reference, constrained agency, and representational continuity, without requiring direct physical implementation of algebraic structures.
+\singlespacing
+Toroidal population geometry motivates models of stable neural representation, but geometry alone does not establish dynamical attraction. We compare retained grid cell analysis outputs with an explicit model of two coupled oscillators. The recording audit supports spatial tuning descriptions but identifies pooling across separate recordings, preventing a valid simultaneous population interpretation. In the model, two circular phases define a toroidal coordinate space. Independent rotations can be periodic or quasi periodic, while attractive coupling produces a stable phase locked circle when detuning is smaller than twice the coupling strength. An amplitude extension yields an attracting invariant torus through explicit normal contraction. Exact solutions and finite simulations verify these results within stated numerical limits. Observation models further show that contraction can preserve an exactly encoded variable while finite resolution removes its distinguishability. Autonomous dynamics under projection require an additional consistency condition. Together, these findings specify the dynamical and observational assumptions needed to connect neural geometry with information persistence, entropy, and continuity across scales.
 \end{abstract}
 
 \newpage
-
-%% ============================================================
-%% SECTION 1: INTRODUCTION
-%% ============================================================
 \section{Introduction}\label{sec:intro}
 
-\subsection{Grid Cells and Continuous Attractor Networks}
+Grid cells provide a tractable setting for studying how neural populations represent continuous variables. Individual cells fire at locations arranged approximately on a triangular lattice \cite{Hafting2005}. Across a population, relative firing patterns can encode position within that repeating structure. This periodic representation motivates toroidal coordinates and raises a dynamical question: what maintains the representation when neural activity is perturbed?
 
-The discovery that grid cells in the medial entorhinal cortex fire in characteristic hexagonal spatial patterns \cite{Hafting2005} established that the mammalian brain contains a structured internal coordinate system for spatial representation. This finding, which contributed to the Nobel Prize in Physiology or Medicine awarded to May-Britt Moser and Edvard I.\ Moser, revealed that individual grid cells fire at the vertices of a regular triangular lattice as an animal traverses an environment. Grid cells are organized into discrete modules, each with a characteristic spatial scale, and the ratio of scales between adjacent modules follows an approximately constant geometric factor \cite{Stensola2012}. The spatial code of a single grid cell can be described by two circular phase variables, meaning that the state space of an individual cell's firing pattern is inherently periodic.
+Published recordings support both geometric and dynamical descriptions of grid cell populations. Gardner et al.\ recovered toroidal population topology within simultaneously recorded modules, including across waking and sleep conditions \cite{Gardner2022}. Hermansen et al.\ found toroidal representations during one dimensional behavior \cite{Hermansen2024}. Yoon et al.\ showed that relationships among simultaneous cells remained conserved despite changes in individual responses, supporting a low dimensional continuous attractor \cite{Yoon2013}. These findings motivate models in which nearby activity returns toward a continuous family of represented states \cite{Wu2016}.
 
-Theoretical models proposed that grid cell networks implement continuous attractor dynamics, in which the population activity evolves on a low-dimensional manifold embedded in the high-dimensional space of possible firing rate vectors \cite{Yoon2013}. In a continuous attractor network, the set of stable states forms a connected manifold rather than a collection of isolated fixed points, and the system can move smoothly along this manifold in response to velocity inputs. For a two-dimensional periodic spatial code, the predicted attractor manifold is a two-dimensional torus $T^2 = S^1 \times S^1$.
+The relation between spatial tuning and population dynamics nevertheless requires separate measurements. Di Sarra et al.\ found that timing perturbations could disrupt recovered topology while leaving spatial grid scores largely intact \cite{DiSarra2025}. Their independent rate modulated Poisson model also produced toroidal signatures; a later correction replaces duplicated panels in the synthetic calibration figure \cite{DiSarra2025Correction}. A toroidal representation can thus be supported by several constructions, each with different implications for the underlying dynamics.
 
-\subsection{The Gardner et al.\ Discovery}
+Coupled oscillators make these implications mathematically explicit. Neural rhythms and cross frequency interactions motivate phase descriptions \cite{Buzsaki2006,Canolty2006,Tort2009}. Two independently specifiable circular phases have coordinate space $T^2$, while their equations determine which trajectories occur there. A dynamical attractor additionally requires recovery from nearby states in a specified ambient space. Information persistence adds another requirement: a variable must remain distinguishable under the available observation.
 
-The decisive empirical confirmation came from Gardner et al.\ \cite{Gardner2022}, who recorded simultaneously from large populations of grid cells in individual modules of the rat medial entorhinal cortex. Using persistent cohomology, a technique from topological data analysis that can recover the topology of a manifold from a finite point cloud, they reconstructed the shape of the manifold on which the population activity resides. The analysis revealed that the joint activity of grid cells within a single module traces a path on a two-dimensional torus $T^2 = S^1 \times S^1$.
+We examine these requirements through a recording audit, analytic oscillator models, and finite numerical checks. The central result is that toroidal coordinates, normal attraction, and information retention require distinct assumptions. The retained spatial maps do not establish a neural attractor. The oscillator model identifies a sufficient mechanism for attraction and shows how its interpretation depends on coupling and observation. These calculations provide testable conditions for a neural model rather than a fitted biological mechanism.
 
-This result was significant for several reasons. It provided the first direct visualization of continuous attractor network dynamics in the brain. It confirmed that neural population activity can be organized on non-trivial topological manifolds. It demonstrated that the tools of algebraic topology can be applied to experimental neural data to recover geometric structure that is not visible in the activity of individual neurons.
+Section~\ref{sec:methods} introduces the data, equations, and verification methods. Section~\ref{sec:results} presents the principal findings, followed by their interpretation in Section~\ref{sec:discussion} and the conclusion in Section~\ref{sec:conclusion}. Appendices~\ref{app:geometry}--\ref{app:lean} contain the derivations, processing details, numerical checks, and extended models.
 
-\subsection{Why Toroidal Geometry Matters}
+\section{Methods}\label{sec:methods}
 
-The toroidal structure observed in grid cell populations is not an isolated property of the spatial navigation system. From the perspective of dynamical systems theory, toroidal manifolds arise naturally whenever multiple oscillatory processes interact. A single periodic process traces a circle $S^1$ in phase space; two coupled periodic processes trace a torus $S^1 \times S^1$; and $n$ interacting oscillatory variables produce an $n$-dimensional torus $T^n$ \cite{Strogatz2015}. The dissipative quasi-periodic attractor framework establishes that such toroidal motion persists under small perturbations \cite{Broer1996}, providing a rigorous mathematical foundation for the structural stability of these manifolds.
+\subsection{Recording Audit and Observables}
 
-Neural systems contain the oscillatory dynamics needed to produce toroidal attractors. Electroencephalographic recordings reveal rhythmic activity spanning multiple frequency bands, from slow delta oscillations ($<4$~Hz) through theta (4--8~Hz), alpha (8--13~Hz), beta (13--30~Hz), and gamma ($>30$~Hz) rhythms \cite{Buzsaki2006, Buzsaki2004}. These oscillations interact through cross-frequency coupling mechanisms, notably theta-gamma phase-amplitude coupling observed in the hippocampus and neocortex \cite{Canolty2006, Tort2009, Lisman2005}. Such coupled oscillatory dynamics provide the conditions under which toroidal attractor manifolds are expected to emerge. Winfree \cite{Winfree2001} established the mathematical foundations for understanding biological oscillator coupling and phase singularities, providing the theoretical basis for toroidal phase-space organization in coupled biological systems.
+The empirical analysis examines five retained recording files from the Hafting data collection \cite{Hafting2005}. We inspect timestamps, cell labels, rate maps, persistence diagrams, and the transformations connecting them. Recording boundaries are preserved unless acquisition metadata establishes simultaneity. Reconstructing the earlier pooling rule allows its output to be checked against the stored population matrix. The audit also distinguishes retained numerical outputs from figures and calculations reported only in an annotated draft.
 
-\subsection{Goal of This Paper}
+Spatial entropy is evaluated from the normalized rates across observed map bins. This defines a categorical statistic of spatial tuning. Topology is assessed by inspecting retained persistence outputs and their provenance. No calibrated neural $H_2$ reconstruction is performed in this study. Appendix~\ref{app:data} gives the recording inventory, processing parameters, entropy definition, and control checks needed to interpret these measurements.
 
-This paper develops a physical dynamical framework explaining why toroidal manifolds arise in recursive neural systems, anchored by a methodological investigation of the limits of standard pipelines for recovering toroidal topology from grid cell data. We reanalyze Gardner et al. (2022) with persistent homology applied to temporal population vectors, characterize the limits of Vietoris-Rips filtration on dense trajectory samples, and discuss implications for the dissipative quasi periodic attractor interpretation of grid cell dynamics.
+\subsection{Oscillator Model}
 
-The central claim is that recursive oscillatory systems have toroidal phase spaces, within which attractor structure is hypothesized, and that neural systems contain the coupled oscillatory dynamics necessary for such phase-space geometry to arise. The grid cell system provides a concrete empirical demonstration of this principle. Building on this empirical anchor, we integrate the strongest formal material from observer interface theory: finite observation, non invertible projection, latent equivalence classes, entropy coupling, and recursive closure. We explicitly separate empirical claims from mathematical definitions, interpretations, and bounded speculative implications, establishing a rigorous foundation for understanding how external spatial structure is mapped into internal neural topology.
+The model represents each oscillator by a phase $\phi_i\in\mathbb{R}/2\pi\mathbb{Z}$ with constant natural frequency $\omega_i$. Their joint coordinate space is $T^2=S^1\times S^1$. We use symmetric sinusoidal coupling \cite{Kuramoto1984,Strogatz2000},
+\begin{equation}\label{eq:sine_pair}
+\begin{aligned}
+ \dot\phi_1&=\omega_1+\epsilon\sin(\phi_2-\phi_1),\\
+ \dot\phi_2&=\omega_2+\epsilon\sin(\phi_1-\phi_2),\qquad\epsilon\geq0.
+\end{aligned}
+\end{equation}
+Here $\epsilon=0$ gives independent rotations. With phase difference $\delta=\phi_2-\phi_1$ and detuning $\Delta\omega=\omega_2-\omega_1$, the relative dynamics reduce to
+\begin{equation}\label{eq:phase_difference}
+ \dot\delta=\Delta\omega-2\epsilon\sin\delta.
+\end{equation}
+The lifted common phase advances at $(\omega_1+\omega_2)/2$. This reduction identifies synchronization without assuming attraction transverse to the torus.
 
-\section{Grid Cells and Toroidal Manifolds}\label{sec:grid_cells}
+Normal attraction is tested by adding positive amplitude coordinates $r_1,r_2$ with
+\begin{equation}\label{eq:radial}
+ \dot r_i=-\lambda(r_i-1),\qquad\lambda>0.
+\end{equation}
+The full state is embedded as $(r_1\cos\phi_1,r_1\sin\phi_1,r_2\cos\phi_2,r_2\sin\phi_2)$ in $\mathbb{R}^4$. This extension specifies the directions in which states can approach the unit product torus. Independent rotations, phase locking, radial perturbations, and a solvable forcing perturbation are compared under the same model framework. Appendices~\ref{app:geometry} and \ref{app:normal} provide the derivations and stability conditions.
 
-\subsection{Continuous Attractor Networks and Neural Manifolds}
+\subsection{Numerical and Observation Checks}
 
-The theoretical framework of continuous attractor neural networks (CANNs) provides the foundation for understanding toroidal structure in neural systems \cite{Wu2016}.
-In a CANN, the network possesses a continuous family of stable states parameterized by one or more variables.
-The defining feature of a CANN is a stable activity bump: a localized pattern of elevated firing that can be positioned at any point along the attractor manifold.
-This bump moves continuously across the manifold in response to velocity inputs, maintaining a coherent representation of the encoded variable without discrete transitions between states.
-For a network encoding a single circular variable (such as head direction), the attractor manifold is $S^1$.
-For a network encoding two circular variables (such as the two periodic coordinates of a grid cell module), the attractor manifold is $T^2$ \cite{Yoon2013}.
+Finite simulations test the analytic predictions in arbitrary model units. The principal frequencies are $(1,\sqrt{2})$, with coupling strengths $0$, $0.1$, and $0.6$; a rational frequency control uses $(1,3/2)$. Fourth order Runge--Kutta trajectories are compared with exact solutions and adaptive integration. Phase kicks and radial displacements test recovery in different directions. Step refinement measures error over a fixed interval; Appendix~\ref{sec:simulation} specifies all parameters, tolerances, and convergence limits.
 
-The reason the torus appears specifically in grid cell networks follows directly from the periodicity of the spatial code.
-Each grid cell fires at regularly spaced locations, and the spatial phase of this firing pattern wraps around with the grid spacing, producing a cyclic variable on $S^1$.
-Because the hexagonal grid pattern is periodic in two independent spatial directions, there are two such cyclic phase variables.
-Their joint state space is $S^1 \times S^1 = T^2$, and the activity bump of the CANN moves on this torus as the animal navigates through space.
+Information is evaluated using specified observation maps. An exactly encoded binary variable and its finite resolution observation test whether contraction preserves distinguishability. Projections of the coupled phase model test whether an observed variable has autonomous dynamics. These examples use constructed states and observation rules; their definitions and calculations are in Appendix~\ref{sec:observation}.
+
+\section{Results}\label{sec:results}
+
+\subsection{What the Retained Recordings Establish}\label{sec:empirical}
+
+The recording audit supports a description of spatial tuning but does not establish simultaneous toroidal population dynamics. The five files contain 23 cell recordings and 13 distinct labels. The stored $(59{,}992,13)$ population matrix is reproduced exactly by merging repeated labels across separate recordings on one recording's time axis. Its embeddings consequently cannot establish the geometry or attraction of a simultaneous population. The 13 retained rate maps also do not reconstruct temporal population trajectories.
+
+The retained topology outputs provide no calibrated evidence for a toroidal neural attractor. They contain $H_1$ intervals computed from the pooled matrix, while no matching $H_2$ output is retained. Further reconstructions appear in the annotated draft, but the supplied artifacts do not allow their independent reproduction. The spatial maps have mean entropy 10.860 bits under the stated rate normalization, compared with a 2,500-bin uniform maximum of 11.288 bits. This statistic describes spatial rate allocation. It does not measure memory duration or thermodynamic entropy production. Appendix~\ref{app:data} records the full numerical and provenance findings.
+
+\subsection{Synchronization and Normal Attraction}
+
+The same toroidal phase coordinates support different orbit structures. With independent nonzero frequencies, a rational frequency ratio gives periodic orbits and an irrational ratio gives dense quasi periodic orbits. Both phase directions remain neutral under perturbations. Under positive coupling, stable locking occurs when $|\Delta\omega|<2\epsilon$, with
+\begin{equation}\label{eq:locking}
+ \delta_* = \arcsin\!\left(\frac{\Delta\omega}{2\epsilon}\right),\qquad
+ \lambda_\delta=-\sqrt{4\epsilon^2-(\Delta\omega)^2}<0.
+\end{equation}
+The stable locked set is a circle of fixed phase difference. It is a periodic orbit when the common frequency is nonzero and a circle of equilibria otherwise. The common phase remains neutral. At the equality threshold the equilibrium is nonhyperbolic; above the threshold the relative phase drifts. The complete branch and threshold analysis is given in Appendix~\ref{app:geometry}.
+
+The amplitude extension establishes attraction to an invariant torus by an exact distance law. For $M=\{r_1=r_2=1\}$,
+\begin{equation}\label{eq:normal_distance}
+ d(z(t),M)=e^{-\lambda t}d(z(0),M).
+\end{equation}
+Changing the sign of $\lambda$ changes normal stability while preserving the flow on $M$. Under phase locking, $M$ remains invariant and normally attracting even though typical limiting motion lies on a circle within it. A sufficiently strong normal contraction also gives persistence under small autonomous perturbations, subject to normal hyperbolicity \cite{BergerBounemoura2013}. This persistence concerns the manifold; preserving quasi periodic internal motion requires further hypotheses \cite{Broer1996}.
+
+The finite calculations agree with the predicted locking, drift, and recovery. For $(\omega_1,\omega_2)=(1,\sqrt{2})$ and $\epsilon=0.6$, the stable phase difference is approximately $0.3524$ rad and its exponent is $-1.1262$ per model time unit. At $\epsilon=0.1$, the mean slip rate is $0.3627$ rad per model time unit. Phase kicks persist for independent rotations, whereas locking restores relative phase and retains a common offset. The radial examples recover the predicted normal contraction. Fixed-interval refinement gives approximately fourth order convergence before the numerical floor. These results verify the finite model calculations; they supply no new biological measurements. Figure~\ref{fig:oscillator_validation} and the error analysis are in Appendix~\ref{sec:simulation}.
+
+\subsection{Information Persistence and Coarse Dynamics}
+
+Normal contraction does not by itself determine the recoverability of an encoded variable. In the binary example, two distinct initial displacements remain distinguishable at every finite time under exact observation. A fixed finite resolution eventually maps both to the same observed bin. Information loss thus depends on the encoding and measurement, even when the dynamical contraction is unchanged. Differential entropy in the normal coordinates decreases under contraction, but that change does not specify a thermodynamic entropy flux.
+
+An observation supports autonomous coarse dynamics only if its evolution is consistent across states with the same observation. For fine and coarse flows $F_t,G_t$, a continuous surjection $\pi$, and a time conversion $c>0$, the required relation is
+\begin{equation}\label{eq:coarse_flow}
+ \pi\circ F_t=G_{ct}\circ\pi.
+\end{equation}
+The single phase $\phi_1$ fails this test when coupling is nonzero: its velocity depends on the unobserved phase. The circular sum $(\phi_1+\phi_2)\pmod{2\pi}$ instead follows an exact autonomous rotation. Appendix~\ref{sec:observation} derives the consistency condition and gives both examples. Continuity across descriptions therefore requires a compatible map and dynamics.
+
+\section{Discussion}\label{sec:discussion}
+
+\subsection{From Population Geometry to Neural Dynamics}\label{sec:trajectory}
+
+The results identify the extra evidence needed to connect a toroidal representation with a neural attractor. Published population studies support geometric organization and, in the case of Yoon et al., a dynamical attractor interpretation for their recordings. The present audit limits what can be inferred from this repository's retained outputs. Its pooling error does not refute the published evidence. The explicit amplitude model shows why geometry and on-manifold trajectories alone leave normal stability undetermined.
+
+A direct recovery experiment would connect these descriptions by measuring motion transverse to an independently estimated manifold. Simultaneous recordings should identify the population and module, control behavioral input, and resolve the relevant temporal scale. Displaced states could then be tested for normal contraction while allowing motion along the manifold. Return toward a manifold must be distinguished from return to the same timed trajectory. Topological controls would separately test the effects of noise, sampling, and preprocessing on the recovered shape. Appendix~\ref{app:data} states the associated sampling and calibration limits.
+
+The oscillator results also distinguish synchronization from a two dimensional attracting representation. Coupling can reduce typical limiting motion to a circle while leaving the coordinate torus intact. An attracting torus in a larger space may coexist with this internal locking. A neural interpretation therefore needs a specified state space, a recovery measurement, and a description of the motion that remains on the recovered set.
+
+\subsection{Entropy, Observation, and Continuity}\label{sec:entropy}
+
+Information persistence requires both dynamics and an observation rule. Exact smooth contraction can preserve distinguishable states, whereas finite resolution can erase their observed difference. A report of decreasing entropy must accordingly identify its variable, normalization, and units. Spatial Shannon entropy, differential entropy, description length, and thermodynamic entropy describe different quantities. The thermodynamic balance in Appendix~\ref{sec:observation} requires a physical boundary and measured exchanges before it can constrain neural energetic cost.
+
+Recursive processing inherits the distinctions preserved by its inputs. Repeating a deterministic operation on the same observation cannot recover distinctions already removed by that observation. New inputs can supply additional information. Predictive coding and Minimum Description Length motivate conditional compression models \cite{RaoBallard1999,LiVitanyi2008,Prada2025}, but do not establish monotonic compression through every biological layer. Likewise, Eq.~\eqref{eq:coarse_flow} gives a condition to test when relating scales; oscillation or shared topology alone does not satisfy it.
+
+Broader interpretations require additional models and measurements. Recurrence does not establish a neural self model, and toroidal spatial coding does not determine the topology of subjective experience. The present results concern state geometry, stability, and observation. Appendix~\ref{sec:quaternions} examines quaternion operators as a separate mathematical extension, and Appendix~\ref{app:physical} states the physical assumptions needed for comparisons across frequency scales.
+
+\section{Conclusion}\label{sec:conclusion}
+
+Toroidal phase coordinates specify a space of states, while the equations determine its orbit structure and stability. The coupled model produces independent rotations, phase locking onto a circle, and, with explicit normal contraction, an attracting invariant torus. Exact solutions and finite numerical checks support these model results. The retained neural artifacts establish spatial tuning descriptions but do not establish torus attraction.
+
+The same distinction extends to information and scale. Contraction can preserve exact information while finite resolution removes it, and a coarse observation has autonomous dynamics only under a compatible projection. Connecting these mathematical results to neural persistence requires simultaneous recordings, recovery measurements, and explicit observation and entropy definitions.
+
+\clearpage
+\appendix
+\numberwithin{equation}{section}
+\section{Geometry and Phase Dynamics}\label{app:geometry}\label{sec:grid_cells}\label{sec:torus}
+
+\subsection{Periodic Spatial Coordinates}
+
+An idealized grid code has toroidal coordinates because positions repeat under lattice translations. Let $\Lambda=\mathbb{Z}\mathbf{e}_1+\mathbb{Z}\mathbf{e}_2$ be a rank two lattice. Equivalent positions differ by an element of $\Lambda$, and the quotient $\mathbb{R}^2/\Lambda$ is a torus. Writing $\mathbf{x}=u_1\mathbf{e}_1+u_2\mathbf{e}_2$ gives circular coordinates $\phi_i=2\pi u_i\pmod{2\pi}$. Figure~\ref{fig:grid_cell_hex} illustrates this construction. The lattice coefficients are wrapped; Cartesian coordinates are not generally independent periods of the same length.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/fig_grid_cell_hex.pdf}
-\caption{Grid cell hexagonal firing pattern. (A) Spatial firing fields of a single grid cell, showing elevated firing rates at regularly spaced locations forming a hexagonal lattice within the arena. (B) The hexagonal lattice structure defined by two basis vectors $\mathbf{e}_1$ and $\mathbf{e}_2$ separated by $60^\circ$, with characteristic grid spacing $\lambda$. (C) The periodic spatial code wraps each spatial direction modulo $\lambda$, producing two cyclic phase variables $\phi_1, \phi_2 \in S^1$. Their joint state space is the two-torus $T^2 = S^1 \times S^1$.}
+\includegraphics[width=0.80\textwidth]{figures/fig_grid_cell_hex.pdf}
+\caption{Idealized periodic spatial coding. (A) Schematic firing fields, not measured rate maps. (B) Two lattice basis vectors separated by $60^\circ$. (C) Wrapping their coefficients modulo one gives two circular coordinates and the quotient $T^2$.}
 \label{fig:grid_cell_hex}
 \end{figure}
 
-\subsection{The Gardner et al.\ Discovery: Methodology and Results}
-
-Gardner et al.\ \cite{Gardner2022} used Neuropixels high-density silicon probes to record simultaneously from hundreds of grid cells in individual modules of the rat medial entorhinal cortex.
-The key methodological innovation was the application of persistent cohomology to the high-dimensional population activity vectors.
-Persistent cohomology is a tool from topological data analysis that identifies topological features (connected components, loops, voids) in a point cloud by tracking which features persist across a range of spatial scales.
-For a dataset sampled from a torus, persistent cohomology detects two independent one-dimensional cocycles (corresponding to the two independent loops of the torus) that persist over a wide range of scales.
-
-The analysis revealed that the joint activity of grid cells within a single module traces a path on a two-dimensional torus $T^2 = S^1 \times S^1$ (see Figure~\ref{fig:toroidal_manifold}).
-The toroidal structure was robust across animals, recording sessions, and behavioral conditions, including periods of darkness when visual landmarks were unavailable.
-This robustness confirmed that the toroidal geometry is an intrinsic property of the network dynamics rather than an artifact of external sensory input.
-
-Subsequent work by Hermansen et al.\ \cite{Hermansen2024} extended the analysis to show that toroidal representations persist even during one-dimensional behavior, indicating that the toroidal structure is maintained by the network dynamics independently of the dimensionality of the behavioral task.
-Di Sarra et al.\ \cite{DiSarra2025} demonstrated that oscillatory mechanisms play a role in maintaining the toroidal topology of grid cell population activity.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/fig_toroidal_manifold.pdf}
-\caption{From oscillatory coupling to toroidal neural manifolds. (A) A single oscillator traces a circle $S^1$. (B) Two coupled oscillators produce dynamics on the two-torus $T^2 = S^1 \times S^1$. (C) Three coupled oscillators produce dynamics on $T^3 = S^1 \times S^1 \times S^1$; this is a product of three circles, not $S^3$, and does not require quaternionic representation. (D) Grid cell population activity from a single module resides on a toroidal manifold, as demonstrated by Gardner et al.\ \cite{Gardner2022} using persistent cohomology.}
-\label{fig:toroidal_manifold}
-\end{figure}
-
-\subsection{Empirical Reconstruction from Grid Cell Dataset}\label{sec:empirical}
-
-To evaluate consistency with the theoretical framework, we reconstructed the population manifold using publicly available grid cell datasets. The empirical analysis differentiates between geometric and topological claims. Geometry is supported by the structure of individual rate maps and the continuous embedding of population vectors. Topology is supported independently by persistent homology applied to the population manifold. We used MAT files from the Hafting et al.\ (2005) \cite{Hafting2005} and \texttt{rat\_10925} datasets. Position coordinates (\texttt{pos\_x}, \texttt{pos\_y}, \texttt{pos\_timeStamps}) and spike timestamps for each neuron were extracted and aligned.
-
-Preprocessing involved removing all NaN values from position arrays, normalizing position coordinates to finite bounds, and binning spatial positions into a $50 \times 50$ grid. Firing rate maps were computed for each neuron using occupancy normalization. The resulting dataset contained 17 neurons total (13 from Hafting et al.\ and 4 from the \texttt{rat\_10925} dataset) and approximately 59,596 position samples per trial, yielding a rate map tensor of shape $(17, 50, 50)$. Representative individual neuron spatial firing fields are shown in Figure~\ref{fig:rate_maps}. These rate maps capture spatial tuning geometry and do not reconstruct temporal phase space trajectories. Trajectory level reconstruction requires temporal population vectors at fine time resolution constructed from simultaneous large scale recordings during active behavior.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/fig_grid_cell_hex.pdf}
-\caption{Grid cell hexagonal firing pattern. (A) Spatial firing fields of a single grid cell showing elevated firing rates at regularly spaced locations forming a hexagonal lattice. (B) The hexagonal lattice structure defined by two basis vectors separated by $60^\circ$, with characteristic grid spacing $\lambda$. (C) The periodic spatial code wraps each spatial direction modulo $\lambda$, producing two cyclic phase variables whose joint state space is $T^2 = S^1 \times S^1$. The rate map analysis (17 neurons from Hafting et al.\ 2005 and \texttt{rat\_10925}) captures spatial tuning geometry; the persistent homology analysis in Section~\ref{sec:homology_reporting} uses the Gardner et al.\ (2022) Rat R Day 1 Module 2 dataset (168 neurons).}
-\label{fig:rate_maps}
-\end{figure}
-
-To reconstruct the manifold, the rate maps were flattened into population vectors and reduced using Principal Component Analysis (PCA) with 3 components. The population activity forms a low dimensional manifold consistent with toroidal structure. As shown in Figure~\ref{fig:manifold_topology}A (which uses the external Gardner dataset), the PCA embedding reveals a smooth continuous trajectory with no fragmentation. The total variance explained by the first three components is low, indicating that manifold structure is distributed across components and that the embedding represents an approximation of the full high dimensional geometry rather than a complete reconstruction. UMAP preserves local structure and supports the same manifold geometry (Figure~\ref{fig:manifold_topology}B). The UMAP embedding is provided for visualization only and is not used for topological quantification.
-
-We then applied persistent homology using the Ripser algorithm to analyze the topology of this manifold. The analysis reveals a small number of persistent $H_1$ features consistent with toroidal structure. This is consistent with, but does not uniquely identify, toroidal topology. The persistent homology barcode showing these features is presented in Figure~\ref{fig:manifold_topology}D. The persistence magnitude exceeds background noise levels, indicating non-random topological structure. The persistence values are reported in Section~\ref{sec:homology_reporting}.
-
-\subsubsection{Persistent Homology Reporting}\label{sec:homology_reporting}
-
-\textbf{Empirical Result:} The persistent homology computation on the PCA-whitened, density-downsampled population trajectory (800 points, maxdim=1) yielded 566 $H_1$ features. The top five persistence values are 0.723, 0.721, 0.627, 0.617, and 0.585. The gap ratio of the top feature to the third is 1.15, indicating two nearly equal leading $H_1$ features that are only modestly separated from the remaining $H_1$ spectrum. This is compatible with $T^2 = S^1 \times S^1$ (two independent 1-cycles of near-equal persistence). However, $H_2$ computation (400 points, maxdim=2) yielded top persistence values of 0.240, 0.233, and 0.207, with a gap ratio of 1.03, indicating no clear $H_2$ dominance. The result is therefore weak $H_1$-level compatibility with toroidal organization under a simplified pipeline, not confirmed $T^2$ evidence.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/fig_persistence_buildspec.png}
-\caption{Persistent homology of the Gardner et al.\ (2022) Rat R Day 1 Module 2 population trajectory (168 neurons, 800 points after density downsampling, PCA-whitened to 8 dimensions). The persistence diagram shows 566 $H_1$ features. The top five $H_1$ persistence values are 0.723, 0.721, 0.627, 0.617, and 0.585. The gap ratio of the top feature to the third is 1.15, indicating two nearly equal leading $H_1$ features only modestly separated from the remaining spectrum. $H_2$ computation (400 points, maxdim=2) yielded top values of 0.240, 0.233, 0.207 with gap ratio 1.03; no dominant $H_2$ feature is resolved above background.}
-\label{fig:manifold_topology}
-\end{figure}
-
-Finally, we computed the Shannon entropy over the normalized firing distributions. The resulting entropy value is approximately 1.49 bits. Relative to a uniform spatial distribution, this indicates a spatially selective or non uniform firing distribution. The entropy calculation is based on the spatial firing distribution, not the temporal spike train.
-
-This empirical reconstruction is consistent with the theoretical synthesis. The empirical torus is consistent with the oscillatory coupling argument, the entropy result is consistent with structured spatial coding, and the manifold geometry is consistent with the low dimensional neural geometry required for recursive computation. The Hafting dataset contains a small population and has limited reconstruction capability. The Gardner dataset provides large scale confirmation. The current results are consistent with large scale findings but are not equivalent to them. The empirical reconstruction is consistent with the theoretical principles, not a novel experimental finding.
-
-\subsection{Trajectory Level Population Reconstruction}\label{sec:trajectory}
-
-The current reconstruction uses rate maps and therefore captures spatial tuning geometry rather than temporal evolution of the population state. A direct test of the attractor claim requires temporal population vectors derived from simultaneous large scale recordings, such as the Gardner et al.\ (2022) Neuropixels dataset.
-
-To execute this, spike trains are binned at approximately 100 millisecond resolution, chosen to align with theta timescales, to construct time indexed population activity vectors. Each time bin yields one population state vector across all recorded neurons. These vectors form a trajectory through the neural state space rather than a static map over position.
-
-Dimensionality reduction should be performed with UMAP using cosine distance rather than relying only on PCA, because local manifold structure may be distributed across many dimensions and need not be captured by leading variance components. Persistent homology applied to the resulting trajectory can test whether the time evolving population state is consistent with toroidal attractor organization. The trajectory reconstruction yields a continuous low dimensional manifold with non collapsed embedding. \textbf{Empirical Result:} The persistent homology analysis reported in Section~\ref{sec:homology_reporting} applies to the temporal population trajectory. The top persistence values (0.723, 0.721) are nearly equal and separated from the background (0.627), but the gap is modest (1.15). This result is consistent with low dimensional manifold organization but does not uniquely identify toroidal topology in the reconstructed dynamics, especially given the absence of a resolved $H_2$ feature.
-
-The absence of a persistence gap is consistent with dense trajectory sampling under Vietoris-Rips filtration, where increased sampling density inflates the number of $H_1$ features and reduces separation between dominant cycles. Under these conditions, low dimensional generators are not isolated and may be obscured by overlapping local loops. These two interpretations cannot be distinguished under the current filtration and sampling regime, and resolving them would require either subsampling experiments to test persistence gap sensitivity to sampling density or alternative filtrations such as alpha complexes. The observed topology reflects a distributed structure under the current sampling and filtration regime rather than a reduction to a small set of dominant generators.
-
-\textbf{Methodological Limitation:} The current pipeline has not been validated on a known synthetic torus. Without running the identical PCA/UMAP/Ripser pipeline on a generated $T^2$ (or $T^3$) with matched noise and sampling density, the negative trajectory result is uninterpretable: it is not possible to distinguish whether the pipeline failed to find a torus that is present, or correctly determined that the trajectory dynamics do not exhibit toroidal attractor organization. Synthetic validation under matched conditions is the required next methodological step.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{figures/fig_toroidal_manifold.pdf}
-\caption{Toroidal manifold construction from oscillatory coupling. (A) A single oscillator traces $S^1$. (B) Two coupled oscillators produce $T^2 = S^1 \times S^1$. (C) Three coupled oscillators produce $T^3 = S^1 \times S^1 \times S^1$ (a product of three circles, not $S^3$). (D) Grid cell population activity resides on a toroidal manifold as demonstrated by Gardner et al.\ \cite{Gardner2022}.}
-\label{fig:trajectory_manifold}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{figures/fig_entropy_funnel.pdf}
-\caption{$H_2$ barcode from the Gardner et al.\ (2022) Rat R Day 1 Module 2 population trajectory (400 points, maxdim=2, coeff=2). The top $H_2$ persistence values (0.240, 0.233, 0.207) show no dominance gap (ratio 1.03). No dominant $H_2$ feature is resolved; this is consistent with the formal requirement that full torus evidence requires $\beta_2 = 1$, which is not met here.}
-\label{fig:trajectory_barcode}
-\end{figure}
-
-This trajectory level approach extends the present work by moving from coding geometry to dynamical population evolution. It represents the correct next empirical step toward direct attractor reconstruction.
-
-\subsection{Ablation Analysis}
-
-To test the robustness and specificity of the topological signal, we conducted three ablation studies on the reconstructed data. To test whether the topological signal reflects genuine temporal coordination, we performed a controlled spike shuffling ablation using identical preprocessing, normalization, binning, dimensionality reduction, and filtration parameters as the baseline analysis. The only change was temporal permutation of spike timestamps within each neuron, preserving total spike counts per neuron (4,623,560 total spikes in both conditions). Shuffling spike timestamps independently per neuron increases maximum $H_1$ persistence (to 0.738, exceeding the baseline 0.723) rather than abolishing it. This increase is the expected artifact of denser, more isotropic sampling under Vietoris-Rips filtration, in which noise inflates the number and persistence of spurious loops. This indicates that the simplified pipeline applied here, without the density-matched downsampling and topology-aware preprocessing of Gardner et al.\ and Hermansen et al., does not by itself discriminate toroidal structure from a noisier isotropic control. This is a methodological finding about simplified pipelines, not evidence against toroidal organization in the underlying data, which Gardner et al.\ established with a validated pipeline. Jitter controls at 100ms (0.589) and 500ms (0.637) show that temporal structure contributes to the signal. Finally, removing smoothing from the firing rate maps reduces the maximum persistence to 0.315, demonstrating the necessity of temporal integration for resolving the underlying geometry. Spatially binned rate map reconstructions exhibit clearer low dimensional geometric organization than trajectory level reconstructions, indicating that spatial coding geometry is more directly recoverable under current sampling and analysis conditions than temporal population dynamics, which remain sensitive to reconstruction, sampling density, and filtration choices.
+A population firing map requires further assumptions to represent this quotient faithfully. It must separate distinct lattice phases and sample them adequately. A scalar firing rate from one neuron need not distinguish all phases. Spatial periodicity therefore defines candidate coordinates without establishing an embedded population manifold or its dynamical stability.
 
 
-%% ============================================================
-%% SECTION 3: OSCILLATORY NEURAL DYNAMICS
-%% ============================================================
-\section{Oscillatory Neural Dynamics}\label{sec:oscillatory}
 
-\subsection{The Electromagnetic Basis of Biological Dynamics}
+Even a torus-compatible Betti signature does not uniquely determine a general space. Over a field, $T^2$ has $(\beta_0,\beta_1,\beta_2)=(1,2,1)$. The wedge $S^1\vee S^1\vee S^2$ has the same ranks. Additional assumptions or invariants are needed to identify the space. An unresolved $H_2$ feature is inconclusive about the underlying topology and says nothing by itself about attraction.
 
-At molecular and cellular scales, biological interactions are predominantly electromagnetic.
-Chemical bonds arise from the overlap of electron wavefunctions governed by Coulomb forces; hydrogen bonds reflect dipole interactions; van der Waals forces result from fluctuating charge distributions \cite{Frohlich1968}.
-The distinction between ``chemical'' and ``electromagnetic'' descriptions is one of abstraction level rather than ontological category.
-By maintaining the electromagnetic framework as the base physical layer, it becomes possible to move continuously between molecular dynamics, neural activity, field interactions, and entropy flows without changing the fundamental descriptive language.
+\subsection{Circular Coordinates}
 
-Living cells generate endogenous electromagnetic fields through several mechanisms.
-Ion channel currents produce transient electric fields associated with action potentials, with typical neuronal membrane potentials of approximately $-70$~mV.
-Charge transport in proteins, oscillatory metabolic activity, and membrane potential fluctuations all contribute to localized electromagnetic oscillations.
-Whenever charges move, Maxwell's equations apply, and the resulting fields propagate according to the wave equation:
-\begin{equation}\label{eq:wave}
-  \nabla^2 \mathbf{E} - \mu_0 \epsilon_0 \frac{\partial^2 \mathbf{E}}{\partial t^2} = 0,
-\end{equation}
-where $\mathbf{E}$ is the electric field, $\mu_0$ is the permeability of free space, and $\epsilon_0$ is the permittivity of free space. This is the source-free, lossless approximation; biological tissue is conductive and the full treatment includes a loss term $\sigma \mu_0 \partial \mathbf{E}/\partial t$.
-In biological tissue, the effective permittivity and conductivity are frequency-dependent, leading to complex dispersion relations that govern the propagation and attenuation of electromagnetic signals across different frequency regimes.
-
-\subsection{The Frequency Hierarchy in Neural Systems}
-
-The electromagnetic dynamics of neural tissue span an enormous range of frequencies.
-Conventional electrophysiological methods access oscillatory activity primarily in the range of approximately 1 to $10^3$~Hz \cite{Buzsaki2006}.
-These measurements have revealed a rich hierarchy of neural rhythms organized into canonical frequency bands, summarized in Table~\ref{tab:freq_bands}.
-
-\begin{table}[H]
-\centering
-\caption{Canonical neural oscillation frequency bands accessible through conventional electrophysiology.}
-\label{tab:freq_bands}
-\begin{tabular}{lll}
-\toprule
-\textbf{Band} & \textbf{Frequency Range} & \textbf{Associated Functions} \\
-\midrule
-Delta ($\delta$) & 0.5--4 Hz & Deep sleep, cortical inhibition \\
-Theta ($\theta$) & 4--8 Hz & Navigation, memory encoding \\
-Alpha ($\alpha$) & 8--13 Hz & Relaxed wakefulness, sensory gating \\
-Beta ($\beta$) & 13--30 Hz & Motor planning, active cognition \\
-Gamma ($\gamma$) & 30--100 Hz & Sensory binding, attention \\
-High gamma & 100--300 Hz & Local cortical computation \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Above the range of conventional electrophysiology, several intermediate frequency regimes remain poorly characterized in living neural tissue.
-Ion channel kinetics and synaptic transmission dynamics operate in the kilohertz to megahertz range ($10^3$ to $10^6$~Hz).
-Protein conformational vibrations, hydrogen bond network dynamics, membrane oscillations, and cytoskeletal lattice modes occur at still higher frequencies in the gigahertz to terahertz range ($10^{9}$ to $10^{13}$~Hz) \cite{Markelz2008, Frohlich1968}.
-
-\subsection{Cross-Frequency Coupling}
-
-The oscillatory bands listed in Table~\ref{tab:freq_bands} do not operate in isolation.
-Cross-frequency coupling mechanisms link activity across bands, creating a hierarchical temporal organization.
-The most extensively studied form is theta-gamma phase-amplitude coupling, in which the phase of theta oscillations modulates the amplitude of gamma bursts \cite{Canolty2006, Tort2009}.
-This coupling allows slow oscillations to organize the timing of faster activity, creating nested temporal windows for information encoding \cite{Lisman2005}.
-
-These coupled oscillatory dynamics are consistent with the physical substrate from which toroidal attractor manifolds emerge \cite{Winfree2001}.
-Each oscillatory band contributes a periodic phase variable, and the coupling between bands determines the trajectory on the resulting product manifold.
-The mathematical formalization of this relationship is developed in the following sections.
-
-
-%% ============================================================
-%% SECTION 4: MATHEMATICAL TORUS CONSTRUCTION
-%% ============================================================
-\section{Mathematical Torus Construction}\label{sec:torus}
-
-\subsection{From Circles to Tori: The Geometry of Periodic Coupling}
-
-The connection between oscillatory dynamics and toroidal geometry follows from elementary topology \cite{Winfree2001, Strogatz2015}.
-Consider a single neural oscillator with phase variable $\theta_i(t)$ evolving as
+A phase coordinate records position within an oscillation cycle \cite{Winfree2001, Strogatz2015}.
+Consider a single idealized oscillator with phase variable $\theta_i(t)$ evolving as
 \begin{equation}\label{eq:oscillator}
-  \theta_i(t) = \omega_i t + \phi_i,
+  \theta_i(t) = \omega_i t + \theta_{i,0},
 \end{equation}
-where $\theta_i(t)$ is the instantaneous phase of the $i$-th oscillator, $\omega_i$ is its angular frequency, and $\phi_i$ is the initial phase offset.
-Because $\theta_i$ is $2\pi$-periodic, it traces a trajectory on the circle $S^1$.
-When two independent oscillators with phases $\theta_1(t)$ and $\theta_2(t)$ are considered jointly, each evolving on its own $S^1$, the state space of the combined system is the product manifold
+where $\theta_i(t)$ is the instantaneous phase of the $i$-th oscillator, $\omega_i$ is its angular frequency, and $\theta_{i,0}$ is the initial phase.
+The phase is identified modulo $2\pi$, so $e^{i\theta_i(t)}$ lies on $S^1$. For $\omega_i\ne0$ it traverses that circle periodically; $\omega_i=0$ gives a fixed phase.
+
+
+Two independently specifiable phases define a product space. When oscillators with phases $\theta_1(t)$ and $\theta_2(t)$ are considered jointly, each evolving on its own $S^1$, the state space of the combined system is the product manifold
 \begin{equation}\label{eq:torus}
   T^2 = S^1 \times S^1,
 \end{equation}
-which is the two-dimensional torus. Two independent oscillators, each evolving on $S^1$, jointly span this product manifold because their combined state requires specifying two independent angles.
-More generally, $n$ coupled periodic variables define a trajectory on the $n$-torus $T^n = (S^1)^n$ \cite{Strogatz2015}.
+which is the two-dimensional torus. This is the space of possible phase pairs; a particular trajectory need not visit all of it.
+More generally, $n$ independently specifiable circular coordinates define $T^n = (S^1)^n$ \cite{Strogatz2015}. Constraints or locking can restrict the accessible or limiting set.
 
 The torus $T^2$ can be embedded in three-dimensional Euclidean space via the standard parametric representation:
 \begin{align}
@@ -294,404 +223,268 @@ The torus $T^2$ can be embedded in three-dimensional Euclidean space via the sta
   y(\theta, \phi) &= (R + r\cos\theta)\sin\phi, \label{eq:torus_y} \\
   z(\theta, \phi) &= r\sin\theta, \label{eq:torus_z}
 \end{align}
-Here $R$ is the major radius, defined as the distance from the center of the torus to the center of the tube. The minor radius $r$ is the radius of the tube itself. The angles $\theta, \phi \in [0, 2\pi)$ correspond to the two independent phase variables.
+For $R>r>0$, this is an embedding of the abstract torus, not an inferred neural geometry. Here $R$ is the major radius, defined as the distance from the center of the torus to the center of the tube. The minor radius $r$ is the radius of the tube itself. The angles $\theta, \phi \in [0, 2\pi)$ correspond to the two independent phase variables.
 
 \subsection{Coupled Oscillator Dynamics on the Torus}
 
-\textbf{Mathematical Definition:} This construction establishes a geometric fact: multiple coupled oscillators have a toroidal phase space. The trajectory on this torus encodes the relative phase relationships between the oscillators. If the frequency ratio between two oscillators is rational, the trajectory closes and the motion is periodic. If the ratio is irrational, the trajectory never closes and instead densely fills the torus, producing quasi periodic motion.
-
-\textbf{Hypothesis:} While the geometric fact is trivial, the claim that neural systems with multiple oscillations exhibit toroidal \textit{attractor} manifolds is a substantive dynamical hypothesis requiring independent justification. For a system of two coupled oscillators with phases $\phi_1$ and $\phi_2$, the dynamics can be written in the general form:
+Let $\phi_1,\phi_2\in\mathbb{R}/2\pi\mathbb{Z}$. For $C^1$ coupling functions periodic in each phase, the equations
 \begin{align}
-  \dot{\phi}_1 &= \omega_1 + \epsilon f_1(\phi_1, \phi_2), \label{eq:coupled1} \\
-  \dot{\phi}_2 &= \omega_2 + \epsilon f_2(\phi_1, \phi_2), \label{eq:coupled2}
+  \dot{\phi}_1 &= \omega_1 + \epsilon f_1(\phi_1,\phi_2), \label{eq:coupled1} \\
+  \dot{\phi}_2 &= \omega_2 + \epsilon f_2(\phi_1,\phi_2) \label{eq:coupled2}
 \end{align}
-where $\omega_1$ and $\omega_2$ are the natural frequencies, $\epsilon$ is a coupling parameter, and $f_1, f_2$ are $2\pi$ periodic coupling functions. The Kuramoto model \cite{Kuramoto1984, Strogatz2000} provides a canonical example in which $f_i$ depends on the phase difference $\phi_j - \phi_i$, leading to synchronization phenomena that have been extensively studied in the context of neural oscillations. The empirical reconstruction in Section~\ref{sec:grid_cells} provides the necessary justification for treating these phase spaces as dynamical attractors in the grid cell system.
+define a flow on $T^2$. They do not specify directions transverse to $T^2$ in a larger state space. Consequently, they cannot establish normal attraction of a neural manifold.
 
-\section{Dissipative Quasi Periodic Attractors}\label{sec:kam}
+For $\epsilon=0$ and nonzero frequencies, a rational ratio $\omega_1/\omega_2$ gives closed periodic trajectories; an irrational ratio gives trajectories dense in $T^2$. Both directions are neutral under phase perturbations. These rationality statements apply to constant independent rotations, not to arbitrary coupling functions or merely to the ratio of natural frequencies in a coupled system. For $n$ independent rotations, density requires rational independence of the frequency vector: $k\cdot\omega\ne0$ for every nonzero $k\in\mathbb{Z}^n$.
 
-\textbf{Mathematical Theorem:} Neural systems are dissipative, meaning classical Kolmogorov Arnold Moser (KAM) theory \cite{Kolmogorov1954, Arnold1963, Moser1962}, which applies only to conservative Hamiltonian systems, cannot directly guarantee the stability of neural tori. Instead, the persistence of toroidal motion under perturbation in neural systems relies on the dissipative quasi periodic attractor framework established by Broer, Huitema, and Takens \cite{Broer1996}.
+\subsection{Locking Branches and the Critical Threshold}
 
-In the dissipative setting, the surrounding flow contracts onto the attractor. This requires specific hypotheses: sufficient smoothness of the vector field, normal hyperbolicity (stronger contraction toward the torus than within it), and non resonance conditions on the internal frequencies. When these conditions are met, quasi periodic attractors persist under small perturbations, and trajectories in the basin of attraction converge onto the torus.
+Subtracting the two equations in Eq.~\eqref{eq:sine_pair} gives Eq.~\eqref{eq:phase_difference}. Adding them gives $\dot\psi=(\omega_1+\omega_2)/2$ for the locally lifted phase $\psi=(\phi_1+\phi_2)/2$. The average is used on a lift because it is not a globally single-valued circular coordinate.
 
-\textbf{Analogy:} While classical KAM theory provides intuition for how incommensurate frequencies prevent resonance overlap, the dissipative framing is mathematically required for the neural interpretation. Attractors with basin contraction are necessary to explain stable population dynamics in the presence of biological noise. We hypothesize that the recurrent connectivity and homeostatic regulation of grid cell networks satisfy the necessary hyperbolicity conditions to maintain these dissipative structures; this remains an empirically untested prediction.
+For $\epsilon>0$ and $|\Delta\omega|<2\epsilon$, solving $\dot\delta=0$ gives the branch $\delta_*$ in Eq.~\eqref{eq:locking} and the second branch $\pi-\delta_*$ modulo $2\pi$. Linearizing gives $\dot\eta=-2\epsilon\cos\delta_*\,\eta$ to first order. Since $\cos\delta_*>0$, its exponent is $-\sqrt{4\epsilon^2-(\Delta\omega)^2}$. The other branch has the opposite sign and is unstable. The common phase remains neutral. A nonzero common frequency makes the stable circle a periodic orbit; zero common frequency gives a circle of equilibria. At $|\Delta\omega|=2\epsilon$ the exponent vanishes, so exponential stability does not follow.
 
-\section{Quaternion Phase Representation}\label{sec:quaternions}
-
-\subsection{Quaternions and Rotation Groups}
-
-\textbf{Mathematical Definition:} When three or more oscillatory bands are coupled simultaneously, the two dimensional torus $T^2$ is insufficient to capture the full phase dynamics. The state space of three independent circular phases defines the three torus $T^3 = S^1 \times S^1 \times S^1$. 
-
-\textbf{Mathematical Definition:} A quaternion $q \in \mathbb{H}$ is a four dimensional hypercomplex number of the form:
-\begin{equation}\label{eq:quaternion}
-  q = a + b\,\mathbf{i} + c\,\mathbf{j} + d\,\mathbf{k},
+At the positive threshold $\Delta\omega=2\epsilon>0$, an exact solution with $\delta(0)=0$ is
+\begin{equation}\label{eq:critical_locking}
+ \delta(t)=2\arctan\!\left(\frac{\epsilon t}{1+\epsilon t}\right),
+ \qquad \frac{\pi}{2}-\delta(t)\sim\frac{1}{\epsilon t}.
 \end{equation}
-where $a, b, c, d$ are real numbers and $\mathbf{i}, \mathbf{j}, \mathbf{k}$ are the fundamental quaternion units. Unit quaternions ($|q| = 1$) form the sphere $S^3$, which is the double cover of the 3D rotation group $SO(3)$.
+It follows by setting $u=\tan(\delta/2)$, so that $\dot u=\epsilon(u-1)^2$. This orbit approaches the critical phase difference algebraically from below. Perturbations just above $\pi/2$ initially move away before winding around the circle; the critical equilibrium is not Lyapunov stable. Thus a vanishing linear exponent is not evidence for stable exponential locking.
 
-\textbf{Hypothesis:} It is critical to distinguish the phase space geometry from the algebraic representation of transformations. $T^3$ and $S^3$ are distinct manifolds with different topologies. $T^3$ is not naturally embedded in $S^3$, and quaternions are not the natural phase space for three independent oscillators. However, quaternionic algebra may be used as an optional representation of ordered transformations acting on phase states. The quaternion formulation is an algebraic framework representing ordered phase composition and does not imply direct neural implementation. 
-
-\subsection{Quaternion Dynamics and the Three Torus}
-
-For a system of three quasi periodic oscillators, the trajectory traces a path on the three torus $T^3$. If we choose to represent transformations of this state using quaternions, the dynamics of the transformation operator can be written as:
-\begin{equation}\label{eq:quat_dynamics}
-  \dot{q}(t) = \frac{1}{2}\,\bm{\Omega}(t)\,q(t),
+If $|\Delta\omega|>2\epsilon$, the phase difference drifts. The mean unwrapped slip rate is
+\begin{equation}\label{eq:slip}
+ \langle\dot\delta\rangle=\operatorname{sgn}(\Delta\omega)
+ \sqrt{(\Delta\omega)^2-4\epsilon^2}.
 \end{equation}
-where $\bm{\Omega}(t) = \omega_1\,\mathbf{i} + \omega_2\,\mathbf{j} + \omega_3\,\mathbf{k}$ is a pure quaternion encoding the instantaneous angular velocity vector. 
+For positive detuning this follows by integrating one cycle,
+$T_\delta=\int_0^{2\pi}(\Delta\omega-2\epsilon\sin u)^{-1}\,du
+=2\pi/\sqrt{(\Delta\omega)^2-4\epsilon^2}$.
+Drift alone is not a proof of dense quasi periodic motion: the common and slip rotation rates can be commensurate.
 
-Table~\ref{tab:phase_dim} summarizes the relationship between the number of coupled oscillatory phases, the mathematical representation, and the resulting manifold geometry.
+The phase model describes motion on a torus but has no ambient normal directions. Appendix~\ref{app:normal} verifies the normal dynamics added in Eq.~\eqref{eq:radial}.
+
+\section{Normal Attraction and Perturbation Calculations}\label{app:normal}\label{sec:kam}
+
+In a specified ambient state space, an attracting invariant torus $M$ is invariant under the flow and has a neighborhood whose trajectories approach it in distance. This local manifold attraction need not imply that every trajectory explores $M$, or that $M$ is a minimal or transitive attractor. A sufficient mechanism is contraction in normal directions dominating tangent growth in forward and backward time, with appropriate smoothness and compactness assumptions. Normal hyperbolicity gives persistence of the invariant manifold under sufficiently small autonomous $C^1$ perturbations of the vector field \cite{BergerBounemoura2013}; no frequency nonresonance assumption is needed for that manifold persistence statement.
+
+Equation~\eqref{eq:radial} extends the phase pair with positive radial coordinates $r_1,r_2$.
+In the embedding $(r_1\cos\phi_1,r_1\sin\phi_1,r_2\cos\phi_2,r_2\sin\phi_2)\in\mathbb{R}^4$, the set $M=\{r_1=r_2=1\}$ is an invariant $T^2$ and
+\begin{equation}
+ r_i(t)-1=(r_i(0)-1)e^{-\lambda t}.
+\end{equation}
+For positive radii, the nearest point on each unit circle has the same phase. Hence $d(z,M)^2=(r_1-1)^2+(r_2-1)^2$, which gives Eq.~\eqref{eq:normal_distance}.
+This proves normal attraction in the specified model. Replacing $\lambda>0$ by $\lambda=0$ or $\lambda<0$ leaves the flow on $M$ unchanged but makes the normal directions neutral or locally repelling. For the repelling case, the polar description is used while the radii remain positive. Topology and on manifold trajectories alone therefore cannot determine normal stability.
+
+\subsection{Normal Hyperbolicity and Internal Motion}
+
+The normal attraction can coexist with phase locking. For independent rotations the tangent exponents are zero. For the sinusoidally coupled pair a sufficient domination bound is $\lambda>2|\epsilon|$, because the tangent Jacobian has norm at most $2|\epsilon|$. Under locking the same torus remains invariant and normally attracting, but its typical limiting motion is the stable circle within it.
+
+Explicitly, the phase Jacobian is
+\begin{equation}
+ J(\phi)=\epsilon\cos\delta
+ \begin{pmatrix}-1&1\\1&-1\end{pmatrix},\qquad
+ \|J(\phi)\|_2\leq2|\epsilon|.
+\end{equation}
+The forward and inverse tangent propagators are consequently bounded by $e^{2|\epsilon|t}$ for $t\geq0$. Normal displacements decay as $e^{-\lambda t}$. The stated strict inequality makes normal contraction dominate both tangent bounds. Attraction in the explicit model holds for every $\lambda>0$; this stronger sufficient bound supplies normal hyperbolicity.
+
+\subsection{A Solvable Perturbation}
+
+A controlled perturbation gives a second exactly checkable example. With independent phases, replace Eq.~\eqref{eq:radial} by
+\begin{equation}
+ \dot r_i=-\lambda(r_i-1)+a\sin\phi_i.
+\end{equation}
+The attracting invariant torus is now the graph
+\begin{equation}\label{eq:forced_graph}
+ r_i^*(\phi_i)=1+\frac{a(\lambda\sin\phi_i-\omega_i\cos\phi_i)}{\lambda^2+\omega_i^2}.
+\end{equation}
+For $|a|<\min_i\sqrt{\lambda^2+\omega_i^2}$ the graph has positive radii. Substitution gives
+$\frac{d}{dt}(r_i-r_i^*(\phi_i))=-\lambda(r_i-r_i^*(\phi_i))$.
+The graph displacement therefore contracts exactly. Distance to the graph is bounded above by this displacement at the same phases, proving attraction, although distance to the original unit torus need not vanish. This is a special solvable perturbation, not a numerical proof for arbitrary perturbations.
+
+\subsection{Scope of Persistence Results}
+
+Persistence of a torus as a normally attracting manifold does not ensure that its internal flow remains quasi periodic. Generic perturbations can change rotation rates and introduce locking. Results preserving quasi periodic motion require the additional regularity, arithmetic, nondegeneracy, and parameter assumptions of the particular theorem \cite{Broer1996}. Classical Hamiltonian KAM results \cite{Kolmogorov1954, Arnold1963, Moser1962} cannot simply be applied to a dissipative neural model. Physical energy dissipation alone establishes neither normal hyperbolicity nor those quasi periodic persistence hypotheses.
+
+\section{Data Processing and Provenance}\label{app:data}
+
+\subsection{Recording Inventory and Processing}
+
+The repository retains five MAT files from the Hafting data collection \cite{Hafting2005}. We inspect position timestamps, coordinates, and cell timestamp arrays in each file. The audit records input hashes, cell labels, and matrix dimensions in \path{outputs/claim_audit/empirical_provenance.json}. Separate files are treated as separate recordings unless acquisition metadata establishes simultaneity.
+
+The corrected activity builder bins one selected recording at a time. It uses complete 20 ms bins and divides spike counts by the bin width to obtain rates. Each empirical command requires a recording name and writes to a recording-specific output directory. We separately reconstruct the earlier pooling rule and compare its matrix entry by entry with the retained legacy matrix. This reconstruction identifies provenance; it is not used as a new biological population analysis.
+
+Spatial rate maps use a $50\times50$ position grid. Spike counts and estimated occupancy time are smoothed separately with a Gaussian kernel of width two spatial bins. Their ratio is evaluated where smoothed occupancy exceeds 0.01 s. Occupancy is approximated by sample count times the median tracking interval. New map generation assigns spikes to the nearest retained position timestamp. Irregular tracking and long gaps require further treatment before quantitative biological interpretation.
+
+\subsection{Topology and Entropy Checks}
+
+The topology audit reads retained persistence diagrams and inspects the code that generated them. It counts finite $H_1$ intervals and records their lifetimes. It also checks whether matching $H_2$ outputs and reported control implementations are present. We do not rerun or calibrate the full neural PCA, UMAP, and persistent homology pipeline in this audit.
+
+Spatial entropy provides a separate description of the retained rate maps. For finite nonnegative rates $r_b$ with positive total, we use
+\begin{equation}\label{eq:spatial_entropy}
+ p_b=\frac{r_b}{\sum_j r_j},\qquad
+ H=-\sum_b p_b\log_2 p_b,
+\end{equation}
+with $0\log_2 0=0$. This weights spatial bins by rate, rather than by occupancy-weighted spike probability. The normalization must therefore accompany any interpretation of the statistic.
+
+The other entropy routines use different categorical variables. The population routine normalizes activity across neuron labels within each time bin. It measures activity-share entropy conditional on positive total activity. The temporal routine partitions samples into contiguous windows and measures the allocation of activity among those windows. Neither routine estimates a process entropy rate or a memory lifetime. Silent or missing distributions are undefined; summaries report how many bins have defined values.
+
+The annotated draft supplied for revision contains additional raster figures and numerical reports. We inspect those reports as part of the document record. Their source recordings, executable notebooks, and numerical arrays are not included in the materials available for this audit. Printed plots alone do not supply a reproducible reconstruction.
+
+\subsection{Detailed Audit Results}
+
+\subsubsection{Recording Provenance}
+
+The five retained files contain 23 cell recordings and 13 distinct labels (Table~\ref{tab:data_inventory}). Some labels repeat between trials. These counts do not establish the number of distinct biological cells or a simultaneous pooled population.
 
 \begin{table}[H]
 \centering
-\caption{Relationship between coupled oscillatory phases, mathematical representation, and manifold geometry.}
-\label{tab:phase_dim}
-\begin{tabular}{cccc}
+\caption{Retained recording files. Position counts are before removal of nonfinite coordinates. Distinct cell labels across files need not identify distinct biological cells.}
+\label{tab:data_inventory}
+\begin{tabular}{lrr}
 \toprule
-\textbf{Phases} & \textbf{Representation} & \textbf{State Manifold} & \textbf{Neural Example} \\
+\textbf{File} & \textbf{Position samples} & \textbf{Cell recordings} \\
 \midrule
-1 & Complex $e^{i\phi}$ & $S^1$ (circle) & Single rhythm \\
-2 & $e^{i\phi_1} \times e^{i\phi_2}$ & $T^2$ (2-torus) & Grid cell module \\
-3 & Unit quaternion $q$ (transformation) & $T^3$ & $\theta$-$\alpha$-$\gamma$ coupling \\
-$n$ & Clifford algebra (transformation) & $T^n$ & Multi-band interaction \\
+\texttt{Hafting\_Fig2c\_Trial1.mat} & 59,596 & 7 \\
+\texttt{Hafting\_Fig2c\_Trial2.mat} & 59,723 & 7 \\
+\texttt{Hafting\_Fig2d\_Trial1.mat} & 59,596 & 3 \\
+\texttt{Hafting\_Fig2d\_Trial2.mat} & 59,723 & 3 \\
+\texttt{rat\_10925.mat} & 89,652 & 3 \\
 \bottomrule
 \end{tabular}
 \end{table}
-\vspace{-2ex}
-\begin{flushleft}
-\small \textit{Note:} The quaternion and Clifford algebra entries represent an optional algebraic framework for ordered phase transformations. They do not imply direct neural implementation or that the phase space itself is $S^3$.
-\end{flushleft}
 
-\section{Toward an Empirical Signature of Non Commutative Phase Composition}
+The legacy population matrix does not preserve recording boundaries. Its shape is $(59{,}992,13)$, and the audit reproduces it exactly by merging matching cell labels across files on one selected recording's time axis. Consequently, its embeddings and population statistics cannot establish simultaneous neural dynamics. The corrected selection rule prevents this pooling.
 
-\textbf{Hypothesis:} The quaternion formalism in Section \ref{sec:quaternions} represents ordered phase composition across three coupled oscillatory bands and is an algebraic framework. It does not imply direct neural implementation. The open problem is identifying an empirical signature of order dependent phase composition in neural data.
+The retained rate maps describe spatial tuning within the limits of their provenance. Earlier exports reused filenames for repeated cell labels, leaving 13 maps without a one-to-one record of all 23 cell recordings. Those maps do not reconstruct temporal population trajectories. Their geometry cannot establish normal attraction.
 
-To operationalize this prediction, define a sequence conditioned coupling functional over three bands with instantaneous phases $(\theta, \alpha, \gamma)$. Let an ordered phase sequence over three bands be defined as a temporal tuple over a window $\tau$:
-\begin{equation}
-S_{\pi}(t)=\bigl(\phi_{\pi(1)}(t),\phi_{\pi(2)}(t+\Delta t),\phi_{\pi(3)}(t+2\Delta t)\bigr)
-\end{equation}
-where $\pi$ is a permutation of the band labels and $\Delta t$ is a fixed temporal offset matched to the sampling resolution.
+\subsubsection{Persistent Homology and Control Reports}\label{sec:homology_reporting}
 
-For each ordering, construct a downstream network state functional $\Psi(S_{\pi})$, where $\Psi$ may represent population trajectory geometry, participation ratio, phase weighted connectivity structure, or divergence between state space paths. The empirical prediction can then be written as:
-\begin{equation}
-D\bigl(\Psi(S_{123}),\Psi(S_{321})\bigr)>\varepsilon
-\end{equation}
-for a nonzero threshold $\varepsilon$ under matched amplitude distributions and matched pairwise coupling statistics. This means that band ordering changes the resulting network state even when ordinary pairwise coupling measures and amplitudes are held fixed. 
+The retained legacy diagrams provide no calibrated toroidal population result. They contain 32 finite $H_1$ intervals for PCA and 84 for UMAP. The maximum lifetimes are 0.668947 and 4.001927 in the respective embedding metrics. These values describe stored calculations on the invalid pooled matrix. UMAP changes distances, so the two maxima are not directly comparable. No matching $H_2$ output is retained, and the topology entry point computes only $H_0$ and $H_1$.
 
-\textbf{Future Work:} The specific operationalization of this functional is left as a theoretical sketch and requires further specification for direct experimental validation. Standard phase amplitude coupling (PAC) and wPLI analyses summarize pairwise phase relationships and integrate out sequential order, so they are symmetric marginals. They are not sufficient on their own to detect non commutative phase composition. The analysis must explicitly condition on ordered sequences across three bands and compare downstream state outcomes across permutations.
+The annotated draft documents further analyses but does not resolve their reproducibility. It displays rate maps, persistence barcodes, and a UMAP embedding attributed to Gardner modules. It also reports an $H_2$ calculation and a separate Colab parameter sweep. Some numerical values differ from the repository manuscript. We retain these as unverified draft reports, rather than selecting one version as a measured result. In particular, neither a plotted persistence gap nor a stated threshold establishes a noise floor without calibration.
 
+The retained ablation code does not implement the draft's reported timestamp-jitter experiments. It compares spatial smoothing, neuron subsets, and shuffling of binned activity columns. Its legacy outputs inherit the pooling error. Reordering a list of spike timestamps before histogramming leaves the event train unchanged; a temporal surrogate must alter event times or their relationships. Spatial smoothing, temporal smoothing, and PCA whitening also modify different quantities. Their effects cannot be interchanged in an interpretation.
 
+\subsubsection{Spatial Entropy}
 
+The retained spatial maps have mean entropy 10.860 bits under Eq.~\eqref{eq:spatial_entropy}. A uniform distribution over all 2,500 bins has entropy $\log_2(2500)\approx11.288$ bits. The earlier reported value of approximately 1.49 bits is not reproduced from these maps. Binning, smoothing, missing positions, and normalization affect the comparison.
 
+The stored mean population entropy of 0.260240 bits belongs to the pooled matrix and has a different definition. It is not a valid simultaneous population statistic. Neither entropy value measures temporal information persistence or thermodynamic production. Appendix~\ref{sec:observation} examines those separate questions using explicit dynamical and observation models.
 
-%% ============================================================
-%% SECTION 9: JAYNES AND RECURSIVE COGNITION
-%% ============================================================
-\section{Recursive Cognition and Source Attribution}\label{sec:recursive}
+\subsection{Sampling and Topological Calibration}
 
-\subsection{Source Attribution and Predictive Coding}
+Temporal sampling must match the frequency being tested. A 100 ms bin gives a sampling rate of 10 Hz and a Nyquist frequency of 5 Hz. It cannot resolve the full 4--8 Hz theta band. Gardner et al.\ used 10 ms spike count bins with separate smoothing and subsampling choices \cite{Gardner2022}. Sampling rate, filtering, and the target observable must be specified together.
 
-\textbf{Interpretation:} A critical computational transition in the evolution of complex nervous systems is the emergence of a mode of neural processing in which the system can represent and reflect upon its own internal states. The distinction between a neural architecture that cannot distinguish internally generated signals from external ones and an architecture that can is a genuine computational distinction with physical consequences.
+Topological calibration is a separate requirement. The same neural preprocessing and filtration pipeline should be tested against known topology with matched noise and sampling. Coverage, dependence, metric changes, and preprocessing can alter persistence. Dense sampling alone does not universally inflate spurious $H_1$ features. The finite oscillator calculations test dynamical equations and do not provide this topology calibration.
 
-This capacity for source attribution is well studied in the corollary discharge and predictive coding literature \cite{Friston2010}. When a system generates a motor command, it simultaneously generates an efference copy that predicts the sensory consequences of that action. This allows the system to distinguish self generated movement from external environmental changes. 
+\section{Numerical Methods and Verification}\label{sec:simulation}
 
-\subsection{Modular Oscillatory Organization and Self Monitoring}
+\subsection{Simulation Design}
 
-The framework developed in the preceding sections provides a physical mechanism for this self monitoring capacity. In a nervous system without modular oscillatory organization, internal signals would be experienced as undifferentiated inputs, indistinguishable in kind from external sensory signals.
+All simulations use arbitrary model units. No parameters are fitted to neural recordings. The script \path{scripts/oscillator_validation.py} uses $(\omega_1,\omega_2)=(1,\sqrt{2})$ and compares $\epsilon=0$, $0.1$ (drift), and $0.6$ (locking), with a rational control $(1,3/2)$ at $\epsilon=0$. Initial phases are $(0.2,0.9)$ and the fixed step fourth order Runge--Kutta (RK4) runs use $h=0.02$ over 200 arbitrary time units. Radial runs use $\lambda=2$, initial radii $(0.7,1.3)$, and forcing $a=0$ or $0.1$ over 20 time units. The unforced radial case is also run under phase locking. A separate short control reverses the normal rate without changing the flow on the torus.
 
-The development of a modular frequency regime, with distinct frequency bands carrying information at different temporal scales and cross frequency coupling providing hierarchical integration, creates the possibility of source attribution. Signals arriving via different frequency channels can be distinguished by their spectral signature. Internally generated signals, which originate from recurrent cortical processing and are embedded in the cross frequency coupling structure, can be distinguished from externally driven signals, which enter the system through sensory pathways with different spectral characteristics.
+\subsection{Analytic Benchmarks}
 
-This capacity for source attribution is the computational precondition for introspective representation. When the system can distinguish internally generated representations from externally driven ones, it becomes possible to represent the fact that a given mental content is a product of the system's own processing. This is the minimal form of self reference: the system's representation of its own representational activity.
+The independent runs agree with the exact rotation solution. The rational control returns after $4\pi$. Density for the irrational case follows analytically from the assumed exact frequency ratio; finite samples and floating point arithmetic do not prove it. A 0.2 radian phase kick persists under independent rotation. Locking restores the relative phase but retains a common phase offset.
 
-\subsection{Recursive Self Reference and Internal Limitation}
-
-\textbf{Analogy:} G\"{o}del's incompleteness theorems \cite{Godel1931} demonstrate that any formal system of sufficient complexity to encode arithmetic can construct self referential statements, and that such systems necessarily contain true statements that cannot be proven within the system. This is a precise mathematical result about formal systems, not a general claim about physical systems. We use it here strictly as an analogy for internal limitation, recursive self reference, finite observation, and incomplete self access across information systems.
-
-\textbf{Hypothesis:} A neural system with modular oscillatory organization and cross frequency coupling can generate representations of its own oscillatory states, and these representations are themselves oscillatory states subject to the same dynamics. This creates a recursive loop in which the system's model of itself is embedded within the system being modeled.
-
-However, because the observer interface mapping $\pi$ is finite and non invertible, complete self access is impossible from inside the system. A system that models itself must represent part of its own state through a projection $\pi_{self}: S \to O_{self}$. Because that projection is finite and non invertible, the system cannot fully invert the mapping to recover its complete state. 
-
-The toroidal attractor manifolds identified by Gardner et al. \cite{Gardner2022} provide a geometric substrate for this recursive structure. A trajectory on a torus is inherently self referential in the topological sense: it returns to previously visited regions of state space, and the pattern of returns encodes information about the global structure of the dynamics. Quasi periodic trajectories on tori never exactly repeat but continuously revisit neighborhoods of previous states, creating a form of approximate self reference bounded by the topology of the manifold.
+The coupled runs agree with the locking and slip predictions. At $\epsilon=0.6$, Eq.~\eqref{eq:locking} gives $\delta_*\approx0.3524$ rad and $\lambda_\delta\approx-1.1262$ per model time unit. At $\epsilon=0.1$, Eq.~\eqref{eq:slip} gives a mean slip rate of 0.3627. Full cycle crossing times and independent quadrature check the slip rate without endpoint averaging bias. The radial runs agree with the exact contraction and forced-graph solutions in Eqs.~\eqref{eq:radial} and \eqref{eq:forced_graph}. Figure~\ref{fig:oscillator_validation} compares these behaviors.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{figures/fig_recursive_loop.pdf}
-\caption{Recursive self reference in modular oscillatory neural systems. The system generates representations of its own oscillatory states (inner loop), which are themselves subject to the same oscillatory dynamics (outer loop). This recursive structure, enabled by modular frequency organization and cross frequency coupling, provides the computational basis for introspective representation. The toroidal attractor geometry supports quasi periodic trajectories that continuously revisit previous states without exact repetition, creating a physical analogue of self referential structure bounded by finite projection.}
-\label{fig:recursive_loop}
+\includegraphics[width=\textwidth]{../outputs/oscillator_validation/oscillator_validation.png}
+\caption{Finite synthetic oscillator calculations in arbitrary units. Phase plots use wrapped coordinates for display; integration uses unwrapped angles. Independent irrational rotations, rational rotations, and phase locking have the same phase coordinate space but different orbit structure. Perturbation checks distinguish neutral phase directions from contraction of phase difference and normal radial displacement. Step refinement checks numerical error against an adaptive reference. None of these panels is a neural recording or empirical attractor reconstruction.}
+\label{fig:oscillator_validation}
 \end{figure}
 
-\section{Entropy and Attractor Stability}\label{sec:entropy}
+\subsection{Numerical Error and Limits}
 
-\subsection{Thermodynamic Constraints on Neural State Space}
+Step refinement measures numerical error over a fixed 20 unit interval. RK4 uses $h=0.08,0.04,0.02,0.01$. The adaptive DOP853 reference uses relative tolerance $10^{-12}$, absolute tolerance $10^{-13}$, and maximum step $0.1$. A tighter DOP853 run and an independent RK45 integration check the locked case. The errors decrease at approximately fourth order before the numerical floor. At $h=0.01$, maximum absolute errors against the reference are approximately $3.9\times10^{-13}$ for drift, $7.1\times10^{-12}$ for locking, and $1.5\times10^{-10}$ for both radial cases. Tests also check exact solutions, stable and unstable branches, and neutral common phase. The CSV trajectories, convergence table, near threshold comparisons, environment versions, and JSON summary are retained with the script.
 
-Neural systems operate far from thermodynamic equilibrium, sustained by a continuous flow of metabolic energy. The brain consumes approximately 20\% of the body's total metabolic output despite comprising roughly 2\% of body mass, reflecting the energetic cost of maintaining organized neural dynamics against the thermodynamic tendency toward entropy maximization. This energetic investment is the physical precondition for the existence of structured attractor manifolds in neural state space.
+The supplementary script \path{scripts/information_validation.py} checks the critical solution in Eq.~\eqref{eq:critical_locking} against adaptive integration and the observation examples in Appendix~\ref{sec:information_persistence}. These calculations also use synthetic parameters and do not estimate biological memory times.
 
-From the perspective of nonequilibrium thermodynamics, the organized oscillatory patterns observed in neural systems are dissipative structures in the sense of Prigogine \cite{Prigogine1977}. They maintain their organization by continuously dissipating energy, exporting entropy to the thermal environment while preserving internal order. The entropy production rate $\dot{S}$ of a neural system can be decomposed into an internal entropy production term $\dot{S}_i \geq 0$ (required by the second law) and an entropy flux term $\dot{S}_e$ representing exchange with the environment:
+The critical solution is evaluated through $u/(1+u)$, with $u=\epsilon t$, to avoid cancellation near $t=0$. Quantized bin labels must remain finite and below $2^{53}$, where consecutive integers are representable in double precision. Requests beyond that range are rejected rather than interpreted as loss of information. Floating point rounding near bin boundaries and underflow at very long times remain numerical limits of the observation calculation.
+
+Finite agreement checks the implementation for the stated models and intervals. Near the locking threshold, slow drift or recovery can be misclassified over short windows.
+
+Fixed RK4 is conditionally stable: for the scalar normal mode its stability polynomial must satisfy $|1-z+z^2/2-z^3/6+z^4/24|<1$ with $z=\lambda h$; the tested maximum $z=0.16$ lies within this interval. These checks do not establish accuracy for arbitrary steps or long time orbit coverage. Stochastic robustness and a neural noise floor are not tested.
+
+\section{Observation Maps and Entropy Calculations}\label{sec:observation}
+
+\subsection{Observation Classes and Recursive Processing}
+
+An observation map specifies which distinctions a representation retains. Let $\pi:X\to O$ map system states to observations. Define $x\sim_\pi y$ when $\pi(x)=\pi(y)$. Equality makes this relation reflexive, symmetric, and transitive. Its class at $x$ is $[x]_\pi=\{y:\pi(y)=\pi(x)\}$. A noninjective map identifies distinct states; finite dimension alone does not imply noninjectivity.
+
+A deterministic downstream map cannot distinguish states already identified by $\pi$. If $R:O\to O$ and $\pi(x)=\pi(y)$, then $R^n(\pi(x))=R^n(\pi(y))$ for every integer $n\geq0$. This is a statement about processing the same observation. It does not prohibit new observations or external inputs from providing additional information.
+
+Toroidal coordinates are one possible observation map. Given $\varphi_1,\varphi_2:X\to S^1$, define $\Phi(x)=(\varphi_1(x),\varphi_2(x))\in T^2$. Equality of both phase coordinates is equivalent to equality of the ordered pair. This product property alone gives no surjectivity, embedding, or attractor theorem.
+
+\subsection{Contraction and Information Persistence}\label{sec:information_persistence}
+
+Normal attraction controls distance to a manifold, not the recoverability of an encoded variable. Phase locking suppresses relative phase differences asymptotically, but uniqueness of a smooth ordinary differential equation prevents distinct exact states from merging at finite time on their common interval of existence. This mathematical injectivity need not survive measurement noise, finite resolution, an incomplete observation, or numerical rounding.
+
+For example, encode an equiprobable binary label $B$ in a radial displacement $x_B(0)\in\{0.25,0.75\}$ and let $x_B(t)=e^{-2t}x_B(0)$. Exact observation distinguishes the labels at every finite time, so $I(B;x_B(t))=1$ bit. With the explicitly chosen observation $Q_\Delta(x)=\lfloor x/\Delta\rfloor$, both labels occupy bin zero once $t>\frac12\log(0.75/\Delta)$. Their observed mutual information is then zero. For $\Delta=0.1$ and $0.05$, these times are approximately 1.0075 and 1.3540 model units. These are consequences of the chosen code and quantizer, not neural memory lifetimes or universal information decay rates.
+
+Differential entropy describes yet another quantity. For a two dimensional normal displacement $X(t)=e^{-\lambda t}X(0)$ with a density and finite differential entropy, the change-of-variables formula gives
+\begin{equation}
+ h(X(t))=h(X(0))+\log|\det(e^{-\lambda t}I_2)|
+ =h(X(0))-2\lambda t,
+\end{equation}
+in nats relative to fixed normal coordinates. This decreasing differential entropy coexists with finite-time invertibility. It is not thermodynamic entropy production; no heat flux follows without a physical model.
+
+\subsection{Consistency Across Scales}
+
+For a relation between fine and coarse descriptions, one could seek a continuous surjection $\pi$ and flows $F_t,G_t$ satisfying Eq.~\eqref{eq:coarse_flow} for a specified time conversion $c>0$. Such an autonomous coarse flow requires preservation of observation classes: $\pi(x)=\pi(y)$ must imply $\pi(F_t(x))=\pi(F_t(y))$. For differentiable maps and vector fields $f,g$, differentiating at $t=0$ gives the necessary condition $D\pi_x f(x)=c\,g(\pi(x))$. Establishing a continuous or smooth quotient flow also requires the corresponding topological or regularity assumptions.
+
+The sine pair supplies a direct counterexample to automatic closure. With $\pi(\phi_1,\phi_2)=\phi_1\pmod{2\pi}$ and $\epsilon\ne0$, the states $(0,0)$ and $(0,\pi/2)$ have identical observations but projected velocities $\omega_1$ and $\omega_1+\epsilon$. Thus this observation does not define an autonomous one phase flow. In contrast, $\sigma=(\phi_1+\phi_2)\pmod{2\pi}$ satisfies $\dot\sigma=\omega_1+\omega_2$ exactly. The supplementary script checks both examples. Neither these mathematical factors nor the grid cell maps establish continuity or information conservation across molecular, neural, and behavioral scales.
+
+\subsection{Entropy and Physical Cost}\label{app:entropy_balance}
+
+Thermodynamic entropy requires a physical system boundary and specified exchanges. In units of $k_B$, its balance is \cite{Prigogine1977}
 \begin{equation}\label{eq:entropy_balance}
-  \dot{S} = \dot{S}_i + \dot{S}_e.
+ \dot S=\dot S_i+\dot S_e,\qquad \dot S_i\geq0.
 \end{equation}
-$S$ denotes thermodynamic entropy expressed in units of $k_B$ (dimensionless). For a system maintaining a steady state dissipative structure, $\dot{S} = 0$, which requires $\dot{S}_e = -\dot{S}_i < 0$: the system must export entropy at a rate equal to its internal entropy production.
+At steady state, $\dot S_e=-\dot S_i\leq0$. Export is strictly positive in magnitude only when internal production is positive. This balance does not determine the dimension or topology of a neural manifold.
 
-\subsection{Entropy Gradients and Attractor Selection}
+A proposed entropy funnel must specify the quantity it changes. A restriction of represented states can lower a chosen description length without determining heat export, Shannon entropy, or an entropy rate. Minimum Description Length and predictive coding models motivate conditional compression hypotheses \cite{LiVitanyi2008,RaoBallard1999,Prada2025}. They do not establish decreasing description length at every biological layer. Comparing the metabolic costs of different manifolds remains an open modeling and measurement problem.
 
-The existence of low dimensional attractor manifolds in neural state space can be understood as a consequence of this entropy balance. A high dimensional neural system with $N$ neurons has a state space of dimension $N$. However, the attractor manifolds on which the dynamics actually reside are typically of much lower dimension. The toroidal manifold observed in grid cell populations \cite{Gardner2022} is two dimensional, embedded in a state space whose dimension equals the number of simultaneously recorded neurons. \textbf{Hypothesis:} We hypothesize that maintaining a higher-dimensional attractor incurs a greater entropy-export (and hence metabolic) cost, which would create selection pressure toward low-dimensional manifolds. We do not derive the precise scaling here; the relationship between attractor dimensionality and thermodynamic cost is an open quantitative question.
+\section{Quaternion Operators and Phase Coordinates}\label{sec:quaternions}
 
-\subsection{The Entropy Funnel}
+Three independently specifiable circular phases have coordinate space $T^3$. Unit quaternions instead form $S^3$, the double cover of $SO(3)$. No continuous embedding of $T^3$ into $S^3$ exists. Invariance of domain would make its image open, and compactness would make the image closed. Since $S^3$ is connected, such an embedding would be a homeomorphism. This contradicts $\pi_1(T^3)=\mathbb{Z}^3$ and $\pi_1(S^3)=0$ \cite{Hatcher2002}.
 
-\textbf{Hypothesis:} The process by which high dimensional neural activity is channeled onto low dimensional attractor manifolds can be described as an entropy funnel (see Figure~\ref{fig:entropy_funnel}). Raw neural activity, driven by sensory input, metabolic fluctuations, and intrinsic noise, initially occupies a high dimensional region of state space. Recurrent connectivity and oscillatory dynamics act as constraints that progressively reduce the effective dimensionality, channeling the activity onto attractor manifolds. 
+A separately specified quaternion curve can describe rotation operators. For a pure quaternion angular velocity $\Omega(t)$,
+\begin{equation}\label{eq:quat_dynamics}
+ \dot q(t)=\tfrac12\Omega(t)q(t),\qquad |q(0)|=1
+\end{equation}
+preserves $|q(t)|=1$. This equation does not encode all phase triples or derive their dynamics from three natural frequencies. An action on phase states must be defined separately.
 
-This is a hypothesis about path dependent entropy production, not a violation of the Second Law. The entropy of the neural state decreases as the dimensionality is reduced, with the entropy difference being exported to the environment as heat. The neural system actively maintains the attractor structure through synaptic plasticity, homeostatic regulation, and neuromodulatory control. The metabolic cost of this maintenance represents the thermodynamic price of organized information processing.
+Ordinary phase translations commute. With $T_a(\phi)=\phi+a\pmod{2\pi}$, one has $T_aT_b=T_bT_a$. A noncommutative neural model therefore requires additional operators and a specified composition rule. Comparing $A(B(x))$ and $B(A(x))$ from matched states could test such a rule. Merely changing which frequency band is sampled first also changes its timing and can produce ordinary order dependence.
 
-\textbf{Interpretation:} The entropy funnel can be reframed in information-theoretic terms as hierarchical filtration: each level of the neural hierarchy reduces description length relative to its representational scale, consistent with Minimum Description Length (MDL) principles \cite{LiVitanyi2008} and predictive coding frameworks \cite{RaoBallard1999, Friston2010}. Under this view, lower/subcortical systems regulate bodily state, salience, and survival; temporal/contextual systems integrate memory and sequence; prefrontal/global-access systems support reportability and executive rendering \cite{Kandel2013, Dehaene2014}. Recent work by Prada et al.\ (2025, arXiv:2505.14635) demonstrates that predictive-coding networks descend a two-part-code MDL objective; this is a deep-learning result and not a direct biological finding, but it supports the formal connection between predictive processing and compression. Figure~\ref{fig:entropy_funnel} is a conceptual schematic of this hierarchical filtration, not a quantitative thermodynamic claim.
+Pairwise coupling statistics do not specify this operator law. Phase amplitude coupling assigns different roles to a selected phase and amplitude \cite{Tort2010}. The weighted phase lag index measures pairwise synchronization through the imaginary cross-spectrum \cite{Vinck2011}. Neither alone establishes quaternion composition. An empirical test would need controls for delays, common input, amplitudes, and omitted state variables.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{figures/fig_entropy_funnel.pdf}
-\caption{The entropy funnel: high dimensional neural activity is progressively constrained by recurrent dynamics and oscillatory coupling onto low dimensional attractor manifolds. The toroidal attractor $T^2$ represents a thermodynamically efficient geometry for encoding periodic information in phase relationships. Entropy decreases along the funnel axis as the effective dimensionality of the neural state is reduced.}
-\label{fig:entropy_funnel}
-\end{figure}
+\section{Physical Assumptions Across Frequency Scales}\label{app:physical}\label{sec:oscillatory}
 
-\section{Bounded Consciousness and the Observer Interface}\label{sec:consciousness}
-
-\textbf{Hypothesis:} The framework developed here does not attempt to solve the "hard problem" of consciousness (how physical processes generate subjective experience). Instead, it provides a physical constraint on reportability and the observer interface. We hypothesize that the recursive self referential structure enabled by modular oscillatory dynamics and toroidal attractor geometry is the physical substrate for the \textit{reportable} contents of consciousness.
-
-\textbf{Future Work:} If consciousness is bounded by the observer interface mapping $\pi$, then the structure of subjective experience should reflect the topological properties of the underlying neural attractors. The toroidal geometry of grid cells suggests that spatial experience is intrinsically periodic and continuous. Future work should investigate whether other domains of subjective experience (e.g., temporal perception, conceptual spaces) exhibit topological signatures consistent with the attractor manifolds that support them. The empirical pipeline developed in Section~\ref{sec:grid_cells} provides a methodological template for this investigation.
-
-\section{Formal Verification of Claim Boundaries}\label{sec:lean}
-
-The framework's key logical relationships were formalized in Lean 4 to prevent category errors between empirical results, mathematical definitions, interpretations, hypotheses, and future work. The following summarizes the verified results.
-
-\subsection{Observer Interface Projection}
-
-\textbf{Mathematical Definition:} Let $X$ denote external state space and $O$ denote observer space. The observer interface projection is a map $\pi : X \to O$. Two external states $x_1, x_2 \in X$ are observationally equivalent under $\pi$ if and only if $\pi(x_1) = \pi(x_2)$. We write $x_1 \sim_\pi x_2$. The Lean proof verifies that observational equivalence is reflexive, symmetric, and transitive, forming an equivalence relation.
-
-\textbf{Mathematical Definition:} The latent equivalence class of a state $x$ under projection $\pi$ is:
+Electromagnetic descriptions require assumptions about sources and material response. In a vacuum region without charges or currents, Maxwell's equations imply \cite{Tong2015}
+\begin{equation}\label{eq:wave}
+ \nabla^2\mathbf E-\mu_0\epsilon_0\partial_t^2\mathbf E=0.
+\end{equation}
+For a homogeneous, isotropic, nondispersive Ohmic medium with constant $\mu,\epsilon,\sigma$, no free charge density, and no impressed current, the equation becomes
 \begin{equation}
-[x]_\pi = \{x' \in X : \pi(x') = \pi(x)\}
+ \nabla^2\mathbf E-\mu\epsilon\partial_t^2\mathbf E-\mu\sigma\partial_t\mathbf E=0.
 \end{equation}
-Equivalent states determine the same latent class. This formalizes the information loss inherent in any finite biological interface.
+Neural tissue additionally requires source currents, boundary conditions, and appropriate dispersive properties. These equations do not supply a measured mechanism for toroidal neural dynamics.
 
-\subsection{Toroidal Grid Cell Map}
+Frequency comparisons do not establish coupling between scales. Relative to $10^3$ Hz, the range $10^9$--$10^{13}$ Hz spans six to ten orders of magnitude. Channel gating times and inverse relaxation times are not automatically coherent oscillation frequencies. A model linking these scales would need measured variables and specified interactions.
 
-\textbf{Mathematical Definition:} Given two grid cell phase maps $\varphi_1, \varphi_2 : X \to S^1$, the toroidal representation is:
-\begin{equation}
-\Phi(x) = (\varphi_1(x), \varphi_2(x)) \in S^1 \times S^1 = T^2
-\end{equation}
-The Lean proof verifies that if two states share the same two circular phase coordinates, they share the same toroidal representation, and conversely that equality of toroidal representation implies equality of each phase coordinate.
+The band 0.1--10 THz corresponds to photon energies 0.414--41.36 meV through $E=h\nu$. At 310 K, $k_BT\approx26.7$ meV \cite{NISTConstants}. Part of that band is near a thermal energy scale, but the comparison does not establish coherence or equate all photon energies with hydrogen bond dissociation. Molecular spectroscopy and Fr\"ohlich's coherence proposal motivate further questions \cite{Markelz2008,Frohlich1968}. They do not demonstrate coupling to the grid cell model in this paper.
 
-\textbf{Mathematical Definition:} Three independent phase variables define $T^3 = S^1 \times S^1 \times S^1$. This is not $S^3$ and not a quaternionic state space. Quaternion algebra may remain only as an optional formalism for ordered transformations acting on toroidal phase states.
+\section{Formalization and Reproducibility}\label{sec:lean}\label{app:lean}
 
-\subsection{Projection Collapse and Recursive Processing}
+The mathematical checks are analytic calculations and numerical tests, not completed machine proofs. The retained Lean sources contain proof placeholders, undefined identifiers, and no pinned build. Declaring an abstract type named $S^1$ does not construct the geometric circle. The original prototypes remain in the repository for future development; the paper does not treat them as verification of topology, stability, or empirical evidence.
 
-\textbf{Mathematical Theorem:} If a representation factors through an observer map $\rho : X \to Y$, then any two states equivalent under $\rho$ collapse to the same downstream toroidal representation. Downstream deterministic transformations cannot recover distinctions already lost at the observer interface. (Lean: \texttt{factored\_representation\_cannot\_separate\_obseq}, \texttt{collapsed\_representation\_stays\_collapsed})
+The repository contains the data audit, simulation scripts, tests, and dependency versions. Run \path{scripts/oscillator_validation.py} and \path{scripts/information_validation.py} for the synthetic calculations. Run \path{scripts/audit_empirical_provenance.py} for the retained-artifact inventory. The README gives the test command, manuscript build instructions, and recording-selection requirements. Repository address: \url{https://github.com/ezernackchristopher97-cloud/ENTPTCCONPAPER26}.
 
-\textbf{Mathematical Theorem:} If two states are already collapsed under projection, recursive processing (iteration of deterministic transformations on $T^2$) preserves that collapse. Recursion transforms internal structure but does not recover information absent from the interface. (Lean: \texttt{recursive\_processing\_preserves\_collapse})
-
-\subsection{Self Model Limitation}
-
-\textbf{Mathematical Theorem:} A self model map $\mu : S \to M$ that is many to one implies that distinct system states collapse into the same self model state. This is the safe version of the G\"odel self reference argument: incomplete self access follows from projection limits, not from applying G\"odel directly to brains. (Lean: \texttt{self\_model\_collapse})
-
-\subsection{Reconstructive Memory}
-
-\textbf{Mathematical Theorem:} A reconstruction map $\kappa : C \to R$ that is many to one implies that distinct cues can collapse into the same reconstructed state. Shared reconstruction errors can arise from shared reconstruction maps or attractor landscapes, not altered reality. (Lean: \texttt{memory\_reconstruction\_collapse})
-
-\subsection{Invariance and Constrained Agency}
-
-\textbf{Mathematical Theorem:} If a transformation preserves an invariant, then structurally relevant content can survive changes in surface representation. This supports the claim that meaningful cognition requires preservation of relational invariants across representational transformations. (Lean: \texttt{invariance\_preservation}, \texttt{constrained\_agency\_outcome\_branching})
-
-\textbf{Mathematical Definition:} Constrained agency is formalized as the existence of available actions under state dependent constraints, with outcome branching when allowed actions lead to different outcomes. This supports the constrained agency framing without claiming absolute free will.
-
-\subsection{Topology Evidence Boundaries}
-
-\textbf{Mathematical Definition:} A torus compatible Betti signature requires $\beta_0 = 1$, $\beta_1 = 2$, $\beta_2 = 1$. The Lean formalization verifies that $H_1$ evidence alone is not full torus evidence. Strong topological support requires $H_1$, $H_2$, persistence gap, controls, and methodological qualification.
-
-\subsection{Scope Limitation: $S^1$ Is Abstract}
-
-\textbf{Interpretation:} Throughout this formalization, $S^1$ is declared as an abstract type, not a geometric circle. The toroidal lemmas above establish \emph{product-space behavior} of $(S^1)^n$ (that is, the logic of how phase coordinates compose into toroidal representations and how projections collapse distinctions). They do not establish the geometry of a real circle (e.g., Mathlib's \texttt{AddCircle}), and they do not address the operator-layer geometry (SU(2), holonomy, or curvature). A real geometric circle and the operator-layer geometry are a separate formal layer not part of this module. This module fixes the \emph{logic} of the framework, not the geometry.
-
-\section{Bounded Future Implications}\label{sec:future}
-
-The following subsections outline speculative extensions of the framework developed above. Each is labeled as future work or hypothesis and does not constitute a validated result of this paper. They are included to indicate the broader research program that the empirical and formal core is intended to support.
-
-\subsection{The Terahertz Measurement Gap}
-
-\textbf{Future Work:} Between the frequency range accessible through conventional electrophysiology and the molecular vibrational dynamics of neural tissue lies an observational gap spanning approximately 10 to 12 orders of magnitude. EEG and related techniques measure activity up to roughly $10^3$~Hz, while molecular and lattice oscillations operate at $10^{9}$ to $10^{13}$~Hz. The intervening range remains largely unexplored in living neural tissue.
-
-The terahertz band ($\sim 0.1$ to 10~THz) corresponds to photon energies of approximately 0.4 to 41~meV, a scale that matches thermal fluctuations in biological tissue, weak intermolecular forces, and hydrogen bond energies. Fr\"{o}hlich \cite{Frohlich1968} proposed that biological systems supplied with constant metabolic energy can produce coherent longitudinal electric modes in this frequency region; this specific coherence hypothesis remains experimentally unconfirmed in living neural tissue. Independently, terahertz spectroscopy studies have demonstrated that biological macromolecules exhibit collective vibrational modes in this frequency range \cite{Markelz2008}, and recent reviews of terahertz biotechnology in brain research confirm active mainstream investigation of this band \cite{Pu2025}.
-
-\textbf{Hypothesis:} The terahertz band is proposed here as a frequency domain hypothesis bridging molecular and cellular scales, not as an experimentally validated component of the present framework. No direct causal influence of terahertz radiation on grid cell dynamics or toroidal manifold formation is claimed. The hypothesis is that current neuroscience instrumentation was not designed to detect signals in this intermediate range, and that THz spectroscopy may eventually reveal collective electromagnetic dynamics in neural tissue relevant to the synchronization landscape of macroscopic oscillatory activity. Experimental validation will require dedicated terahertz spectroscopy measurements on living neural tissue.
-
-\subsection{Microbiome Evolutionary Pressure}
-
-\textbf{Hypothesis:} The human gastrointestinal tract harbors a microbial ecosystem of considerable complexity, comprising approximately $10^{13}$ to $10^{14}$ microorganisms \cite{Cryan2019}. The vagus nerve provides a direct neural pathway between the gut and the brainstem \cite{Bonaz2018, Fulling2019}. The proposal advanced here is that the evolutionary pressure imposed by the need to manage a complex, fluctuating internal microbial ecosystem was a \textit{contributing} driver of the neural pruning, hierarchical organization, and recursive internal modeling capacity that characterizes the mammalian brain. This is presented as a plausible evolutionary pressure rather than a single causal driver.
-
-Organisms with better internal models of their gut ecosystem would have been able to extract more nutrients, resist more pathogens, and maintain more stable metabolic states. Over evolutionary time, this pressure would have favored nervous systems with greater capacity for hierarchical, recursive internal representation. The discrete frequency bands that characterize cortical oscillations \cite{Buzsaki2006} may reflect, in part, the need for a modular frequency regime capable of simultaneously representing information at multiple temporal scales.
-
-\textbf{Future Work:} This hypothesis requires comparative neuroscience evidence across species with varying microbiome complexity, and does not constitute a validated finding of the present work.
-
-\subsection{Distributed Reconstruction and Shared Memory Errors}
-
-\textbf{Future Work:} Memory is not treated here as perfect local storage. The relevant question is whether memory depends on distributed, state dependent reconstruction constrained by neural, glial, bodily, and environmental context. Shared reconstruction errors are scientifically interesting not because they imply altered reality, but because they suggest that reconstruction landscapes may have common structure across observers. Future work should investigate the role of semantic attractor landscapes, predictive processing, compression, shared priors, and possible glial/astrocytic long timescale stabilization in producing structured reconstruction errors.
-
-\subsection{Glial Contributions to Attractor Stabilization}
-
-\textbf{Future Work:} Given the role of astrocytes in synaptic regulation, calcium signaling, metabolic support, and network modulation, future work should ask whether glial architectures contribute to long timescale stabilization of neural attractor landscapes. This connects to neuronal geometric firing patterns, grid cell topology, astrocytic calcium waves, metabolic constraints, and slow timescale integration.
-
-\subsection{Invariance, Language, and Meaning Preservation}
-
-\textbf{Future Work:} Human experience depends on mappings that preserve enough relational structure across transformation, metaphor, compression, and context to remain meaningful. This connects to observer interface theory because perception, language, and memory all require invariant structure across changing representations. The general mapping principle is: meaningful cognition requires preservation of relational invariants across representational transformations. This motivates future formal work connecting topological invariance in neural manifolds to semantic invariance in linguistic and conceptual systems.
-
-\section{Conclusion}\label{sec:conclusion}
-
-This paper has developed a physical dynamical framework explaining why toroidal manifolds arise in recursive neural systems, anchored by a methodological investigation of the limits of standard topological recovery pipelines. 
-
-We reanalyzed the Gardner et al. (2022) grid cell dataset, demonstrating that while standard PCA, UMAP, and Vietoris-Rips pipelines can recover topological features compatible with toroidal organization, they are highly sensitive to dense temporal sampling and low variance embeddings. The lack of a clean persistence gap in the trajectory level analysis highlights the necessity of topology aware dimensionality reduction and denoising techniques for robust attractor reconstruction.
-
-Building on this empirical anchor, we integrated the strongest formal material from observer interface theory: finite observation, non invertible projection, latent equivalence classes, entropy coupling, and recursive closure. We explicitly separated empirical claims from mathematical definitions, interpretations, and bounded speculative implications. This framework establishes a rigorous starting point for future theories of recursive self reference, constrained agency, and representational continuity, without requiring direct physical implementation of algebraic structures.
-
-\appendix
-
-\section{Lean 4 Formalization}\label{app:lean}
-
-The following Lean 4 modules formalize the claim boundaries, mapping logic, and topology evidence rules used throughout this paper. These are representative excerpts. The complete verified modules (including the collapse-propagation theorems \texttt{factored\_representation\_cannot\_separate\_obseq}, \texttt{collapsed\_representation\_stays\_collapsed}, \texttt{recursive\_processing\_preserves\_collapse}, the self-model, memory, invariance, agency, and continuity theorems referenced in Section~\ref{sec:lean}) are available in the project repository at \url{https://github.com/ezernackchristopher97-cloud/ENTPTCCONPAPER26}.
-
-\subsection{TMRND\_FormalSpine.lean}
-
-\begin{verbatim}
-/-!
-TMRND formal spine:
-observer projection, observational equivalence,
-and toroidal grid-cell phase mapping.
--/
-
-variable {X O : Type}
-variable (π : X → O)
-
-def ObsEq (π : X → O) (x y : X) : Prop :=
-  π x = π y
-
-theorem ObsEq_refl (π : X → O) (x : X) :
-  ObsEq π x x := by rfl
-
-theorem ObsEq_symm (π : X → O) (x y : X) :
-  ObsEq π x y → ObsEq π y x := by
-  intro h; exact h.symm
-
-theorem ObsEq_trans (π : X → O) (x y z : X) :
-  ObsEq π x y → ObsEq π y z → ObsEq π x z := by
-  intro hxy hyz; exact hxy.trans hyz
-
--- SCOPE NOTE: S1 is an ABSTRACT type, not a geometric circle.
--- Toroidal lemmas establish PRODUCT-SPACE behavior of (S1)^n,
--- not the geometry of a real circle.
-axiom S1 : Type
-abbrev T2 := S1 × S1
-abbrev T3 := S1 × S1 × S1  -- NOT S3, not quaternionic
-
-variable (φ1 φ2 : X → S1)
-
-def GridTorusMap (φ1 φ2 : X → S1) (x : X) : T2 :=
-  (φ1 x, φ2 x)
-
-theorem same_phases_same_torus
-  (φ1 φ2 : X → S1) (x y : X)
-  (h1 : φ1 x = φ1 y) (h2 : φ2 x = φ2 y) :
-  GridTorusMap φ1 φ2 x = GridTorusMap φ1 φ2 y := by
-  unfold GridTorusMap; rw [h1, h2]
-\end{verbatim}
-
-\subsection{TMRND\_TopologyEvidence.lean}
-
-\begin{verbatim}
-/-!
-Topology evidence rules:
-Betti signatures, H1/H2 boundaries, and
-reviewer-safe interpretation constraints.
--/
-
-structure BettiSignature where
-  beta0 : Nat
-  beta1 : Nat
-  beta2 : Nat
-  deriving Repr
-
-def Torus2Betti : BettiSignature :=
-  { beta0 := 1, beta1 := 2, beta2 := 1 }
-
-def ExactlyT2Betti (B : BettiSignature) : Prop :=
-  B.beta0 = 1 ∧ B.beta1 = 2 ∧ B.beta2 = 1
-
-structure TopologyEvidence where
-  betti : BettiSignature
-  persistenceGap : Prop
-  stableUnderSmoothing : Prop
-  stableUnderShuffleControl : Prop
-  stableUnderDownsampling : Prop
-  methodologicallyQualified : Prop
-
-def StrongTorusEvidence (E : TopologyEvidence) : Prop :=
-  ExactlyT2Betti E.betti ∧
-  E.persistenceGap ∧
-  E.stableUnderSmoothing ∧
-  E.stableUnderShuffleControl ∧
-  E.stableUnderDownsampling ∧
-  E.methodologicallyQualified
-
-def WeakTorusCompatibility (E : TopologyEvidence) : Prop :=
-  E.betti.beta1 = 2 ∧ E.methodologicallyQualified
-
-theorem strong_evidence_implies_weak_compatibility
-  (E : TopologyEvidence)
-  (h : StrongTorusEvidence E) :
-  WeakTorusCompatibility E := by
-  unfold StrongTorusEvidence WeakTorusCompatibility at *
-  exact ⟨h.1.2.1, h.2.2.2.2.2⟩
-\end{verbatim}
-
-\subsection{TMRND\_ManuscriptRules.lean}
-
-\begin{verbatim}
-/-!
-Manuscript claim-type labels and boundary rules.
--/
-
-inductive ClaimKind where
-  | empiricalResult
-  | mathematicalDefinition
-  | mathematicalTheorem
-  | interpretation
-  | analogy
-  | hypothesis
-  | futureWork
-  deriving Repr, DecidableEq
-
-structure Statement where
-  kind : ClaimKind
-  domain : SubjectDomain
-  content : Prop
-
-def GodelClaimSafelyBounded (S : Statement) : Prop :=
-  S.domain = SubjectDomain.godelSelfReference →
-    (S.kind = ClaimKind.analogy ∨
-     S.kind = ClaimKind.interpretation ∨
-     S.kind = ClaimKind.futureWork)
-
-def QuaternionClaimSafe (Q : QuaternionStatement) : Prop :=
-  Q.status = ImplementationStatus.algebraicRepresentation ∨
-  Q.status = ImplementationStatus.futureFormalExtension
-
-def ConsciousnessClaimBounded (C : ConsciousnessStatement) : Prop :=
-  C.language = ConsciousnessLanguage.motivatesFutureConsciousnessWork ∨
-  C.language = ConsciousnessLanguage.boundedImplication ∨
-  C.language = ConsciousnessLanguage.notDiscussed
-
-theorem hypothesis_not_empirical :
-  ClaimKind.hypothesis ≠ ClaimKind.empiricalResult := by
-  decide
-
-theorem future_work_not_empirical :
-  ClaimKind.futureWork ≠ ClaimKind.empiricalResult := by
-  decide
-\end{verbatim}
-
+\begingroup
+\singlespacing
+\setlength{\bibsep}{6pt}
 \bibliographystyle{unsrtnat}
 \bibliography{references}
-
+\endgroup
 \end{document}

@@ -17,7 +17,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(__file__))
-from preprocessing import load_all_data, build_activity_matrix
+from preprocessing import analysis_context, build_activity_matrix
 from entropy import neural_entropy
 
 
@@ -210,10 +210,8 @@ def ablation_randomized_spikes(activity, neuron_ids, out_dir):
 
 
 if __name__ == "__main__":
-    data_dir = os.path.join(os.path.dirname(__file__), "..", "data")
-    out_dir = os.path.join(os.path.dirname(__file__), "..", "outputs", "ablation")
-
-    sessions = load_all_data(data_dir)
+    sessions, out_root = analysis_context()
+    out_dir = os.path.join(out_root, "ablation")
     activity, neuron_ids, time_bins = build_activity_matrix(sessions)
 
     ablation_no_smoothing(sessions, out_dir)

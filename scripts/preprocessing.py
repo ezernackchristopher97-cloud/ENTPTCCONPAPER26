@@ -7,6 +7,8 @@ Author: Christopher Ezernack
 """
 
 import os
+import argparse
+from pathlib import Path
 import numpy as np
 import scipy.io as sio
 
@@ -26,7 +28,9 @@ def extract_position(mat_data):
     x = mat_data["pos_x"].flatten()
     y = mat_data["pos_y"].flatten()
 
-    valid = ~(np.isnan(ts) | np.isnan(x) | np.isnan(y))
+    if not (ts.shape == x.shape == y.shape):
+        raise ValueError("Position timestamps and coordinates must have matching lengths")
+    valid = np.isfinite(ts) & np.isfinite(x) & np.isfinite(y)
     return ts[valid], x[valid], y[valid]
 
 
@@ -46,7 +50,7 @@ def extract_spike_times(mat_data):
         val = mat_data[key]
         if isinstance(val, np.ndarray) and val.dtype in [np.float64, np.float32]:
             spikes = val.flatten()
-            spikes = spikes[~np.isnan(spikes)]
+            spikes = spikes[np.isfinite(spikes)]
             neuron_id = key.replace("_timeStamps", "")
             neurons[neuron_id] = spikes
 
@@ -57,12 +61,21 @@ def align_spikes_to_position(pos_ts, spike_times):
     """
     For each spike, find the nearest position timestamp index.
     Returns an array of position indices corresponding to each spike.
-    Only includes spikes that fall within the position recording window.
+    Only includes finite spikes within the position recording window. Exact
+    halfway ties select the earlier sample. This nearest-sample assignment
+    does not interpolate trajectories across missing tracking intervals.
     """
-    mask = (spike_times >= pos_ts[0]) & (spike_times <= pos_ts[-1])
+    pos_ts = np.asarray(pos_ts, dtype=float)
+    spike_times = np.asarray(spike_times, dtype=float)
+    if pos_ts.ndim != 1 or not len(pos_ts) or not np.all(np.isfinite(pos_ts)) or np.any(np.diff(pos_ts) <= 0):
+        raise ValueError("Position timestamps must be finite and strictly increasing")
+    if spike_times.ndim != 1:
+        raise ValueError("Spike times must be a 1D array")
+    mask = np.isfinite(spike_times) & (spike_times >= pos_ts[0]) & (spike_times <= pos_ts[-1])
     valid_spikes = spike_times[mask]
-    indices = np.searchsorted(pos_ts, valid_spikes, side="left")
-    indices = np.clip(indices, 0, len(pos_ts) - 1)
+    right = np.clip(np.searchsorted(pos_ts, valid_spikes, side="left"), 0, len(pos_ts) - 1)
+    left = np.maximum(right - 1, 0)
+    indices = np.where(valid_spikes - pos_ts[left] <= pos_ts[right] - valid_spikes, left, right)
     return valid_spikes, indices
 
 
@@ -110,36 +123,57 @@ def load_all_data(data_dir):
     return sessions
 
 
-def build_activity_matrix(sessions, bin_size=0.02):
+def select_session(sessions, session_name=None):
+    """Select one recording file; never identify neurons across files by name."""
+    if session_name is not None:
+        selected = [s for s in sessions if s["filename"] == session_name]
+        if len(selected) != 1:
+            raise ValueError(f"Expected one recording named {session_name!r}")
+        return selected[0]
+    if len(sessions) != 1:
+        raise ValueError("Select one simultaneous recording with --session; "
+                         "timestamps from separate files must not be pooled")
+    return sessions[0]
+
+
+def analysis_context():
+    """Shared CLI selection and separate output namespace for each recording."""
+    root = Path(__file__).resolve().parents[1]
+    choices = sorted(p.name for p in (root / "data").glob("*.mat"))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--session", required=True, choices=choices)
+    args = parser.parse_args()
+    sessions = load_all_data(root / "data")
+    selected = select_session(sessions, args.session)
+    output = root / "outputs" / "sessions" / Path(args.session).stem
+    output.mkdir(parents=True, exist_ok=True)
+    print(f"Recording: {args.session}; outputs: {output}")
+    return [selected], str(output)
+
+
+def build_activity_matrix(sessions, bin_size=0.02, *, session_name=None):
     """
     Build a population activity matrix shaped (timepoints, neurons).
-    Uses the first session with the most neurons as the primary session.
+    Requires one simultaneous recording or an explicit session_name selection.
     Bins spike counts into time bins of bin_size seconds.
     Returns (activity_matrix, neuron_ids, time_bins).
     """
-    all_neurons = {}
-    best_session = None
-    best_pos_ts = None
-
-    for sess in sessions:
-        if best_session is None or len(sess["neurons"]) > len(best_session["neurons"]):
-            best_session = sess
-            best_pos_ts = sess["pos_ts"]
-
-    pos_ts = best_pos_ts
+    if not np.isfinite(bin_size) or bin_size <= 0:
+        raise ValueError("bin_size must be finite and positive")
+    session = select_session(sessions, session_name)
+    all_neurons = {nid: ndata["spike_times"]
+                   for nid, ndata in session["neurons"].items()}
+    pos_ts = session["pos_ts"]
+    if len(pos_ts) < 2 or not np.all(np.isfinite(pos_ts)) or np.any(np.diff(pos_ts) <= 0):
+        raise ValueError("Position timestamps must be finite and strictly increasing")
     t_start = pos_ts[0]
     t_end = pos_ts[-1]
-    time_bins = np.arange(t_start, t_end, bin_size)
+    # Use only complete bins; the right edge of the last bin is included.
+    n_full_bins = int(np.floor((t_end - t_start) / bin_size + 1e-10))
+    if n_full_bins < 1:
+        raise ValueError("Recording must contain at least one complete time bin")
+    time_bins = t_start + np.arange(n_full_bins + 1) * bin_size
     n_bins = len(time_bins) - 1
-
-    for sess in sessions:
-        for nid, ndata in sess["neurons"].items():
-            if nid not in all_neurons:
-                all_neurons[nid] = ndata["spike_times"]
-            else:
-                all_neurons[nid] = np.concatenate(
-                    [all_neurons[nid], ndata["spike_times"]]
-                )
 
     neuron_ids = sorted(all_neurons.keys())
     n_neurons = len(neuron_ids)
@@ -147,7 +181,7 @@ def build_activity_matrix(sessions, bin_size=0.02):
     activity = np.zeros((n_bins, n_neurons), dtype=np.float32)
     for j, nid in enumerate(neuron_ids):
         spk = all_neurons[nid]
-        spk = spk[(spk >= t_start) & (spk < t_end)]
+        spk = spk[(spk >= t_start) & (spk <= time_bins[-1])]
         counts, _ = np.histogram(spk, bins=time_bins)
         activity[:, j] = counts / bin_size
 
@@ -155,8 +189,7 @@ def build_activity_matrix(sessions, bin_size=0.02):
 
 
 if __name__ == "__main__":
-    data_dir = os.path.join(os.path.dirname(__file__), "..", "data")
-    sessions = load_all_data(data_dir)
+    sessions, out_dir = analysis_context()
     print(f"\nTotal sessions loaded: {len(sessions)}")
     total_neurons = sum(len(s["neurons"]) for s in sessions)
     print(f"Total neuron recordings: {total_neurons}")
@@ -166,7 +199,6 @@ if __name__ == "__main__":
     print(f"  (timepoints={activity.shape[0]}, neurons={activity.shape[1]})")
     print(f"Neuron IDs: {neuron_ids}")
 
-    out_dir = os.path.join(os.path.dirname(__file__), "..", "outputs")
     np.save(os.path.join(out_dir, "activity_matrix.npy"), activity)
     np.savetxt(os.path.join(out_dir, "activity_matrix.csv"), activity,
                delimiter=",", header=",".join(neuron_ids), comments="")

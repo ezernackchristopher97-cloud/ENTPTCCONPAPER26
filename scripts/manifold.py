@@ -16,7 +16,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(__file__))
-from preprocessing import load_all_data, build_activity_matrix
+from preprocessing import analysis_context, build_activity_matrix
 
 
 def compute_pca(activity, n_components=3):
@@ -157,10 +157,8 @@ def save_umap_results(embedding, step, out_dir):
 
 
 if __name__ == "__main__":
-    data_dir = os.path.join(os.path.dirname(__file__), "..", "data")
-    out_dir = os.path.join(os.path.dirname(__file__), "..", "outputs", "manifold")
-
-    sessions = load_all_data(data_dir)
+    sessions, out_root = analysis_context()
+    out_dir = os.path.join(out_root, "manifold")
     activity, neuron_ids, time_bins = build_activity_matrix(sessions)
     print(f"Activity matrix: {activity.shape}")
 

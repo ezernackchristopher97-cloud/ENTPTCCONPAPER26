@@ -15,7 +15,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(__file__))
-from preprocessing import load_all_data
+from preprocessing import analysis_context, select_session
 
 
 def compute_rate_map(spike_x, spike_y, pos_x, pos_y, pos_ts,
@@ -85,7 +85,8 @@ def save_rate_map(rate_map, neuron_id, out_dir, x_edges, y_edges):
 
 
 def build_all_rate_maps(sessions, out_dir, n_bins=50, sigma=2.0):
-    """Build and save rate maps for all neurons across all sessions."""
+    """Build maps within one recording, avoiding overwrites between trials."""
+    select_session(sessions)
     os.makedirs(out_dir, exist_ok=True)
     all_maps = {}
 
@@ -133,10 +134,8 @@ def build_rate_maps_flat_csv(all_maps, out_dir):
 
 
 if __name__ == "__main__":
-    data_dir = os.path.join(os.path.dirname(__file__), "..", "data")
-    out_dir = os.path.join(os.path.dirname(__file__), "..", "outputs", "rate_maps")
-
-    sessions = load_all_data(data_dir)
+    sessions, out_root = analysis_context()
+    out_dir = os.path.join(out_root, "rate_maps")
     print(f"\nBuilding rate maps...")
     all_maps = build_all_rate_maps(sessions, out_dir)
     build_rate_maps_flat_csv(all_maps, out_dir)

@@ -9,7 +9,7 @@
   innerbox/.style={draw, rounded corners=4pt, inner sep=5pt, align=center, font=\small}]
 
 % Title
-\node[font=\large\bfseries] at (0,8.5) {Recursive Self-Reference in Modular Oscillatory Neural Systems};
+\node[font=\large\bfseries] at (0,8.5) {Hypothesized Oscillatory Organization and Self Modeling};
 
 % ============ CENTER: Recursive core ============
 \node[circle, fill=yellow!20, draw=yellow!60!black, thick, minimum size=2cm, 
@@ -45,22 +45,22 @@
 
 % Top: Modular frequency regime
 \node[outerbox, draw=blue!40, fill=white] (modfreq) at (0,6.5) 
-  {Modular frequency regime\\enables source attribution};
+  {Modular frequency regime\\may aid source attribution};
 \draw[->, thick, blue!40] (modfreq.south) -- (selfmodel.north);
 
 % Bottom: Toroidal attractor
 \node[outerbox, draw=orange!50, fill=white] (torus) at (0,-6.5) 
-  {Toroidal attractor geometry\\supports quasi-periodic return};
+  {Candidate toroidal geometry\\does not imply self reference};
 \draw[->, thick, orange!50] (torus.north) -- (oscdyn.south);
 
 % Right: Cross-frequency coupling (pushed further right)
 \node[outerbox, draw=green!50!black, fill=white] (crossfreq) at (8.5,0) 
-  {Cross-frequency coupling\\provides hierarchical\\integration};
+  {Cross-frequency coupling\\may support hierarchical\\integration};
 \draw[->, thick, green!50!black] (crossfreq.west) -- (core.east);
 
 % Left: Godel analogy (pushed further left)
 \node[outerbox, draw=red!40, fill=white] (godel) at (-8.5,0) 
-  {G\"odel-type structure:\\self-reference generates\\power and limitation};
+  {G\"odel analogy:\\formal limitation is not\\a neural theorem};
 \draw[->, thick, red!40] (godel.east) -- (core.west);
 
 % ============ EXTERNAL INPUTS ============
@@ -74,7 +74,7 @@
 \draw[->, thick, orange!70] (gutbrain.north east) -- (oscdyn.south west);
 
 % Output: Introspective consciousness (top-right)
-\node[font=\small, violet, align=center] (introsp) at (6.5,6.5) {Introspective\\consciousness};
+\node[font=\small, violet, align=center] (introsp) at (6.5,6.5) {Proposed introspective\\representation};
 \draw[->, thick, violet] (selfmodel.north east) -- (introsp.south west);
 
 \end{tikzpicture}

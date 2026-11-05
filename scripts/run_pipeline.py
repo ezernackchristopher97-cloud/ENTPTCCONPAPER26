@@ -9,19 +9,20 @@ import os
 import sys
 import subprocess
 import time
+from preprocessing import analysis_context
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
 
 
-def run_step(name, script):
+def run_step(name, script, session_name):
     """Run a pipeline step and report timing."""
     print(f"\n{'='*60}")
     print(f"STEP: {name}")
     print(f"{'='*60}")
     t0 = time.time()
     result = subprocess.run(
-        [sys.executable, os.path.join(SCRIPT_DIR, script)],
+        [sys.executable, os.path.join(SCRIPT_DIR, script), "--session", session_name],
         cwd=PROJECT_DIR,
         capture_output=False
     )
@@ -34,16 +35,14 @@ def run_step(name, script):
 
 
 def main():
+    sessions, out_root = analysis_context()
+    session_name = sessions[0]["filename"]
     print("Grid Cell Analysis Pipeline")
     print(f"Project directory: {PROJECT_DIR}")
     print(f"Start time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
 
-    os.makedirs(os.path.join(PROJECT_DIR, "outputs", "rate_maps"), exist_ok=True)
-    os.makedirs(os.path.join(PROJECT_DIR, "outputs", "manifold"), exist_ok=True)
-    os.makedirs(os.path.join(PROJECT_DIR, "outputs", "topology"), exist_ok=True)
-    os.makedirs(os.path.join(PROJECT_DIR, "outputs", "entropy"), exist_ok=True)
-    os.makedirs(os.path.join(PROJECT_DIR, "outputs", "figures"), exist_ok=True)
-    os.makedirs(os.path.join(PROJECT_DIR, "outputs", "ablation"), exist_ok=True)
+    for name in ("rate_maps", "manifold", "topology", "entropy", "figures", "ablation"):
+        os.makedirs(os.path.join(out_root, name), exist_ok=True)
 
     steps = [
         ("1. Preprocessing and activity matrix", "preprocessing.py"),
@@ -56,7 +55,7 @@ def main():
 
     results = {}
     for name, script in steps:
-        success = run_step(name, script)
+        success = run_step(name, script, session_name)
         results[name] = success
         if not success:
             print(f"\nWARNING: Step '{name}' failed. Continuing with remaining steps.")

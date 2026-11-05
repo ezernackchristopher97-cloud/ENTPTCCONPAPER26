@@ -7,7 +7,7 @@
 \begin{tikzpicture}[>=Stealth, font=\small]
 
 % Title
-\node[font=\large\bfseries] at (1,9.5) {Entropy Funnel: From Neural Activity to Attractor Manifolds};
+\node[font=\large\bfseries] at (1,9.5) {Conceptual Restriction of Represented Neural States};
 
 % ---- Top label ABOVE the funnel ----
 \node[font=\small, fill=red!8, rounded corners=2pt, inner sep=4pt] at (1,8.2) 
@@ -20,6 +20,7 @@
 \draw[thick, blue!60] (-5,7.5) -- (5,7.5);
 
 % Scattered dots at top (noisy activity) - inside funnel, below top edge
+\pgfmathsetseed{1701}
 \foreach \i in {1,...,40} {
   \pgfmathsetmacro{\rx}{-3.8 + 7.6*rnd}
   \pgfmathsetmacro{\ry}{5.5 + 1.5*rnd}
@@ -27,8 +28,8 @@
 }
 
 % Entropy export arrows (well outside funnel)
-\draw[->, thick, orange!70] (3.8,6.0) -- (6.0,6.0) node[right, font=\small] {Heat export};
-\draw[->, thick, orange!70] (-3.8,6.0) -- (-6.0,6.0) node[left, font=\small] {$\dot{S}_e < 0$};
+\draw[->, thick, orange!70] (3.8,6.0) -- (6.0,6.0) node[right, font=\small] {Metabolic exchange};
+\draw[->, thick, orange!70] (-3.8,6.0) -- (-6.0,6.0) node[left, font=\small] {Exchange with environment};
 
 % Middle layer 1: oscillatory constraints
 \draw[thick, dashed, green!60!black] (-3.2,4.5) -- (3.2,4.5);
@@ -61,16 +62,16 @@
 \end{scope}
 
 % Toroidal attractor label
-\node[font=\small\bfseries] at (0,-2.0) {Toroidal attractor $T^2$};
+\node[font=\small\bfseries] at (0,-2.0) {Candidate manifold $T^2$};
 \node[font=\small] at (0,-2.6) {Low-dimensional manifold};
 
 % Entropy arrow on the left (well outside funnel)
 \draw[<-, very thick, red!60] (-7.0,-0.5) -- (-7.0,7.5);
-\node[rotate=90, font=\small\bfseries, red!60!black] at (-7.7,3.5) {Decreasing Entropy};
+\node[rotate=90, font=\small\bfseries, red!60!black] at (-7.7,3.5) {Proposed constraints};
 
 % Dimensionality arrow on the right (well outside all labels)
 \draw[<-, very thick, blue!60] (9.5,-0.5) -- (9.5,7.5);
-\node[rotate=90, font=\small\bfseries, blue!60!black] at (10.2,3.5) {Decreasing Dimensionality};
+\node[rotate=90, font=\small\bfseries, blue!60!black] at (10.2,3.5) {Fewer represented variables};
 
 \end{tikzpicture}
 \end{document}

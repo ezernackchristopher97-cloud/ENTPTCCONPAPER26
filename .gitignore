@@ -1,2 +1,7 @@
 *.pyc
 __pycache__/
+outputs/sessions/
+paper/build/
+paper/figures/*.aux
+paper/figures/*.log
+paper/figures/*.out

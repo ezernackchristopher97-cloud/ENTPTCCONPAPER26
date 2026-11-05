@@ -1,0 +1,36 @@
+{
+  "kind": "synthetic mathematical checks, not biological or thermodynamic evidence",
+  "binary_label_entropy_bits": 1.0,
+  "finite_time_exact_observation_information_bits": 1.0,
+  "exact_information_basis": "Two distinct initial values remain distinct for every finite t under x(t)=exp(-2t)x(0).",
+  "quantizer": "floor(x/width), widths 0.1 and 0.05 in arbitrary units",
+  "zero_bin_entry_times": {
+    "0.1": 1.0074515102711323,
+    "0.05": 1.354025100551105
+  },
+  "max_numerical_position_error": 2.167710455580618e-12,
+  "max_finite_inverse_error": 2.6476598691260733e-12,
+  "nonautonomous_projection_phi1_velocities": [
+    1.0,
+    1.6
+  ],
+  "autonomous_sum_phase_max_circular_error": 2.842170943040401e-14,
+  "critical_phase_difference_max_error": 2.5912605394751154e-13,
+  "critical_asymptotic_scaled_error": "t*(pi/2-delta(t)) -> 1/epsilon, analytically",
+  "unit_checks": {
+    "photon_energy_meV_at_0.1_and_10_THz": [
+      0.41356676969238587,
+      41.356676969238585
+    ],
+    "kBT_meV_at_310K": 26.713733112650054,
+    "decades_from_1kHz_to_1GHz_and_10THz": [
+      6.0,
+      10.0
+    ]
+  },
+  "limits": [
+    "Quantized information depends on resolution, bin alignment, and the chosen initial distribution.",
+    "Exponential contraction can become numerically indistinguishable at long times; the finite-time injectivity statement is analytic.",
+    "No neural memory time, entropy production rate, or cross-scale coupling is inferred."
+  ]
+}
