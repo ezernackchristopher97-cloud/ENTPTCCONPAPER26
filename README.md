@@ -1,6 +1,8 @@
 # Toroidal Manifolds and Recursive Neural Dynamics
 
-The manuscript distinguishes circular phase coordinates, sampled population topology, invariant manifolds, and dynamical attraction. Its simulations are mathematical examples in arbitrary units, not neural recordings or fits.
+This repository contains the [grid cell study](paper/main.pdf) for TRMND (*Toroidal Manifolds and Recursive Neural Dynamics*). The full TRMND manuscript asks which features of neural activity remain accessible through finite measurements and reports. This study asks whether grid cell geometry identifies a torus that attracts displaced activity. Its simulations use arbitrary time units.
+
+The separate [EntPTC manuscript](https://github.com/ezernackchristopher97-cloud/entptc-implementation/blob/main/entptc.pdf) develops the recursive operator model.
 
 See [the initial claim audit](docs/toroidal_claim_audit.md) for the evidence boundaries and exact analytic results. Its approved corrections were committed locally as `0e24f8f`, based on `2e971a431a640545bf031617445f3d61a7d5e722`. The [follow-up mathematical audit](docs/followup_math_audit.md) and editorial revision were approved and committed locally as `d9397f5`.
 
