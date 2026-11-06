@@ -65,36 +65,36 @@
 
 \begin{abstract}
 \singlespacing
-A toroidal pattern in grid cell activity raises two questions. Does nearby activity return to the torus after a displacement, and which distinctions can an observer still recover? We audit five recording files and analyze a model of two coupled oscillators. The archived population matrix combines cell labels across trials, so its topology cannot answer the recovery question. In the model, two circular phases give the same toroidal state space across several regimes. Independent rotations can be periodic or dense, and coupling can lock the relative phase onto a circle. Adding two amplitude coordinates lets us change transverse stability while leaving every trajectory on the torus unchanged. A perturbation away from the torus distinguishes these models by its measured return rate. The same contraction preserves an exactly observed binary label for every finite time, although a finite resolution readout eventually gives both labels the same value. These examples specify what a neural account of continuity would have to establish about the state, its recovery, and the observer's resolution.
+Grid cell firing patterns can represent position on a torus. An attracting torus also requires nearby activity to return after a displacement. We reconstructed a population matrix from five grid cell recording files. Its 13 columns combine 23 cell recordings across trials and animals, so its rows cannot trace a simultaneous population through time. In a model of two coupled oscillators, independent phases can trace periodic or dense orbits on the torus. Coupling can lock the phases to a circle within it. Adding amplitude coordinates gives three models with identical trajectories on the torus. A small radial displacement decays in one, persists in another, and grows in the third. In the contracting model, two radial displacements encode a bit that an exact readout recovers at every finite time. A readout with fixed bin width eventually assigns both displacements to the same bin. A neural test of continuity must specify both how activity recovers and which distinctions a later observation can resolve.
 
 \end{abstract}
 
 \newpage
 \section{Introduction}\label{sec:intro}
 
-Grid cells provide a tractable setting for studying how neural populations represent continuous variables. Individual cells fire at locations arranged approximately on a triangular lattice \cite{Hafting2005}. Across a population, relative firing patterns can encode position within that repeating structure. This periodic representation motivates toroidal coordinates and raises a dynamical question: what maintains the representation when neural activity is perturbed?
+Grid cells fire at locations arranged approximately on a triangular lattice \cite{Hafting2005}. Relative firing rates across a population can encode position within each period of this pattern. Positions separated by a lattice period share the same coordinates. These coordinates lie on a torus. Whether displaced neural activity returns to this torus is a question about dynamics.
 
-Published recordings support both geometric and dynamical descriptions of grid cell populations. Gardner et al.\ recovered toroidal population topology within simultaneously recorded modules, including across waking and sleep conditions \cite{Gardner2022}. Hermansen et al.\ found toroidal representations during one dimensional behavior \cite{Hermansen2024}. Yoon et al.\ showed that relationships among simultaneous cells remained conserved despite changes in individual responses, supporting a low dimensional continuous attractor \cite{Yoon2013}. These findings motivate models in which nearby activity returns toward a continuous family of represented states \cite{Wu2016}.
+Simultaneous recordings provide evidence for a toroidal representation. Gardner et al.\ recovered toroidal population topology within grid cell modules during waking and sleep \cite{Gardner2022}. Hermansen et al.\ found toroidal representations during movement along a one dimensional path \cite{Hermansen2024}. Yoon et al.\ found that relationships among cells persisted as individual responses changed \cite{Yoon2013}. Those relationships support a continuous attractor model in which nearby activity returns toward a family of represented states \cite{Wu2016}.
 
-The relation between spatial tuning and population dynamics nevertheless requires separate measurements. Di Sarra et al.\ found that timing perturbations could disrupt recovered topology while leaving spatial grid scores largely intact \cite{DiSarra2025}. Their independent rate modulated Poisson model also produced toroidal signatures; a later correction replaces duplicated panels in the synthetic calibration figure \cite{DiSarra2025Correction}. A toroidal representation can thus be supported by several constructions, each with different implications for the underlying dynamics.
+Spatial tuning and joint activity have different sensitivities to timing. Di Sarra et al.\ found that timing perturbations could disrupt the recovered topology while leaving spatial grid scores largely intact \cite{DiSarra2025}. Their model of independent Poisson firing with modulated rates also produced toroidal signatures \cite{DiSarra2025,DiSarra2025Correction}. A toroidal signature alone leaves the mechanism of recovery undetermined.
 
-Two coupled oscillators allow a direct test of what population geometry can reveal about dynamics. Neural rhythms and cross frequency interactions motivate phase descriptions \cite{Buzsaki2006,Canolty2006,Tort2009}. Two independently specifiable phases define a toroidal state space. Their equations determine where a trajectory goes on that torus. To test attraction, one must also specify what happens to a state displaced away from it.
+Two coupled oscillators provide a simple example. Neural rhythms and interactions across frequencies motivate a description in terms of phase \cite{Buzsaki2006,Canolty2006,Tort2009}. Each phase specifies a position on a circle. Together, the two phases specify a point on a torus. The phase equations determine motion along that surface. Amplitude coordinates describe what happens when a displacement takes the state away from it.
 
-Our central construction gives two systems with identical trajectories on the torus but opposite responses to a transverse displacement. No observation confined to the torus can distinguish the two systems through those trajectories alone. A second construction addresses information persistence: two initially distinct states contract toward the same limit, and the observer's resolution determines how long their difference can be read. Together these constructions give the observer a precise role in a theory of continuity.
+The trajectories in two such models can agree everywhere on the torus even when one model attracts displaced states and the other repels them. Recovery can preserve a difference between states that approach the same limit. Whether an observer can still read that difference depends on the resolution of the measurement.
 
-Section~\ref{sec:methods} specifies the recordings, models, and observations. Section~\ref{sec:results} compares the archived measurements with the locking, recovery, and information calculations. Section~\ref{sec:discussion} describes a neural recovery experiment and its relevance to accounts of conscious experience. The derivations and reproducibility details follow in Appendices~\ref{app:geometry}--\ref{app:lean}.
+The grid cell analysis identifies which recordings share position traces and which were pooled across trials. The oscillator model gives separate predictions for phase locking, return after a displacement, and loss of a distinction at finite resolution. These predictions specify measurements relevant to the continuity of a neural representation and, in a proposed human test, to a report of conscious experience.
 
 \section{Methods}\label{sec:methods}
 
-\subsection{Recording Audit and Observables}
+\subsection{Grid Cell Recordings and Spatial Tuning}
 
-We examine five files from the Hafting grid cell recordings \cite{Hafting2005,HaftingData2017}. The data documentation identifies simultaneously recorded cells within each file. We treat each file separately unless acquisition metadata establishes that two files share a recording session. For the archive audit, we reconstruct the older procedure that placed all files on one time axis. We compare its output entry by entry with the stored population matrix.
+We examined five files from the Hafting grid cell recordings \cite{Hafting2005,HaftingData2017}. The accompanying documentation identifies simultaneously recorded cells within each file. We kept the spike records separate for each file. To reconstruct the archived population matrix, we merged repeated cell labels on one recording's time axis, then compared every entry with the stored matrix.
 
-The spatial analysis assigns each observed map bin a probability proportional to its firing rate. This yields a categorical entropy of spatial tuning. We also inspect the dimensions and lifetimes in the retained persistence diagrams. Appendix~\ref{app:data} gives the recording inventory, normalization, and preprocessing settings.
+For each spatial map, we assigned each bin a probability proportional to its firing rate and computed the entropy of this distribution. We also counted intervals and measured their lifetimes in the archived persistence diagrams. Appendix~\ref{app:data} specifies the recording inventory, normalization, and preprocessing.
 
 \subsection{Oscillator Model}
 
-The model represents each oscillator by a phase $\phi_i\in\mathbb{R}/2\pi\mathbb{Z}$ with constant natural frequency $\omega_i$. Their joint coordinate space is $T^2=S^1\times S^1$. We use symmetric sinusoidal coupling \cite{Kuramoto1984,Strogatz2000},
+Oscillator $i$ has phase $\phi_i\in\mathbb{R}/2\pi\mathbb{Z}$ and constant natural frequency $\omega_i$. The phase pair lies on $T^2=S^1\times S^1$. With symmetric sinusoidal coupling \cite{Kuramoto1984,Strogatz2000}, the phases satisfy
 \begin{equation}\label{eq:sine_pair}
 \begin{aligned}
  \dot\phi_1&=\omega_1+\epsilon\sin(\phi_2-\phi_1),\\
@@ -105,29 +105,29 @@ Here $\epsilon=0$ gives independent rotations. With phase difference $\delta=\ph
 \begin{equation}\label{eq:phase_difference}
  \dot\delta=\Delta\omega-2\epsilon\sin\delta.
 \end{equation}
-The lifted common phase advances at $(\omega_1+\omega_2)/2$. This reduction identifies synchronization without assuming attraction transverse to the torus.
+On a lift to real angles, the mean phase advances at $(\omega_1+\omega_2)/2$. A stable equilibrium of Eq.~\eqref{eq:phase_difference} gives a stable phase difference.
 
-Normal attraction is tested by adding positive amplitude coordinates $r_1,r_2$ with
+To describe a displacement away from the torus, we add two positive amplitudes $r_1,r_2$ satisfying
 \begin{equation}\label{eq:radial}
  \dot r_i=-\lambda(r_i-1),\qquad\lambda>0.
 \end{equation}
-The full state is embedded as $(r_1\cos\phi_1,r_1\sin\phi_1,r_2\cos\phi_2,r_2\sin\phi_2)$ in $\mathbb{R}^4$. This extension specifies the directions in which states can approach the unit product torus. Independent rotations, phase locking, radial perturbations, and a solvable forcing perturbation are compared under the same model framework. Appendices~\ref{app:geometry} and \ref{app:normal} provide the derivations and stability conditions.
+The resulting state is $(r_1\cos\phi_1,r_1\sin\phi_1,r_2\cos\phi_2,r_2\sin\phi_2)$ in $\mathbb{R}^4$. Both amplitudes equal one on the unit product torus. Changing an amplitude displaces the state in a direction normal to the torus. Appendix~\ref{app:normal} also treats a periodic forcing of the amplitudes with an exact solution.
 
-\subsection{Numerical and Observation Checks}
+\subsection{Simulations and Observation Rules}
 
-Finite simulations test the analytic predictions in arbitrary model units. The principal frequencies are $(1,\sqrt{2})$, with coupling strengths $0$, $0.1$, and $0.6$; a rational frequency control uses $(1,3/2)$. Fourth order Runge--Kutta trajectories are compared with exact solutions and adaptive integration. Phase kicks and radial displacements test recovery in different directions. Step refinement measures error over a fixed interval; Appendix~\ref{sec:simulation} specifies all parameters, tolerances, and convergence limits.
+We simulated the phase pair at frequencies $(1,\sqrt{2})$ with coupling strengths $0$, $0.1$, and $0.6$. A control at $(1,3/2)$ has a rational frequency ratio. We compared fourth order Runge--Kutta trajectories with exact solutions and adaptive integration. Phase shifts and radial displacements tested recovery in different directions. Reducing the integration step over a fixed interval measured numerical error. Appendix~\ref{sec:simulation} gives the parameters and tolerances in model units.
 
-Information is evaluated using specified observation maps. An exactly encoded binary variable and its finite resolution observation test whether contraction preserves distinguishability. Projections of the coupled phase model test whether an observed variable has autonomous dynamics. These examples use constructed states and observation rules; their definitions and calculations are in Appendix~\ref{sec:observation}.
+We encoded a binary variable in the initial radial displacement and read it in two ways. One observation returns the exact displacement. The other returns the index of a bin of fixed width. For the phase pair, we compared two observations of the angles to determine when the observed value specifies its own future evolution (Appendix~\ref{sec:observation}).
 
 \section{Results}\label{sec:results}
 
-\subsection{What the Retained Recordings Establish}\label{sec:empirical}
+\subsection{Tracking, Population Activity, and Spatial Entropy}\label{sec:empirical}
 
-Tracking agrees across a subset of the files. Within each numbered trial, the Figure 2c and 2d files have identical tracking timestamps and identical $x$ and $y$ position arrays. This identifies a shared position record for the two cell groups. Confirming synchronization of their spike clocks requires acquisition metadata.
+The Figure 2c and 2d files share a tracking record within each numbered trial. Their position timestamps and both coordinate arrays match exactly. Establishing whether their spike clocks were synchronized would require acquisition metadata.
 
-The archived population matrix combines both trials and another rat. The five files contain 23 cell recordings under 13 distinct labels. Merging spikes with repeated labels on one recording's time axis reproduces all entries in the stored matrix of 59,992 time bins by 13 labels. A row in that matrix therefore has no single time at which the represented population was observed together.
+The archived population matrix pools both trials and an additional animal. The five files contain 23 cell recordings under 13 distinct labels. Merging spikes with repeated labels on one recording's time axis reproduces every entry in the matrix of 59,992 time bins by 13 labels. Its rows therefore combine activity from different recording times.
 
-The retained diagrams contain $H_1$ intervals from embeddings of this pooled matrix. The repository contains no matching $H_2$ output. The archived spatial maps answer a different question: across 13 maps the mean entropy of the normalized rates is 10.860 bits, compared with 11.288 bits for uniform rates across all 2,500 bins. This number describes how firing rates are distributed across space. Appendix~\ref{app:data} details the computation and identifies the additional topology reports that could not be reproduced.
+The stored persistence diagrams contain $H_1$ intervals for embeddings of the pooled matrix. The topology calculation stopped at $H_1$, so it supplies no corresponding $H_2$ intervals. Across the 13 spatial maps, the mean entropy of the normalized firing rates is 10.860 bits. Uniform rates across all 2,500 bins would give 11.288 bits. This comparison describes the distribution of firing rates across space (Appendix~\ref{app:data}).
 
 \subsection{Synchronization and Normal Attraction}
 
@@ -138,51 +138,51 @@ The same toroidal phase coordinates support different orbit structures. With ind
 \end{equation}
 The stable locked set is a circle of fixed phase difference. It is a periodic orbit when the common frequency is nonzero and a circle of equilibria otherwise. The common phase remains neutral. At $|\Delta\omega|=2\epsilon>0$ the locking exponent vanishes. When $|\Delta\omega|>2\epsilon$, the relative phase drifts. The complete branch and threshold analysis is given in Appendix~\ref{app:geometry}.
 
-The amplitude extension establishes attraction to an invariant torus by an exact distance law. For $M=\{r_1=r_2=1\}$,
+A radial displacement measures attraction to the invariant torus. For $M=\{r_1=r_2=1\}$, its Euclidean distance satisfies
 \begin{equation}\label{eq:normal_distance}
  d(z(t),M)=e^{-\lambda t}d(z(0),M).
 \end{equation}
-For the same initial phases on $M$, the choices $\lambda$, $0$, and $-\lambda$ give identical phase histories. A small transverse displacement decays, stays fixed, or grows, respectively, as long as the radial coordinates remain positive. Under phase locking, $M$ remains invariant and normally attracting even though typical limiting motion lies on a circle within it. A sufficiently strong normal contraction also gives persistence under small autonomous perturbations, subject to normal hyperbolicity \cite{BergerBounemoura2013}. This persistence concerns the manifold; preserving quasiperiodic internal motion requires further hypotheses \cite{Broer1996}.
+For identical initial phases on $M$, positive, zero, and negative radial rates give identical phase histories. A small transverse displacement decays, stays fixed, or grows, respectively, while the radii remain positive. With a positive rate, the torus attracts nearby states even when phase locking confines their limiting motion to a circle. If normal contraction dominates the tangent dynamics, the torus persists under sufficiently small autonomous perturbations \cite{BergerBounemoura2013}. Persistence of quasiperiodic motion on that torus requires additional hypotheses \cite{Broer1996}.
 
-The finite calculations agree with the predicted locking, drift, and recovery. For $(\omega_1,\omega_2)=(1,\sqrt{2})$ and $\epsilon=0.6$, the stable phase difference is approximately $0.3524$ rad and its exponent is $-1.1262$ per model time unit. At $\epsilon=0.1$, the mean slip rate is $0.3627$ rad per model time unit. Phase kicks persist for independent rotations, whereas locking restores relative phase and retains a common offset. The radial examples recover the predicted normal contraction. Fixed-interval refinement gives approximately fourth order convergence before the numerical floor. These results verify the finite model calculations; they supply no new biological measurements. Figure~\ref{fig:oscillator_validation} and the error analysis are in Appendix~\ref{sec:simulation}.
+The simulations reproduce the predicted phase and amplitude changes. At $(\omega_1,\omega_2)=(1,\sqrt{2})$ and $\epsilon=0.6$, the stable phase difference is $0.3524$ rad and its exponent is $-1.1262$ per model time unit, to four decimal places. At $\epsilon=0.1$, the mean slip rate is $0.3627$ rad per model time unit. A phase shift persists under independent rotation. Under locking, the phase difference recovers while a common offset persists. The radial displacements decay at the predicted rate. Reducing the integration step gives approximately fourth order convergence until numerical precision limits the comparison (Figure~\ref{fig:oscillator_validation}).
 
 \subsection{Information Persistence and Coarse Dynamics}
 
-Normal contraction does not by itself determine the recoverability of an encoded variable. In the binary example, two distinct initial displacements remain distinguishable at every finite time under exact observation. A fixed finite resolution eventually maps both to the same observed bin. Information loss thus depends on the encoding and measurement, even when the dynamical contraction is unchanged. Differential entropy in the normal coordinates decreases under contraction, but that change does not specify a thermodynamic entropy flux.
+A readout sets the duration for which a contracting state reveals an encoded bit. Two distinct radial displacements remain distinguishable at every finite time under exact observation. A readout with fixed bin width eventually assigns both to the same bin. The differential entropy of a density in the normal coordinates also decreases under contraction. Estimating thermodynamic entropy flux would require physical measurements.
 
 An observation supports autonomous coarse dynamics only if its evolution is consistent across states with the same observation. For fine and coarse flows $F_t,G_t$, a continuous surjection $\pi$, and a time conversion $c>0$, the required relation is
 \begin{equation}\label{eq:coarse_flow}
  \pi\circ F_t=G_{ct}\circ\pi.
 \end{equation}
-The single phase $\phi_1$ fails this test when coupling is nonzero: its velocity depends on the unobserved phase. The circular sum $(\phi_1+\phi_2)\pmod{2\pi}$ instead follows an exact autonomous rotation. Appendix~\ref{sec:observation} derives the consistency condition and gives both examples. Continuity across descriptions therefore requires a compatible map and dynamics.
+For nonzero coupling, the velocity of $\phi_1$ depends on the unobserved phase. Its current value alone does not determine its future. The circular sum $(\phi_1+\phi_2)\pmod{2\pi}$ does determine its own future, since it rotates at the constant rate $\omega_1+\omega_2$. Thus two observations of the same system can differ in whether they satisfy Eq.~\eqref{eq:coarse_flow}.
 
 \section{Discussion}\label{sec:discussion}
 
 \subsection{From Population Geometry to Neural Dynamics}\label{sec:trajectory}
 
-The results identify the extra evidence needed to connect a toroidal representation with a neural attractor. Published population studies support geometric organization and, in the case of Yoon et al., a dynamical attractor interpretation for their recordings. The present audit limits what can be inferred from this repository's retained outputs. The published studies use their own simultaneously recorded populations. In our amplitude model, even complete phase trajectories on the torus leave normal stability undetermined.
+Testing a neural attractor requires information about activity away from the proposed manifold. Yoon et al.\ used simultaneous recordings to study conserved relationships within grid cell populations \cite{Yoon2013}. The matrix reconstructed here pools separate recordings. Even a simultaneous record restricted to a torus could leave stability unresolved. In the oscillator model, every trajectory on the torus is consistent with attraction, neutrality, or repulsion.
 
-A recovery experiment would estimate the manifold from simultaneous recordings of an identified module, then hold that estimate fixed when evaluating displaced states in separate trials. Let $d(t)$ denote the distance from a displaced population state to that manifold in a specified activity metric. For $d(t_1),d(t_2)>0$ and $t_2>t_1$, the model predicts
+A recovery experiment could estimate the manifold from simultaneous recordings of an identified grid cell module. The experiment would hold this estimate fixed and measure displacements in separate trials. Let $d(t)$ be the distance from the displaced population state to the estimated manifold in a specified activity metric. For $d(t_1),d(t_2)>0$ and $t_2>t_1$, the model predicts
 \begin{equation}\label{eq:observed_recovery}
  \frac{\log[d(t_1)/d(t_2)]}{t_2-t_1}=\lambda .
 \end{equation}
-The sign distinguishes contraction, neutrality, and local repulsion in the model. A phase shift along the torus can persist throughout the return. In a recording, one would compare the decay with matched control trials, account for sensory and behavioral inputs, and estimate uncertainty above the distance imposed by measurement noise. Appendix~\ref{app:data} discusses the separate calibration required to identify topology.
+A positive rate indicates contraction, a zero rate neutrality, and a negative rate local repulsion. A shift along the torus can persist throughout the return. A neural test would compare decay rates with matched control trials and account for sensory and behavioral inputs. Distances near the measurement noise floor would require a separate estimate of uncertainty.
 
-The oscillator results also distinguish synchronization from a two dimensional attracting representation. Coupling can reduce typical limiting motion to a circle while leaving the coordinate torus intact. An attracting torus in a larger space may coexist with this internal locking. A neural interpretation therefore needs a specified state space, a recovery measurement, and a description of the motion that remains on the recovered set.
+The motion that persists after recovery can occupy only part of the torus. In the locking regime, typical trajectories approach a circle within the attracting surface. Measuring recovery and tracking the phase difference would distinguish attraction to the surface from locking within it.
 
 \subsection{Entropy, Observation, and Continuity}\label{sec:entropy}
 
-Information persistence requires both dynamics and an observation rule. Exact smooth contraction can preserve distinguishable states, whereas finite resolution can erase their observed difference. A report of decreasing entropy must accordingly identify its variable, normalization, and units. Spatial Shannon entropy, differential entropy, description length, and thermodynamic entropy describe different quantities. The thermodynamic balance in Appendix~\ref{sec:observation} requires a physical boundary and measured exchanges before it can constrain neural energetic cost.
+The lifetime of an observed distinction depends on the readout. Under smooth contraction the exact states remain distinct, while a measurement with finite resolution can assign them the same value. An entropy measurement also requires a choice of variable and units. Spatial Shannon entropy describes the distribution of firing rates among bins. Differential entropy describes a density in specified coordinates. A thermodynamic estimate of neural cost would require a physical boundary and measurements of energy or matter exchanged across it (Appendix~\ref{app:entropy_balance}).
 
-Recursive processing inherits the distinctions preserved by its inputs. Repeating a deterministic operation on the same observation cannot recover distinctions already removed by that observation. New inputs can supply additional information. Predictive coding and Minimum Description Length motivate conditional compression models \cite{RaoBallard1999,LiVitanyi2008,Prada2025}, but do not establish monotonic compression through every biological layer. Likewise, Eq.~\eqref{eq:coarse_flow} gives a condition to test when relating scales; oscillation or shared topology alone does not satisfy it.
+Repeating a deterministic operation on a single observation preserves any equality already present in that observation. A subsequent measurement can supply a distinction that the first one missed. Predictive coding and Minimum Description Length motivate models of compression \cite{RaoBallard1999,LiVitanyi2008,Prada2025}. Whether successive biological layers shorten a description depends on their inputs and their codes. Relating those layers dynamically also requires a map that satisfies Eq.~\eqref{eq:coarse_flow}.
 
-For a theory of subjective continuity, the open question is which differences in neural state remain available to a later report or action. The binary example shows why that question requires a specified readout and interval. A test in humans would have to define the reported distinction, identify the neural observable used to predict it, and compare predictions at the observer's available resolution. The rat recordings considered here concern spatial coding. They contain no report of experience. Appendix~\ref{sec:quaternions} considers operator order, and Appendix~\ref{app:physical} specifies what a physical model would need to connect different frequency ranges.
+A theory of subjective continuity must specify which differences in neural state remain available to a later report or action. A human experiment could define a perceptual distinction in advance, specify a neural measurement, and test whether that measurement predicts the later report over a stated interval. The available rat recordings measure spatial firing and contain no reports of experience. Their relevance to this question is the distinction between persistence in a state and persistence in an observable.
 
 \section{Conclusion}\label{sec:conclusion}
 
-Two phase coordinates determine the topology of the model's state space. Coupling determines whether relative phase drifts or locks, while the amplitude equations determine whether a displaced state returns to the torus. The archived grid cell maps describe spatial tuning. Testing transverse recovery requires a population observed together through time.
+Models with identical activity on a torus can respond differently to a displacement. Measuring the return rate distinguishes attraction, neutrality, and repulsion. The pooled grid cell matrix cannot provide that measurement. It requires a population recorded together through a displacement and its recovery.
 
-The observer enters through the distinctions that a readout preserves. In the model a binary distinction survives exact contraction at every finite time, yet its two readouts eventually coincide at fixed resolution. A claim of continuity across scales must identify that readout and show when fine states that look alike have the same observable evolution. These are measurable conditions for connecting neural dynamics to the persistence of a representation.
+In the contracting model, an exact observation preserves one bit at every finite time. A readout of fixed resolution eventually loses it. Testing continuity of a neural representation therefore requires tracking the displaced state and measuring which distinction a later observer can still recover.
 
 \clearpage
 \appendix
@@ -191,20 +191,18 @@ The observer enters through the distinctions that a readout preserves. In the mo
 
 \subsection{Periodic Spatial Coordinates}
 
-An idealized grid code has toroidal coordinates because positions repeat under lattice translations. Let $\Lambda=\mathbb{Z}\mathbf{e}_1+\mathbb{Z}\mathbf{e}_2$ be a rank two lattice. Equivalent positions differ by an element of $\Lambda$, and the quotient $\mathbb{R}^2/\Lambda$ is a torus. Writing $\mathbf{x}=u_1\mathbf{e}_1+u_2\mathbf{e}_2$ gives circular coordinates $\phi_i=2\pi u_i\pmod{2\pi}$. Figure~\ref{fig:grid_cell_hex} illustrates this construction. The lattice coefficients are wrapped; Cartesian coordinates are not generally independent periods of the same length.
+In an idealized grid code, two positions are equivalent if they differ by a lattice translation. Let $\Lambda=\mathbb{Z}\mathbf{e}_1+\mathbb{Z}\mathbf{e}_2$ be a rank two lattice. The quotient $\mathbb{R}^2/\Lambda$ is a torus. Writing $\mathbf{x}=u_1\mathbf{e}_1+u_2\mathbf{e}_2$ gives circular coordinates $\phi_i=2\pi u_i\pmod{2\pi}$ (Figure~\ref{fig:grid_cell_hex}). The periodic variables are the coefficients in the lattice basis.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/fig_grid_cell_hex.pdf}
-\caption{Idealized periodic spatial coding. (A) Schematic firing fields, not measured rate maps. (B) Two lattice basis vectors separated by $60^\circ$. (C) Wrapping their coefficients modulo one gives two circular coordinates and the quotient $T^2$.}
+\caption{Periodic spatial coordinates. (A) Schematic grid cell firing fields. (B) Two lattice basis vectors separated by $60^\circ$. (C) Taking each lattice coefficient modulo one identifies positions that differ by a lattice translation and gives the quotient $T^2$.}
 \label{fig:grid_cell_hex}
 \end{figure}
 
-A population firing map requires further assumptions to represent this quotient faithfully. It must separate distinct lattice phases and sample them adequately. A scalar firing rate from one neuron need not distinguish all phases. Spatial periodicity therefore defines candidate coordinates without establishing an embedded population manifold or its dynamical stability.
+To recover this quotient from firing rates, the population map must distinguish lattice phases and the recordings must sample them adequately. A single firing rate can have the same value at several phases. Spatial periodicity supplies candidate coordinates. Stability requires a description of the corresponding population dynamics.
 
-
-
-Even a torus-compatible Betti signature does not uniquely determine a general space. Over a field, $T^2$ has $(\beta_0,\beta_1,\beta_2)=(1,2,1)$. The wedge $S^1\vee S^1\vee S^2$ has the same ranks. Additional assumptions or invariants are needed to identify the space. An unresolved $H_2$ feature is inconclusive about the underlying topology and says nothing by itself about attraction.
+Different spaces can have the same Betti numbers. Over a field, both $T^2$ and the wedge $S^1\vee S^1\vee S^2$ have $(\beta_0,\beta_1,\beta_2)=(1,2,1)$. Identifying a torus from these ranks requires additional assumptions or invariants. An unresolved $H_2$ feature leaves the topology open.
 
 \subsection{Circular Coordinates}
 
@@ -214,23 +212,22 @@ Consider a single idealized oscillator with phase variable $\theta_i(t)$ evolvin
   \theta_i(t) = \omega_i t + \theta_{i,0},
 \end{equation}
 where $\theta_i(t)$ is the instantaneous phase of the $i$-th oscillator, $\omega_i$ is its angular frequency, and $\theta_{i,0}$ is the initial phase.
-The phase is identified modulo $2\pi$, so $e^{i\theta_i(t)}$ lies on $S^1$. For $\omega_i\ne0$ it traverses that circle periodically; $\omega_i=0$ gives a fixed phase.
+Identifying phase modulo $2\pi$ places $e^{i\theta_i(t)}$ on $S^1$. For $\omega_i\ne0$ the phase traverses the circle periodically. For $\omega_i=0$ it stays fixed.
 
-
-Two independently specifiable phases define a product space. When oscillators with phases $\theta_1(t)$ and $\theta_2(t)$ are considered jointly, each evolving on its own $S^1$, the state space of the combined system is the product manifold
+Two independently specifiable phases $\theta_1,\theta_2$ define the product space
 \begin{equation}\label{eq:torus}
   T^2 = S^1 \times S^1,
 \end{equation}
-which is the two-dimensional torus. This is the space of possible phase pairs; a particular trajectory need not visit all of it.
+of possible phase pairs. A given trajectory may visit only part of it.
 More generally, $n$ independently specifiable circular coordinates define $T^n = (S^1)^n$ \cite{Strogatz2015}. Constraints or locking can restrict the accessible or limiting set.
 
-The torus $T^2$ can be embedded in three-dimensional Euclidean space via the standard parametric representation:
+A standard embedding of $T^2$ in three dimensional Euclidean space has coordinates
 \begin{align}
   x(\theta, \phi) &= (R + r\cos\theta)\cos\phi, \label{eq:torus_x} \\
   y(\theta, \phi) &= (R + r\cos\theta)\sin\phi, \label{eq:torus_y} \\
   z(\theta, \phi) &= r\sin\theta, \label{eq:torus_z}
 \end{align}
-For $R>r>0$, this is an embedding of the abstract torus, not an inferred neural geometry. Here $R$ is the major radius, defined as the distance from the center of the torus to the center of the tube. The minor radius $r$ is the radius of the tube itself. The angles $\theta, \phi \in [0, 2\pi)$ correspond to the two independent phase variables.
+For $R>r>0$, $R$ is the distance from the center of the torus to the center of the tube and $r$ is the tube radius. The two angles $\theta,\phi\in[0,2\pi)$ specify positions on this model surface. Inferring an embedding for neural activity would require population measurements.
 
 \subsection{Coupled Oscillator Dynamics on the Torus}
 
@@ -239,22 +236,24 @@ Let $\phi_1,\phi_2\in\mathbb{R}/2\pi\mathbb{Z}$. For $C^1$ coupling functions pe
   \dot{\phi}_1 &= \omega_1 + \epsilon f_1(\phi_1,\phi_2), \label{eq:coupled1} \\
   \dot{\phi}_2 &= \omega_2 + \epsilon f_2(\phi_1,\phi_2) \label{eq:coupled2}
 \end{align}
-define a flow on $T^2$. They do not specify directions transverse to $T^2$ in a larger state space. Consequently, they cannot establish normal attraction of a neural manifold.
+define a flow on $T^2$. Testing transverse attraction requires additional equations for states outside $T^2$.
 
-For $\epsilon=0$ and nonzero frequencies, a rational ratio $\omega_1/\omega_2$ gives closed periodic trajectories; an irrational ratio gives trajectories dense in $T^2$. Both directions are neutral under phase perturbations. These rationality statements apply to constant independent rotations, not to arbitrary coupling functions or merely to the ratio of natural frequencies in a coupled system. For $n$ independent rotations, density requires rational independence of the frequency vector: $k\cdot\omega\ne0$ for every nonzero $k\in\mathbb{Z}^n$.
+At $\epsilon=0$ with both frequencies nonzero, a rational ratio $\omega_1/\omega_2$ gives closed periodic trajectories. An irrational ratio gives trajectories dense in $T^2$. Perturbations in either phase direction remain neutral. For $n$ independent rotations, density requires rational independence of the frequency vector, so $k\cdot\omega\ne0$ for every nonzero $k\in\mathbb{Z}^n$. Coupling changes the equations and can change the orbit structure.
 
 \subsection{Locking Branches and the Critical Threshold}
 
-Subtracting the two equations in Eq.~\eqref{eq:sine_pair} gives Eq.~\eqref{eq:phase_difference}. Adding them gives $\dot\psi=(\omega_1+\omega_2)/2$ for the locally lifted phase $\psi=(\phi_1+\phi_2)/2$. The average is used on a lift because it is not a globally single-valued circular coordinate.
+Subtracting the equations in Eq.~\eqref{eq:sine_pair} gives Eq.~\eqref{eq:phase_difference}. On a lift, the mean phase $\psi=(\phi_1+\phi_2)/2$ satisfies $\dot\psi=(\omega_1+\omega_2)/2$. Changing one angular representative by $2\pi$ changes this mean by $\pi$, so the mean requires a choice of lift.
 
-For $\epsilon>0$ and $|\Delta\omega|<2\epsilon$, solving $\dot\delta=0$ gives the branch $\delta_*$ in Eq.~\eqref{eq:locking} and the second branch $\pi-\delta_*$ modulo $2\pi$. Linearizing gives $\dot\eta=-2\epsilon\cos\delta_*\,\eta$ to first order. Since $\cos\delta_*>0$, its exponent is $-\sqrt{4\epsilon^2-(\Delta\omega)^2}$. The other branch has the opposite sign and is unstable. The common phase remains neutral. A nonzero common frequency makes the stable circle a periodic orbit; zero common frequency gives a circle of equilibria. At $|\Delta\omega|=2\epsilon$ the exponent vanishes, so exponential stability does not follow.
+For $\epsilon>0$ and $|\Delta\omega|<2\epsilon$, $\dot\delta=0$ gives the branch $\delta_*$ in Eq.~\eqref{eq:locking} and the branch $\pi-\delta_*$ modulo $2\pi$. Linearization at $\delta_*$ gives $\dot\eta=-2\epsilon\cos\delta_*\,\eta$. Since $\cos\delta_*>0$, its exponent is $-\sqrt{4\epsilon^2-(\Delta\omega)^2}$. The other branch has the opposite sign and is unstable.
+
+The common phase remains neutral. A nonzero common frequency makes the stable circle a periodic orbit. At zero common frequency the circle consists of equilibria. At $|\Delta\omega|=2\epsilon$ the locking exponent vanishes.
 
 At the positive threshold $\Delta\omega=2\epsilon>0$, an exact solution with $\delta(0)=0$ is
 \begin{equation}\label{eq:critical_locking}
  \delta(t)=2\arctan\!\left(\frac{\epsilon t}{1+\epsilon t}\right),
  \qquad \frac{\pi}{2}-\delta(t)\sim\frac{1}{\epsilon t}.
 \end{equation}
-It follows by setting $u=\tan(\delta/2)$, so that $\dot u=\epsilon(u-1)^2$. This orbit approaches the critical phase difference algebraically from below. Perturbations just above $\pi/2$ initially move away before winding around the circle; the critical equilibrium is not Lyapunov stable. Thus a vanishing linear exponent is not evidence for stable exponential locking.
+Setting $u=\tan(\delta/2)$ gives $\dot u=\epsilon(u-1)^2$ and yields Eq.~\eqref{eq:critical_locking}. This solution approaches $\pi/2$ algebraically from below. A perturbation just above $\pi/2$ initially moves away and winds around the circle. The critical equilibrium therefore fails Lyapunov stability.
 
 If $|\Delta\omega|>2\epsilon$, the phase difference drifts. The mean unwrapped slip rate is
 \begin{equation}\label{eq:slip}
@@ -264,37 +263,37 @@ If $|\Delta\omega|>2\epsilon$, the phase difference drifts. The mean unwrapped s
 For positive detuning this follows by integrating one cycle,
 $T_\delta=\int_0^{2\pi}(\Delta\omega-2\epsilon\sin u)^{-1}\,du
 =2\pi/\sqrt{(\Delta\omega)^2-4\epsilon^2}$.
-Drift alone is not a proof of dense quasiperiodic motion: the common and slip rotation rates can be commensurate.
+The common and slip rotation rates can be commensurate even when the phases drift. In that case the trajectory closes.
 
-The phase model describes motion on a torus but has no ambient normal directions. Appendix~\ref{app:normal} verifies the normal dynamics added in Eq.~\eqref{eq:radial}.
+The phase equations specify motion along the torus. The radial equations specify how nearby states move toward or away from it.
 
 \section{Normal Attraction and Perturbation Calculations}\label{app:normal}\label{sec:kam}
 
-In a specified ambient state space, an attracting invariant torus $M$ is invariant under the flow and has a neighborhood whose trajectories approach it in distance. This local manifold attraction need not imply that every trajectory explores $M$, or that $M$ is a minimal or transitive attractor. A sufficient mechanism is contraction in normal directions dominating tangent growth in forward and backward time, with appropriate smoothness and compactness assumptions. Normal hyperbolicity gives persistence of the invariant manifold under sufficiently small autonomous $C^1$ perturbations of the vector field \cite{BergerBounemoura2013}; no frequency nonresonance assumption is needed for that manifold persistence statement.
+A torus $M$ attracts nearby states if it is invariant and trajectories from a neighborhood approach it in distance. Individual trajectories can visit only part of $M$. A sufficient condition for persistence under perturbations is that normal contraction dominate tangent growth in forward and backward time. Under the usual smoothness and compactness hypotheses, the normally hyperbolic manifold persists under sufficiently small autonomous $C^1$ perturbations of the vector field \cite{BergerBounemoura2013}. This condition places no nonresonance requirement on the frequencies along the torus.
 
 Equation~\eqref{eq:radial} extends the phase pair with positive radial coordinates $r_1,r_2$.
 In the embedding $(r_1\cos\phi_1,r_1\sin\phi_1,r_2\cos\phi_2,r_2\sin\phi_2)\in\mathbb{R}^4$, the set $M=\{r_1=r_2=1\}$ is an invariant $T^2$ and
 \begin{equation}
  r_i(t)-1=(r_i(0)-1)e^{-\lambda t}.
 \end{equation}
-For positive radii, the nearest point on each unit circle has the same phase. Hence $d(z,M)^2=(r_1-1)^2+(r_2-1)^2$, which gives Eq.~\eqref{eq:normal_distance}.
-This proves normal attraction in the specified model. Replacing $\lambda>0$ by $\lambda=0$ or $\lambda<0$ leaves the flow on $M$ unchanged but makes the normal directions neutral or locally repelling. For the repelling case, the polar description is used while the radii remain positive. Topology and on manifold trajectories alone therefore cannot determine normal stability.
+For positive radii, the nearest point on each unit circle has the same phase. Its squared distance is $(r_i-1)^2$ in each coordinate plane. Summing gives $d(z,M)^2=(r_1-1)^2+(r_2-1)^2$ and Eq.~\eqref{eq:normal_distance}.
+Changing $\lambda$ changes the transverse response without altering the phase flow on $M$. Positive $\lambda$ gives normal attraction, zero gives neutral displacement, and negative $\lambda$ gives local repulsion while the radii remain positive.
 
 \subsection{Normal Hyperbolicity and Internal Motion}
 
-The normal attraction can coexist with phase locking. For independent rotations the tangent exponents are zero. For the sinusoidally coupled pair a sufficient domination bound is $\lambda>2|\epsilon|$, because the tangent Jacobian has norm at most $2|\epsilon|$. Under locking the same torus remains invariant and normally attracting, but its typical limiting motion is the stable circle within it.
+Normal attraction can coexist with phase locking. For independent rotations the tangent exponents are zero. For the coupled pair, $\lambda>2|\epsilon|$ is sufficient for normal contraction to dominate tangent growth. In the locking regime, typical trajectories approach the stable circle within the torus.
 
-Explicitly, the phase Jacobian is
+The phase Jacobian satisfies
 \begin{equation}
  J(\phi)=\epsilon\cos\delta
  \begin{pmatrix}-1&1\\1&-1\end{pmatrix},\qquad
  \|J(\phi)\|_2\leq2|\epsilon|.
 \end{equation}
-The forward and inverse tangent propagators are consequently bounded by $e^{2|\epsilon|t}$ for $t\geq0$. Normal displacements decay as $e^{-\lambda t}$. The stated strict inequality makes normal contraction dominate both tangent bounds. Attraction in the explicit model holds for every $\lambda>0$; this stronger sufficient bound supplies normal hyperbolicity.
+The forward and inverse tangent propagators are bounded by $e^{2|\epsilon|t}$ for $t\geq0$. Normal displacements decay as $e^{-\lambda t}$. For $\lambda>2|\epsilon|$, normal contraction dominates both tangent bounds. For every $\lambda>0$, the explicit radial model attracts nearby states.
 
 \subsection{A Solvable Perturbation}
 
-A controlled perturbation gives a second exactly checkable example. With independent phases, replace Eq.~\eqref{eq:radial} by
+Periodic radial forcing moves the invariant torus. With independent phases, replace Eq.~\eqref{eq:radial} by
 \begin{equation}
  \dot r_i=-\lambda(r_i-1)+a\sin\phi_i.
 \end{equation}
@@ -304,46 +303,44 @@ The attracting invariant torus is now the graph
 \end{equation}
 For $|a|<\min_i\sqrt{\lambda^2+\omega_i^2}$ the graph has positive radii. Substitution gives
 $\frac{d}{dt}(r_i-r_i^*(\phi_i))=-\lambda(r_i-r_i^*(\phi_i))$.
-The graph displacement therefore contracts exactly. Distance to the graph is bounded above by this displacement at the same phases, proving attraction, although distance to the original unit torus need not vanish. This is a special solvable perturbation, not a numerical proof for arbitrary perturbations.
+The radial displacement from the graph contracts exponentially. The distance to the graph is at most the norm of the displacement at the same phases, which proves attraction. The distance to the original unit torus can remain positive.
 
 \subsection{Scope of Persistence Results}
 
-Persistence of a torus as a normally attracting manifold does not ensure that its internal flow remains quasiperiodic. Generic perturbations can change rotation rates and introduce locking. Results preserving quasiperiodic motion require the additional regularity, arithmetic, nondegeneracy, and parameter assumptions of the particular theorem \cite{Broer1996}. Classical Hamiltonian KAM results \cite{Kolmogorov1954, Arnold1963, Moser1962} cannot simply be applied to a dissipative neural model. Physical energy dissipation alone establishes neither normal hyperbolicity nor those quasiperiodic persistence hypotheses.
+Preserving an invariant surface and preserving quasiperiodic motion on that surface require different hypotheses. Perturbations can change rotation rates or introduce locking. Theorems that preserve quasiperiodic motion impose conditions on regularity, frequencies, nondegeneracy, and parameters \cite{Broer1996}. Classical KAM results apply to Hamiltonian systems under their respective hypotheses \cite{Kolmogorov1954,Arnold1963,Moser1962}. Their application to a dissipative neural model would require a separate theorem.
 
 \section{Data Processing and Provenance}\label{app:data}
 
 \subsection{Recording Inventory and Processing}
 
-The repository retains five MAT files associated with the Hafting recordings \cite{Hafting2005}. The earlier release of the data is available from the NIRD archive \cite{HaftingData2017}. We inspect position timestamps, coordinates, and cell timestamp arrays in each file. The audit records input hashes, cell labels, and matrix dimensions in \path{outputs/claim_audit/empirical_provenance.json}. We compared the three raw tracking arrays before filtering missing positions. The audit records a SHA-256 digest for each array. The Figure 2c and 2d digests match within Trial 1 and within Trial 2, and differ between trials. We analyze spike populations within files because those digests identify the tracking record only.
+The five MAT files contain position timestamps, coordinates, and spike timestamps from the Hafting recordings \cite{Hafting2005,HaftingData2017}. We compared the three raw tracking arrays before filtering missing positions. SHA-256 digests match between the Figure 2c and 2d files within Trial 1 and within Trial 2. They differ between trials. The file hashes, cell labels, and matrix dimensions are in \path{outputs/claim_audit/empirical_provenance.json}. Matching tracking arrays identify a shared position record. We analyzed spike populations within each file.
 
-The corrected activity builder bins one selected recording at a time. It uses complete 20 ms bins and divides spike counts by the bin width to obtain rates. Each empirical command requires a recording name and writes to a recording-specific output directory. We separately reconstruct the earlier pooling rule and compare its matrix entry by entry with the retained legacy matrix. This reconstruction identifies provenance; it is not used as a new biological population analysis.
+The activity builder bins one selected recording at a time in complete 20 ms intervals. It divides spike counts by the bin width to obtain rates. Each command takes a recording name and writes to a separate output directory. To establish the origin of the pooled matrix, we also reproduced the earlier merging procedure and compared the resulting entries with the archive.
 
-Spatial rate maps use a $50\times50$ position grid. Spike counts and estimated occupancy time are smoothed separately with a Gaussian kernel of width two spatial bins. Their ratio is evaluated where smoothed occupancy exceeds 0.01 s. Occupancy is approximated by sample count times the median tracking interval. New map generation assigns spikes to the nearest retained position timestamp. Irregular tracking and long gaps require further treatment before quantitative biological interpretation.
+Spatial rate maps use a $50\times50$ position grid. The map generation code estimates occupancy time from the sample count and median tracking interval. It smooths spike counts and occupancy separately with a Gaussian kernel of width two spatial bins. It divides the smoothed quantities where occupancy exceeds 0.01 s. It assigns spikes to the nearest retained position timestamp. Irregular sampling and long gaps can bias this assignment.
 
 \subsection{Topology and Entropy Checks}
 
-The topology audit reads retained persistence diagrams and inspects the code that generated them. It counts finite $H_1$ intervals and records their lifetimes. It also checks whether matching $H_2$ outputs and reported control implementations are present. We do not rerun or calibrate the full neural PCA, UMAP, and persistent homology pipeline in this audit.
+We counted finite $H_1$ intervals in the stored persistence diagrams and measured their lifetimes in each embedding. We checked which homology dimensions and perturbations the code computed. Assessing the reliability of these features would require calibration of the full preprocessing, embedding, and filtration procedure.
 
 Spatial entropy provides a separate description of the retained rate maps. For finite nonnegative rates $r_b$ with positive total, we use
 \begin{equation}\label{eq:spatial_entropy}
  p_b=\frac{r_b}{\sum_j r_j},\qquad
  H=-\sum_b p_b\log_2 p_b,
 \end{equation}
-with $0\log_2 0=0$. This weights spatial bins by rate, rather than by occupancy-weighted spike probability. The normalization must therefore accompany any interpretation of the statistic.
+with $0\log_2 0=0$. Each bin's weight is proportional to its firing rate. A distribution of spike locations would also depend on occupancy.
 
-The other entropy routines use different categorical variables. The population routine normalizes activity across neuron labels within each time bin. It measures activity-share entropy conditional on positive total activity. The temporal routine partitions samples into contiguous windows and measures the allocation of activity among those windows. Neither routine estimates a process entropy rate or a memory lifetime. Silent or missing distributions are undefined; summaries report how many bins have defined values.
+The population entropy routine normalizes activity across cell labels within each bin that has positive total activity. The temporal routine partitions samples into contiguous windows and measures the allocation of activity among them. Silent or missing distributions are undefined. The summaries give the number of defined bins. Both routines measure shares of activity rather than a process entropy rate.
 
-The annotated draft supplied for revision contains additional raster figures and numerical reports. We inspect those reports as part of the document record. Their source recordings, executable notebooks, and numerical arrays are not included in the materials available for this audit. Printed plots alone do not supply a reproducible reconstruction.
-
-\subsection{Detailed Audit Results}
+\subsection{Results by Data Product}
 
 \subsubsection{Recording Provenance}
 
-The five retained files contain 23 cell recordings and 13 distinct labels (Table~\ref{tab:data_inventory}). Some labels repeat between trials. These counts do not establish the number of distinct biological cells or a simultaneous pooled population.
+The five files contain 23 cell recordings and 13 distinct labels (Table~\ref{tab:data_inventory}). Some labels occur in both trials. Counting labels alone cannot identify the number of distinct biological cells.
 
 \begin{table}[H]
 \centering
-\caption{Retained recording files. Position counts are before removal of nonfinite coordinates. Distinct cell labels across files need not identify distinct biological cells.}
+\caption{Position samples and recorded cells in the five files. Position counts include nonfinite coordinates. Cell labels can repeat across files.}
 \label{tab:data_inventory}
 \begin{tabular}{lrr}
 \toprule
@@ -358,89 +355,97 @@ The five retained files contain 23 cell recordings and 13 distinct labels (Table
 \end{tabular}
 \end{table}
 
-The legacy population matrix does not preserve recording boundaries. Its shape is $(59{,}992,13)$, and the audit reproduces it exactly by merging matching cell labels across files on one selected recording's time axis. Consequently, its embeddings and population statistics cannot establish simultaneous neural dynamics. The corrected selection rule prevents this pooling.
+Placing all five files on one recording's time axis and merging spikes with matching cell labels reproduces every entry of the $(59{,}992,13)$ archived matrix. Its embeddings and population statistics are summaries of that pooled matrix. Separate recording selections prevent this pooling.
 
-The retained rate maps describe spatial tuning within the limits of their provenance. Earlier exports reused filenames for repeated cell labels, leaving 13 maps without a one-to-one record of all 23 cell recordings. Those maps do not reconstruct temporal population trajectories. Their geometry cannot establish normal attraction.
+Earlier map exports reused filenames for repeated cell labels. The 13 surviving spatial maps have no one-to-one correspondence with all 23 cell recordings. They describe firing rates by location. Testing attraction requires the time course of a displaced population.
 
-\subsubsection{Persistent Homology and Control Reports}\label{sec:homology_reporting}
+\subsubsection{Persistence Diagrams and Controls}\label{sec:homology_reporting}
 
-The retained legacy diagrams provide no calibrated toroidal population result. They contain 32 finite $H_1$ intervals for PCA and 84 for UMAP. The maximum lifetimes are 0.668947 and 4.001927 in the respective embedding metrics. These values describe stored calculations on the invalid pooled matrix. UMAP changes distances, so the two maxima are not directly comparable. No matching $H_2$ output is retained, and the topology entry point computes only $H_0$ and $H_1$.
+The pooled matrix has 32 finite $H_1$ intervals under principal component analysis (PCA) and 84 under the UMAP embedding. The maximum lifetimes are 0.668947 and 4.001927, respectively. UMAP changes distances, so these lifetimes use different metrics. The topology code computes $H_0$ and $H_1$ only.
 
-The annotated draft documents further analyses but does not resolve their reproducibility. It displays rate maps, persistence barcodes, and a UMAP embedding attributed to Gardner modules. A separate manuscript archive preserves the standalone barcode image for Gardner Rat R, Day 1, Module 2. It displays $H_1$ and $H_2$ intervals. The archive contains the plotted image but supplies neither the numerical intervals nor the generating notebook. The draft also reports a separate Colab parameter sweep. Some numerical values differ from the repository manuscript. We retain these as unverified draft reports, rather than selecting one version as a measured result. In particular, neither a plotted persistence gap nor a stated threshold establishes a noise floor without calibration.
+The annotated manuscript shows rate maps, a UMAP embedding, and persistence barcodes attributed to Gardner modules. A separate archive preserves the barcode for Rat R, Day 1, Module 2 as a standalone image. It displays $H_1$ and $H_2$ intervals. Reproducing those intervals requires the missing numerical arrays and generating notebook. Reported parameter sweeps give inconsistent numerical values across archival sources. Quantifying a noise floor for the plotted gaps requires a control with matched sampling and known topology.
 
-The retained ablation code does not implement the draft's reported timestamp-jitter experiments. It compares spatial smoothing, neuron subsets, and shuffling of binned activity columns. Its legacy outputs inherit the pooling error. Reordering a list of spike timestamps before histogramming leaves the event train unchanged; a temporal surrogate must alter event times or their relationships. Spatial smoothing, temporal smoothing, and PCA whitening also modify different quantities. Their effects cannot be interchanged in an interpretation.
+The available controls compare spatial smoothing, subsets of neurons, and shuffled columns of binned activity in the pooled matrix. They do not implement timestamp jitter. Reordering a list of timestamps leaves a histogram of spike counts unchanged. A timing surrogate must change the event times or their relationships. Spatial smoothing, temporal smoothing, and PCA whitening each act on a different quantity.
 
 \subsubsection{Spatial Entropy}
 
-The retained spatial maps have mean entropy 10.860 bits under Eq.~\eqref{eq:spatial_entropy}. A uniform distribution over all 2,500 bins has entropy $\log_2(2500)\approx11.288$ bits. The earlier reported value of approximately 1.49 bits is not reproduced from these maps. Binning, smoothing, missing positions, and normalization affect the comparison.
+The 13 spatial maps have mean entropy 10.860 bits under Eq.~\eqref{eq:spatial_entropy}. Uniform rates across all 2,500 bins give $\log_2(2500)\approx11.288$ bits. Applying the stated normalization to these maps does not reproduce a separately reported value of about 1.49 bits. Binning, smoothing, and treatment of missing positions all affect this calculation.
 
-The stored mean population entropy of 0.260240 bits belongs to the pooled matrix and has a different definition. It is not a valid simultaneous population statistic. Neither entropy value measures temporal information persistence or thermodynamic production. Appendix~\ref{sec:observation} examines those separate questions using explicit dynamical and observation models.
+The pooled matrix has mean activity-share entropy 0.260240 bits. Pooling across trials rules out interpreting this value as the entropy of a simultaneous population. Both this value and the spatial-map statistic summarize a distribution of rates. Measuring information persistence requires observations at different times (Appendix~\ref{sec:observation}).
 
 \subsection{Sampling and Topological Calibration}
 
 Temporal sampling must match the frequency being tested. A 100 ms bin gives a sampling rate of 10 Hz and a Nyquist frequency of 5 Hz. It cannot resolve the full 4--8 Hz theta band. Gardner et al.\ used 10 ms spike count bins with separate smoothing and subsampling choices \cite{Gardner2022}. Sampling rate, filtering, and the target observable must be specified together.
 
-Topological calibration is a separate requirement. The same neural preprocessing and filtration pipeline should be tested against known topology with matched noise and sampling. Coverage, dependence, metric changes, and preprocessing can alter persistence. Dense sampling alone does not universally inflate spurious $H_1$ features. The finite oscillator calculations test dynamical equations and do not provide this topology calibration.
+Persistence diagrams require calibration against known topology under matched noise and sampling. Coverage, temporal dependence, distance metric, and preprocessing can change the recovered features. A high sample density by itself gives no general prediction for the number of spurious $H_1$ intervals.
 
 \section{Numerical Methods and Verification}\label{sec:simulation}
 
 \subsection{Simulation Design}
 
-All simulations use arbitrary model units. No parameters are fitted to neural recordings. The script \path{scripts/oscillator_validation.py} uses $(\omega_1,\omega_2)=(1,\sqrt{2})$ and compares $\epsilon=0$, $0.1$ (drift), and $0.6$ (locking), with a rational control $(1,3/2)$ at $\epsilon=0$. Initial phases are $(0.2,0.9)$ and the fixed step fourth order Runge--Kutta (RK4) runs use $h=0.02$ over 200 arbitrary time units. Radial runs use $\lambda=2$, initial radii $(0.7,1.3)$, and forcing $a=0$ or $0.1$ over 20 time units. The unforced radial case is also run under phase locking. A separate short control reverses the normal rate without changing the flow on the torus.
+All simulation parameters are in model units. The script \path{scripts/oscillator_validation.py} compares couplings $\epsilon=0,0.1,0.6$ at $(\omega_1,\omega_2)=(1,\sqrt{2})$. A control uses $(1,3/2)$ at $\epsilon=0$. Each phase trajectory starts at $(0.2,0.9)$. The fourth order Runge--Kutta (RK4) integration uses a fixed step $h=0.02$ over 200 time units.
+
+The radial simulations use $\lambda=2$, initial radii $(0.7,1.3)$, and forcing $a=0$ or $0.1$ over 20 time units. The unforced simulation also runs under phase locking. A short control reverses the normal rate while keeping the phase equations fixed.
 
 \subsection{Analytic Benchmarks}
 
-The independent runs agree with the exact rotation solution. The rational control returns after $4\pi$. Density for the irrational case follows analytically from the assumed exact frequency ratio; finite samples and floating point arithmetic do not prove it. A 0.2 radian phase kick persists under independent rotation. Locking restores the relative phase but retains a common phase offset.
+The independent trajectories agree with the exact rotation solution. The rational control returns after $4\pi$. Density for the irrational ratio follows from the exact frequencies. A finite trajectory samples only part of the orbit. A phase shift of 0.2 rad persists under independent rotation. With locking, the phase difference recovers and a common offset persists.
 
-The coupled runs agree with the locking and slip predictions. At $\epsilon=0.6$, Eq.~\eqref{eq:locking} gives $\delta_*\approx0.3524$ rad and $\lambda_\delta\approx-1.1262$ per model time unit. At $\epsilon=0.1$, Eq.~\eqref{eq:slip} gives a mean slip rate of 0.3627. Full cycle crossing times and independent quadrature check the slip rate without endpoint averaging bias. The radial runs agree with the exact contraction and forced-graph solutions in Eqs.~\eqref{eq:radial} and \eqref{eq:forced_graph}. Figure~\ref{fig:oscillator_validation} compares these behaviors.
+At $\epsilon=0.6$, Eq.~\eqref{eq:locking} predicts $\delta_*\approx0.3524$ rad and $\lambda_\delta\approx-1.1262$ per model time unit. At $\epsilon=0.1$, Eq.~\eqref{eq:slip} predicts a mean slip rate of 0.3627 rad per model time unit. Complete cycle times and independent quadrature agree with this rate. The radial trajectories agree with the solutions of Eqs.~\eqref{eq:radial} and \eqref{eq:forced_graph} (Figure~\ref{fig:oscillator_validation}).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{../outputs/oscillator_validation/oscillator_validation.png}
-\caption{Finite synthetic oscillator calculations in arbitrary units. Phase plots use wrapped coordinates for display; integration uses unwrapped angles. Independent irrational rotations, rational rotations, and phase locking have the same phase coordinate space but different orbit structure. Perturbation checks distinguish neutral phase directions from contraction of phase difference and normal radial displacement. Step refinement checks numerical error against an adaptive reference. None of these panels is a neural recording or empirical attractor reconstruction.}
+\caption{Simulated phase and radial trajectories in model units. The integration uses unwrapped angles. The plots wrap each angle into one period. Independent rotations and phase locking give different orbits in the same phase space. After a perturbation the common phase offset persists, while the stable phase difference and radial displacement recover. The step refinement panel compares RK4 with adaptive integration.}
 \label{fig:oscillator_validation}
 \end{figure}
 
 \subsection{Numerical Error and Limits}
 
-Step refinement measures numerical error over a fixed 20 unit interval. RK4 uses $h=0.08,0.04,0.02,0.01$. The adaptive DOP853 reference uses relative tolerance $10^{-12}$, absolute tolerance $10^{-13}$, and maximum step $0.1$. A tighter DOP853 run and an independent RK45 integration check the locked case. The errors decrease at approximately fourth order before the numerical floor. At $h=0.01$, maximum absolute errors against the reference are approximately $3.9\times10^{-13}$ for drift, $7.1\times10^{-12}$ for locking, and $1.5\times10^{-10}$ for both radial cases. Tests also check exact solutions, stable and unstable branches, and neutral common phase. The CSV trajectories, convergence table, near threshold comparisons, environment versions, and JSON summary are retained with the script.
+We compared RK4 steps of $h=0.08,0.04,0.02,0.01$ over a fixed interval of 20 time units. The adaptive DOP853 reference used relative tolerance $10^{-12}$, absolute tolerance $10^{-13}$, and maximum step $0.1$. A tighter DOP853 run and an independent RK45 integration checked the locked case.
 
-The supplementary script \path{scripts/information_validation.py} checks the critical solution in Eq.~\eqref{eq:critical_locking} against adaptive integration and the observation examples in Appendix~\ref{sec:information_persistence}. These calculations also use synthetic parameters and do not estimate biological memory times.
+The observed convergence order was approximately four before numerical precision limited further improvement. At $h=0.01$, maximum absolute errors against the reference were approximately $3.9\times10^{-13}$ for drift, $7.1\times10^{-12}$ for locking, and $1.5\times10^{-10}$ for both radial cases. Additional tests check exact solutions, stable and unstable branches, and neutral common phase. The repository includes the trajectories, convergence table, comparisons near the threshold, software versions, and a numerical summary.
 
-The critical solution is evaluated through $u/(1+u)$, with $u=\epsilon t$, to avoid cancellation near $t=0$. Quantized bin labels must remain finite and below $2^{53}$, where consecutive integers are representable in double precision. Requests beyond that range are rejected rather than interpreted as loss of information. Floating point rounding near bin boundaries and underflow at very long times remain numerical limits of the observation calculation.
+The script \path{scripts/information_validation.py} compares the critical solution in Eq.~\eqref{eq:critical_locking} with adaptive integration. It also checks the observation rules in Appendix~\ref{sec:information_persistence} using the specified model parameters.
 
-Finite agreement checks the implementation for the stated models and intervals. Near the locking threshold, slow drift or recovery can be misclassified over short windows.
+We evaluated the critical solution through $u/(1+u)$, with $u=\epsilon t$, to avoid cancellation near $t=0$. The quantizer accepts finite bin labels below $2^{53}$, a conservative bound for representing consecutive integers in double precision. Rounding near bin boundaries and underflow at very long times can affect the observed labels.
 
-Fixed RK4 is conditionally stable: for the scalar normal mode its stability polynomial must satisfy $|1-z+z^2/2-z^3/6+z^4/24|<1$ with $z=\lambda h$; the tested maximum $z=0.16$ lies within this interval. These checks do not establish accuracy for arbitrary steps or long time orbit coverage. Stochastic robustness and a neural noise floor are not tested.
+Short observation windows near the locking threshold make slow drift difficult to distinguish from slow recovery.
+
+For the scalar normal mode, fixed step RK4 requires $|1-z+z^2/2-z^3/6+z^4/24|<1$, where $z=\lambda h$. The largest tested value, $z=0.16$, satisfies this condition. The finite integrations cover deterministic trajectories over the stated intervals. Estimating effects of neural noise would require a noise model and data.
 
 \section{Observation Maps and Entropy Calculations}\label{sec:observation}
 
 \subsection{Observation Classes and Recursive Processing}
 
-An observation map specifies which distinctions a representation retains. Let $\pi:X\to O$ map system states to observations. Define $x\sim_\pi y$ when $\pi(x)=\pi(y)$. Equality makes this relation reflexive, symmetric, and transitive. Its class at $x$ is $[x]_\pi=\{y:\pi(y)=\pi(x)\}$. A noninjective map identifies distinct states; finite dimension alone does not imply noninjectivity.
+An observation map $\pi:X\to O$ assigns a readout to each system state. States are equivalent, $x\sim_\pi y$, when $\pi(x)=\pi(y)$. Equality makes this relation reflexive, symmetric, and transitive. The class at $x$ is $[x]_\pi=\{y:\pi(y)=\pi(x)\}$. It contains several states when the readout assigns them the same value. A map of finite dimensional spaces can still be injective.
 
-A deterministic downstream map cannot distinguish states already identified by $\pi$. If $R:O\to O$ and $\pi(x)=\pi(y)$, then $R^n(\pi(x))=R^n(\pi(y))$ for every integer $n\geq0$. This is a statement about processing the same observation. It does not prohibit new observations or external inputs from providing additional information.
+Repeated processing of the same observation gives the same output for equivalent states. For a deterministic map $R:O\to O$, $\pi(x)=\pi(y)$ implies $R^n(\pi(x))=R^n(\pi(y))$ for every integer $n\geq0$. A subsequent observation or an external input can distinguish states that the first measurement merged.
 
-Toroidal coordinates are one possible observation map. Given $\varphi_1,\varphi_2:X\to S^1$, define $\Phi(x)=(\varphi_1(x),\varphi_2(x))\in T^2$. Equality of both phase coordinates is equivalent to equality of the ordered pair. This product property alone gives no surjectivity, embedding, or attractor theorem.
+Two phase measurements define a toroidal readout. Given $\varphi_1,\varphi_2:X\to S^1$, let $\Phi(x)=(\varphi_1(x),\varphi_2(x))\in T^2$. Two states give the same pair exactly when both phases agree. Whether this map covers the torus or embeds the state space depends on the choice of measurements. Attraction also requires equations of motion.
 
 \subsection{Contraction and Information Persistence}\label{sec:information_persistence}
 
-Normal attraction controls distance to a manifold, not the recoverability of an encoded variable. Phase locking suppresses relative phase differences asymptotically, but uniqueness of a smooth ordinary differential equation prevents distinct exact states from merging at finite time on their common interval of existence. This mathematical injectivity need not survive measurement noise, finite resolution, an incomplete observation, or numerical rounding.
+Normal contraction sets a rate for distance to a manifold. Distinct solutions of a smooth ordinary differential equation remain distinct at finite times on their common interval of existence. A finite or noisy measurement can still merge their readouts.
 
-For example, encode an equiprobable binary label $B$ in a radial displacement $x_B(0)\in\{0.25,0.75\}$ and let $x_B(t)=e^{-2t}x_B(0)$. Exact observation distinguishes the labels at every finite time, so $I(B;x_B(t))=1$ bit. With the explicitly chosen observation $Q_\Delta(x)=\lfloor x/\Delta\rfloor$, both labels occupy bin zero once $t>\frac12\log(0.75/\Delta)$. Their observed mutual information is then zero. At the threshold itself the larger displacement is exactly $\Delta$, which the floor rule assigns to bin one. Halving $\Delta$ delays entry into the shared zero bin by $(\log 2)/2$. For $\Delta=0.1$ and $0.05$, these times are approximately 1.0075 and 1.3540 model units. These are consequences of the chosen code and quantizer, not neural memory lifetimes or universal information decay rates.
+Encode an equiprobable binary label $B$ in a radial displacement $x_B(0)\in\{0.25,0.75\}$ and let $x_B(t)=e^{-2t}x_B(0)$. Exact observation distinguishes the labels at every finite time, so $I(B;x_B(t))=1$ bit.
 
-Differential entropy describes yet another quantity. For a two dimensional normal displacement $X(t)=e^{-\lambda t}X(0)$ with a density and finite differential entropy, the change-of-variables formula gives
+A quantizer with bin width $\Delta$ reads $Q_\Delta(x)=\lfloor x/\Delta\rfloor$. Both displacements occupy bin zero for $t>\tfrac12\log(0.75/\Delta)$. Their observed mutual information is then zero. At equality the larger displacement is exactly $\Delta$ and lies in bin one. Halving $\Delta$ delays entry into the shared zero bin by $(\log 2)/2$. For $\Delta=0.1$ and $0.05$, the respective thresholds are approximately 1.0075 and 1.3540 model time units.
+
+The entropy of a continuous density decreases as contraction concentrates it. For a two dimensional normal displacement $X(t)=e^{-\lambda t}X(0)$ with a density and finite differential entropy, the change of variables formula gives
 \begin{equation}
  h(X(t))=h(X(0))+\log|\det(e^{-\lambda t}I_2)|
  =h(X(0))-2\lambda t,
 \end{equation}
-in nats relative to fixed normal coordinates. This decreasing differential entropy coexists with finite-time invertibility. It is not thermodynamic entropy production; no heat flux follows without a physical model.
+in nats relative to fixed normal coordinates. The transformation remains invertible at every finite time. Calculating heat flux would require a physical model of energy exchange.
 
 \subsection{Consistency Across Scales}
 
-For a relation between fine and coarse descriptions, one could seek a continuous surjection $\pi$ and flows $F_t,G_t$ satisfying Eq.~\eqref{eq:coarse_flow} for a specified time conversion $c>0$. Such an autonomous coarse flow requires preservation of observation classes: $\pi(x)=\pi(y)$ must imply $\pi(F_t(x))=\pi(F_t(y))$. For differentiable maps and vector fields $f,g$, differentiating at $t=0$ gives the necessary condition $D\pi_x f(x)=c\,g(\pi(x))$. Establishing a continuous or smooth quotient flow also requires the corresponding topological or regularity assumptions.
+A fine flow $F_t$ and a coarse flow $G_t$ are compatible through a continuous surjection $\pi$ if they satisfy Eq.~\eqref{eq:coarse_flow} at a specified time conversion $c>0$. This requires $\pi(x)=\pi(y)$ to imply $\pi(F_t(x))=\pi(F_t(y))$. When $\pi$ is differentiable, the respective vector fields $f,g$ must satisfy $D\pi_x f(x)=c\,g(\pi(x))$, by differentiation at $t=0$. Continuity or smoothness of the induced flow on the observation space requires the corresponding topological or regularity assumptions.
 
-The sine pair supplies a direct counterexample to automatic closure. With $\pi(\phi_1,\phi_2)=\phi_1\pmod{2\pi}$ and $\epsilon\ne0$, the states $(0,0)$ and $(0,\pi/2)$ have identical observations but projected velocities $\omega_1$ and $\omega_1+\epsilon$. Thus this observation does not define an autonomous one phase flow. In contrast, $\sigma=(\phi_1+\phi_2)\pmod{2\pi}$ satisfies $\dot\sigma=\omega_1+\omega_2$ exactly. The single-phase example also distinguishes repeated processing from a new measurement. For the two fine states just compared, the difference of their lifted first-phase observations at a short time $h>0$ is $\epsilon h+O(h^2)$ (second state minus first). A later observation can thus separate these states even though any deterministic processing of their identical initial observation gives the same result. The supplementary script checks the two projected velocities and the rotation of the circular sum. Neither these mathematical factors nor the grid cell maps establish continuity or information conservation across molecular, neural, and behavioral scales.
+Observing the first phase alone fails this condition when $\epsilon\ne0$. Under $\pi(\phi_1,\phi_2)=\phi_1\pmod{2\pi}$, the states $(0,0)$ and $(0,\pi/2)$ give the same value. Their projected velocities are $\omega_1$ and $\omega_1+\epsilon$. At a short time $h>0$, the lifted first phase of the second state exceeds that of the first by $\epsilon h+O(h^2)$. A later observation can therefore distinguish the states.
+
+The circular sum $\sigma=(\phi_1+\phi_2)\pmod{2\pi}$ satisfies $\dot\sigma=\omega_1+\omega_2$ for every phase pair. Its initial value determines its entire trajectory. Applying this consistency test across molecular, neural, or behavioral scales would require readouts and measured dynamics at those scales.
 
 \subsection{Entropy and Physical Cost}\label{app:entropy_balance}
 
@@ -448,9 +453,9 @@ Thermodynamic entropy requires a physical system boundary and specified exchange
 \begin{equation}\label{eq:entropy_balance}
  \dot S=\dot S_i+\dot S_e,\qquad \dot S_i\geq0.
 \end{equation}
-At steady state, $\dot S_e=-\dot S_i\leq0$. Export is strictly positive in magnitude only when internal production is positive. This balance does not determine the dimension or topology of a neural manifold.
+At steady state, $\dot S_e=-\dot S_i\leq0$. Net entropy export is positive in magnitude exactly when internal production is positive. Relating this balance to the topology of a neural state space would require a coupling between the physical and dynamical variables.
 
-A proposed entropy funnel must specify the quantity it changes. A restriction of represented states can lower a chosen description length without determining heat export, Shannon entropy, or an entropy rate. Minimum Description Length and predictive coding models motivate conditional compression hypotheses \cite{LiVitanyi2008,RaoBallard1999,Prada2025}. They do not establish decreasing description length at every biological layer. Comparing the metabolic costs of different manifolds remains an open modeling and measurement problem.
+Restricting the set of represented states can shorten a code for those states. The change in code length depends on the code and its input distribution. Minimum Description Length and predictive coding motivate such conditional compression models \cite{LiVitanyi2008,RaoBallard1999,Prada2025}. Testing for compression through successive biological layers requires measurements at each layer. Comparing metabolic costs also requires independent measurements of physical exchanges.
 
 \section{Quaternion Operators and Phase Coordinates}\label{sec:quaternions}
 
@@ -460,11 +465,11 @@ A separately specified quaternion curve can describe rotation operators. For a p
 \begin{equation}\label{eq:quat_dynamics}
  \dot q(t)=\tfrac12\Omega(t)q(t),\qquad |q(0)|=1
 \end{equation}
-preserves $|q(t)|=1$. This equation does not encode all phase triples or derive their dynamics from three natural frequencies. An action on phase states must be defined separately.
+preserves $|q(t)|=1$. To use these rotations on a phase model, one must specify an action on the phase states and an evolution law for $\Omega(t)$.
 
-Ordinary phase translations commute. With $T_a(\phi)=\phi+a\pmod{2\pi}$, one has $T_aT_b=T_bT_a$. A noncommutative neural model therefore requires additional operators and a specified composition rule. Comparing $A(B(x))$ and $B(A(x))$ from matched states could test such a rule. Merely changing which frequency band is sampled first also changes its timing and can produce ordinary order dependence.
+Ordinary phase translations commute. With $T_a(\phi)=\phi+a\pmod{2\pi}$, one has $T_aT_b=T_bT_a$. A model with noncommuting neural operators must specify the operators and their composition. An experiment could compare $A(B(x))$ and $B(A(x))$ from matched states. Changing the order of sampling also changes measurement times, which can produce an apparent dependence on order.
 
-Pairwise coupling statistics do not specify this operator law. Phase amplitude coupling assigns different roles to a selected phase and amplitude \cite{Tort2010}. The weighted phase lag index measures pairwise synchronization through the imaginary cross-spectrum \cite{Vinck2011}. Neither alone establishes quaternion composition. An empirical test would need controls for delays, common input, amplitudes, and omitted state variables.
+Phase amplitude coupling assigns different roles to a selected phase and amplitude \cite{Tort2010}. The weighted phase lag index measures pairwise synchronization through the imaginary cross-spectrum \cite{Vinck2011}. Inferring a quaternion composition law from neural data would require additional measurements that control for delays, common input, amplitudes, and omitted state variables.
 
 \section{Physical Assumptions Across Frequency Scales}\label{app:physical}\label{sec:oscillatory}
 
@@ -476,17 +481,17 @@ For a homogeneous, isotropic, nondispersive Ohmic medium with constant $\mu,\eps
 \begin{equation}
  \nabla^2\mathbf E-\mu\epsilon\partial_t^2\mathbf E-\mu\sigma\partial_t\mathbf E=0.
 \end{equation}
-Neural tissue additionally requires source currents, boundary conditions, and appropriate dispersive properties. These equations do not supply a measured mechanism for toroidal neural dynamics.
+Applying these equations to neural tissue requires source currents, boundary conditions, and the tissue's dispersive response. A mechanism for toroidal neural dynamics would also require a measured interaction with the relevant state variables.
 
-Frequency comparisons do not establish coupling between scales. Relative to $10^3$ Hz, the range $10^9$--$10^{13}$ Hz spans six to ten orders of magnitude. Channel gating times and inverse relaxation times are not automatically coherent oscillation frequencies. A model linking these scales would need measured variables and specified interactions.
+Compared with $10^3$ Hz, frequencies of $10^9$--$10^{13}$ Hz are six to ten orders of magnitude higher. A channel gating time or inverse relaxation time can characterize an aperiodic process. A model linking frequency scales would need measured variables and specified interactions.
 
-The band 0.1--10 THz corresponds to photon energies 0.414--41.36 meV through $E=h\nu$. At 310 K, $k_BT\approx26.7$ meV \cite{NISTConstants}. Part of that band is near a thermal energy scale, but the comparison does not establish coherence or equate all photon energies with hydrogen bond dissociation. Molecular spectroscopy and Fr\"ohlich's coherence proposal motivate further questions \cite{Markelz2008,Frohlich1968}. They do not demonstrate coupling to the grid cell model in this paper.
+The band 0.1--10 THz corresponds to photon energies of 0.414--41.36 meV through $E=h\nu$. At 310 K, $k_BT\approx26.7$ meV \cite{NISTConstants}. This thermal energy lies within the stated photon energy range. Molecular spectroscopy and Fr\"ohlich's coherence proposal motivate studying collective modes \cite{Markelz2008,Frohlich1968}. Establishing coherence, bond dissociation, or coupling to grid cell activity would require measurements specific to each process.
 
-\section{Formalization and Reproducibility}\label{sec:lean}\label{app:lean}
+\section{Code and Data}\label{sec:lean}\label{app:lean}
 
-The mathematical checks are analytic calculations and numerical tests, not completed machine proofs. The retained Lean sources contain proof placeholders, undefined identifiers, and no pinned build. Declaring an abstract type named $S^1$ does not construct the geometric circle. The original prototypes remain in the repository for future development; the paper does not treat them as verification of topology, stability, or empirical evidence.
+The derivations use analytic solutions, with numerical checks for specified parameters. The archived Lean prototypes contain proof placeholders and undefined identifiers. They lack a pinned build and provide no formal verification of the claims.
 
-The repository contains the data audit, simulation scripts, tests, and dependency versions. Run \path{scripts/oscillator_validation.py} and \path{scripts/information_validation.py} for the synthetic calculations. Run \path{scripts/audit_empirical_provenance.py} for the retained-artifact inventory. The README gives the test command, manuscript build instructions, and recording-selection requirements. Repository address: \url{https://github.com/ezernackchristopher97-cloud/ENTPTCCONPAPER26}.
+Run \path{scripts/oscillator_validation.py} and \path{scripts/information_validation.py} to reproduce the oscillator trajectories and observation calculations. The script \path{scripts/audit_empirical_provenance.py} records the data inventory and checks the pooled matrix. The repository gives dependency versions, recording selection instructions, and test commands at \url{https://github.com/ezernackchristopher97-cloud/ENTPTCCONPAPER26}.
 
 \begingroup
 \singlespacing
