@@ -30,6 +30,10 @@ def audit(root):
         activity, ids, _ = build_activity_matrix([session])
         inventory.append({
             "file": session["filename"], "sha256": sha256(path),
+            "tracking_array_sha256": {
+                field: hashlib.sha256(raw[field].tobytes(order="C")).hexdigest()
+                for field in ("pos_timeStamps", "pos_x", "pos_y")
+            },
             "raw_position_samples": int(raw["pos_timeStamps"].size),
             "finite_position_samples": int(len(session["pos_ts"])),
             "neuron_labels": ids, "neuron_count": len(ids),

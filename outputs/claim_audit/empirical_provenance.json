@@ -4,6 +4,11 @@
     {
       "file": "Hafting_Fig2c_Trial1.mat",
       "sha256": "f0baf496fc3e184de88561dd85a7de9077e708a277b70d9339912a2af1382223",
+      "tracking_array_sha256": {
+        "pos_timeStamps": "8c60f586fb1d6e81e70fef012ca6dcdf7eb94897e3354bd83a3dd9bfeb30f1db",
+        "pos_x": "421d7bbb25a32cde0a970ef51deddc6032a4fb21dca7b4fa459438c008ab2856",
+        "pos_y": "705108918d2cdd9820541df5dbae502777ba4161a510310cdc6d18ca43153972"
+      },
       "raw_position_samples": 59596,
       "finite_position_samples": 59587,
       "neuron_labels": [
@@ -24,6 +29,11 @@
     {
       "file": "Hafting_Fig2c_Trial2.mat",
       "sha256": "24b7e01efbfb84f6307ccdba2b6bf9835b3583b6af6e7f6998e37bcfc59ccbe6",
+      "tracking_array_sha256": {
+        "pos_timeStamps": "9a12e55da5f8b50e973c0dee2864991c144b807da9695b9c1418238beea119f1",
+        "pos_x": "ce8413786f42ed223f1ffc4a883f24e6ccf21ff31a2007ed35c518399484f943",
+        "pos_y": "2f1d177aa37ce3b6893a14eaf4af1b9c64820a3d1bf13aca6d31d0fe0db1d42d"
+      },
       "raw_position_samples": 59723,
       "finite_position_samples": 59723,
       "neuron_labels": [
@@ -44,6 +54,11 @@
     {
       "file": "Hafting_Fig2d_Trial1.mat",
       "sha256": "6193158002126e668943ba9bd29cadd4abdda13527a27e0c9e614b7ddcbb9b8c",
+      "tracking_array_sha256": {
+        "pos_timeStamps": "8c60f586fb1d6e81e70fef012ca6dcdf7eb94897e3354bd83a3dd9bfeb30f1db",
+        "pos_x": "421d7bbb25a32cde0a970ef51deddc6032a4fb21dca7b4fa459438c008ab2856",
+        "pos_y": "705108918d2cdd9820541df5dbae502777ba4161a510310cdc6d18ca43153972"
+      },
       "raw_position_samples": 59596,
       "finite_position_samples": 59587,
       "neuron_labels": [
@@ -60,6 +75,11 @@
     {
       "file": "Hafting_Fig2d_Trial2.mat",
       "sha256": "ed45226238a987ed377b7b8a0f186efc67a39a5a77421447e7b6c8978c14d863",
+      "tracking_array_sha256": {
+        "pos_timeStamps": "9a12e55da5f8b50e973c0dee2864991c144b807da9695b9c1418238beea119f1",
+        "pos_x": "ce8413786f42ed223f1ffc4a883f24e6ccf21ff31a2007ed35c518399484f943",
+        "pos_y": "2f1d177aa37ce3b6893a14eaf4af1b9c64820a3d1bf13aca6d31d0fe0db1d42d"
+      },
       "raw_position_samples": 59723,
       "finite_position_samples": 59723,
       "neuron_labels": [
@@ -76,6 +96,11 @@
     {
       "file": "rat_10925.mat",
       "sha256": "ba170c43588d63d535aa36bdcff34daf233a74af6763a9802111c0b5a5a68efb",
+      "tracking_array_sha256": {
+        "pos_timeStamps": "8223dff00ebbc62b4a059e35dedf14cba3e35fcdefa5a30f46c6d8a364305ce6",
+        "pos_x": "7354bfa9b37d6f5ee9d37d3d0266e3b94e45c9f1f003f78832a5e733189fa3bd",
+        "pos_y": "78797d041cd701befa9a3366b46211b9ff184ee09fa3ef52c4739a6c940caa8a"
+      },
       "raw_position_samples": 89652,
       "finite_position_samples": 89648,
       "neuron_labels": [
@@ -134,16 +159,16 @@
   "retained_rate_map_count": 13,
   "retained_spatial_entropy_bits": {
     "rate_map_cell1": 10.850963357966794,
-    "rate_map_cell2": 10.971593946222818,
+    "rate_map_cell2": 10.97159394622282,
     "rate_map_cell3": 10.99211047818363,
     "rate_map_rat11015_t1c1": 10.649772745466482,
     "rate_map_rat11015_t2c1": 10.920557647482898,
     "rate_map_rat11015_t2c2": 10.647931431293742,
     "rate_map_rat11015_t5c1": 10.900907236566248,
-    "rate_map_rat11015_t5c2": 10.79735206436199,
-    "rate_map_rat11015_t5c3": 10.823988747594376,
+    "rate_map_rat11015_t5c2": 10.797352064361991,
+    "rate_map_rat11015_t5c3": 10.823988747594377,
     "rate_map_rat11015_t6c1": 10.728237510636543,
-    "rate_map_rat11015_t7c1": 10.935022149195465,
+    "rate_map_rat11015_t7c1": 10.935022149195463,
     "rate_map_rat11015_t7c2": 10.95544553185686,
     "rate_map_rat11015_t7c3": 11.00538473066713
   },
